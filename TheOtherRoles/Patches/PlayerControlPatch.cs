@@ -1136,6 +1136,8 @@ namespace TheOtherRoles.Patches {
 
             // First kill
             if (MapOptions.firstKillName == "") MapOptions.firstKillName = target.Data.PlayerName;
+            __instance.OnKill(target);
+            target.OnDeath(__instance);
         }
     }
 
