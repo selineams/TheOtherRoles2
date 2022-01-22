@@ -43,6 +43,7 @@ namespace TheOtherRoles
         Spy,
         Trickster,
         Cleaner,
+        Undertaker,
         Warlock,
         SecurityGuard,
         Arsonist,
@@ -78,6 +79,8 @@ namespace TheOtherRoles
         EngineerFixLights = 91,
         EngineerUsedRepair,
         CleanBody,
+        DragBody,
+        DropBody,
         MedicSetShielded,
         ShieldedMurderAttempt,
         TimeMasterShield,
@@ -241,6 +244,9 @@ namespace TheOtherRoles
                     case RoleId.Cleaner:
                         Cleaner.cleaner = player;
                         break;
+                    case RoleId.Undertaker:
+                        Undertaker.undertaker= player;
+                        break;
                     case RoleId.Warlock:
                         Warlock.warlock = player;
                         break;
@@ -343,6 +349,24 @@ namespace TheOtherRoles
                     UnityEngine.Object.Destroy(array[i].gameObject);
                 }     
             }
+        }
+
+        public static void dragBody(byte playerId)
+        {
+            DeadBody[] array = UnityEngine.Object.FindObjectsOfType<DeadBody>();
+            for (int i = 0; i < array.Length; i++) {
+                if (GameData.Instance.GetPlayerById(array[i].ParentId).PlayerId == playerId) {
+                    Undertaker.deadBodyDraged = array[i];
+                }
+            }
+        }
+
+        public static void dropBody(byte playerId)
+        {
+            if (Undertaker.undertaker == null || Undertaker.deadBodyDraged == null) return;
+            var deadBody = Undertaker.deadBodyDraged;
+            Undertaker.deadBodyDraged = null;
+            deadBody.transform.position = new Vector3(Undertaker.undertaker.GetTruePosition().x, Undertaker.undertaker.GetTruePosition().y, Undertaker.undertaker.transform.position.z);
         }
 
         public static void timeMasterRewindTime() {
@@ -608,6 +632,7 @@ namespace TheOtherRoles
             if (player == Eraser.eraser) Eraser.clearAndReload();
             if (player == Trickster.trickster) Trickster.clearAndReload();
             if (player == Cleaner.cleaner) Cleaner.clearAndReload();
+            if (player == Undertaker.undertaker) Undertaker.clearAndReload();
             if (player == Warlock.warlock) Warlock.clearAndReload();
             if (player == Witch.witch) Witch.clearAndReload();
 
@@ -877,6 +902,12 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.CleanBody:
                     RPCProcedure.cleanBody(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.DragBody:
+                    RPCProcedure.dragBody(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.DropBody:
+                    RPCProcedure.dropBody(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.TimeMasterRewindTime:
                     RPCProcedure.timeMasterRewindTime();

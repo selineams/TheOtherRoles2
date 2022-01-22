@@ -187,6 +187,10 @@ namespace TheOtherRoles {
         public static CustomOption cleanerSpawnRate;
         public static CustomOption cleanerCooldown;
         
+        public static CustomOption undertakerSpawnRate;
+        public static CustomOption undertakerDragingDelaiAfterKill;
+
+        
         public static CustomOption warlockSpawnRate;
         public static CustomOption warlockCooldown;
         public static CustomOption warlockRootTime;
@@ -286,7 +290,10 @@ namespace TheOtherRoles {
 
             cleanerSpawnRate = CustomOption.Create(260, cs(Cleaner.color, "Cleaner"), rates, null, true);
             cleanerCooldown = CustomOption.Create(261, "Cleaner Cooldown", 30f, 10f, 60f, 2.5f, cleanerSpawnRate);
-
+      
+            undertakerSpawnRate = CustomOption.Create(603, cs(Undertaker.color, "Undertaker"), rates, null, true);
+            undertakerDragingDelaiAfterKill = CustomOption.Create(604, "Draging delay after kill", 0f, 0f, 15, 1f, undertakerSpawnRate);                     
+            
             warlockSpawnRate = CustomOption.Create(270, cs(Cleaner.color, "Warlock"), rates, null, true);
             warlockCooldown = CustomOption.Create(271, "Warlock Cooldown", 30f, 10f, 60f, 2.5f, warlockSpawnRate);
             warlockRootTime = CustomOption.Create(272, "Warlock Root Time", 5f, 0f, 15f, 1f, warlockSpawnRate);
