@@ -38,7 +38,9 @@ namespace TheOtherRoles.Patches {
                 __result = num;
                 return false;
             }
-
+	 
+	    if (Undertaker.deadBodyDraged != null && Undertaker.undertaker== @object)
+                roleCouldUse = false;
             couldUse = (@object.inVent || roleCouldUse) && !pc.IsDead && (@object.CanMove || @object.inVent);
             canUse = couldUse;
             if (canUse)
