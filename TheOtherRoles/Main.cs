@@ -1,4 +1,4 @@
-﻿using BepInEx;
+using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.IL2CPP;
 using HarmonyLib;
@@ -22,7 +22,7 @@ namespace TheOtherRoles
     {
         public const string Id = "me.eisbison.theotherroles";
 
-        public const string VersionString = "3.4.0";
+        public const string VersionString = "3.4.0.1";
 
 
         public static System.Version Version = System.Version.Parse(VersionString);
