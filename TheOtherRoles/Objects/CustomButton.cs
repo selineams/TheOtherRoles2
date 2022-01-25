@@ -4,7 +4,6 @@ using System.IO;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
-using static TheOtherRoles.TheOtherRoles;
 
 namespace TheOtherRoles.Objects {
     public class CustomButton
@@ -14,29 +13,25 @@ namespace TheOtherRoles.Objects {
         public Vector3 PositionOffset;
         public float MaxTimer = float.MaxValue;
         public float Timer = 0f;
-        public float DeputyTimer = 0f;
         private Action OnClick;
-        private Action InitialOnClick;
         private Action OnMeetingEnds;
-        public Func<bool> HasButton;
-        public Func<bool> CouldUse;
+        private Func<bool> HasButton;
+        private Func<bool> CouldUse;
         private Action OnEffectEnds;
         public bool HasEffect;
         public bool isEffectActive = false;
         public bool showButtonText = false;
         public float EffectDuration;
         public Sprite Sprite;
-        public HudManager hudManager;
-        public bool mirror;
-        public KeyCode? hotkey;
+        private HudManager hudManager;
+        private bool mirror;
+        private KeyCode? hotkey;
         private string buttonText;
-        public bool isHandcuffed = false;
 
         public CustomButton(Action OnClick, Func<bool> HasButton, Func<bool> CouldUse, Action OnMeetingEnds, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager, KeyCode? hotkey, bool HasEffect, float EffectDuration, Action OnEffectEnds, bool mirror = false, string buttonText = "")
         {
             this.hudManager = hudManager;
             this.OnClick = OnClick;
-            this.InitialOnClick = OnClick;
             this.HasButton = HasButton;
             this.CouldUse = CouldUse;
             this.PositionOffset = PositionOffset;
@@ -69,11 +64,7 @@ namespace TheOtherRoles.Objects {
                 actionButton.graphic.color = new Color(1f, 1f, 1f, 0.3f);
                 this.OnClick();
 
-                // Deputy skip onClickEvent if handcuffed
-                if (Deputy.handcuffedKnows.ContainsKey(PlayerControl.LocalPlayer.PlayerId) && Deputy.handcuffedKnows[PlayerControl.LocalPlayer.PlayerId] > 0f) return;
-
                 if (this.HasEffect && !this.isEffectActive) {
-                    this.DeputyTimer = this.EffectDuration;
                     this.Timer = this.EffectDuration;
                     actionButton.cooldownTimerText.color = new Color(0F, 0.8F, 0F);
                     this.isEffectActive = true;
@@ -120,7 +111,6 @@ namespace TheOtherRoles.Objects {
                 try
                 {
                     buttons[i].Timer = buttons[i].MaxTimer;
-                    buttons[i].DeputyTimer = buttons[i].MaxTimer;
                     buttons[i].Update();
                 }
                 catch (NullReferenceException)
@@ -140,31 +130,13 @@ namespace TheOtherRoles.Objects {
             }
         }
 
-        public void Update()
+        private void Update()
         {
             if (PlayerControl.LocalPlayer.Data == null || MeetingHud.Instance || ExileController.Instance || !HasButton()) {
                 setActive(false);
                 return;
             }
             setActive(hudManager.UseButton.isActiveAndEnabled);
-
-            if (DeputyTimer >= 0) { // This had to be reordered, so that the handcuffs do not stop the underlying timers from running
-                if (HasEffect && isEffectActive)
-                    DeputyTimer -= Time.deltaTime;
-                else if (!PlayerControl.LocalPlayer.inVent && PlayerControl.LocalPlayer.moveable)
-                    DeputyTimer -= Time.deltaTime;
-            }
-
-            if (DeputyTimer <= 0 && HasEffect && isEffectActive) {
-                isEffectActive = false;
-                actionButton.cooldownTimerText.color = Palette.EnabledColor;
-                OnEffectEnds();
-            }
-
-            if (isHandcuffed) {
-                setActive(false);
-                return;
-            }
 
             actionButton.graphic.sprite = Sprite;
             if (showButtonText && buttonText != ""){
@@ -183,7 +155,7 @@ namespace TheOtherRoles.Objects {
                 actionButton.graphic.color = actionButton.buttonLabelText.color = Palette.DisabledClear;
                 actionButton.graphic.material.SetFloat("_Desat", 1f);
             }
-        
+
             if (Timer >= 0) {
                 if (HasEffect && isEffectActive)
                     Timer -= Time.deltaTime;
@@ -201,16 +173,6 @@ namespace TheOtherRoles.Objects {
 
             // Trigger OnClickEvent if the hotkey is being pressed down
             if (hotkey.HasValue && Input.GetKeyDown(hotkey.Value)) onClickEvent();
-
-            // Deputy disable the button and display Handcuffs instead...
-            if (Deputy.handcuffedPlayers.Contains(PlayerControl.LocalPlayer.PlayerId)) {
-                OnClick = () => {
-                    Deputy.setHandcuffedKnows();
-                };
-            } else // Reset.
-            {
-                OnClick = InitialOnClick;
-            }
         }
     }
 }

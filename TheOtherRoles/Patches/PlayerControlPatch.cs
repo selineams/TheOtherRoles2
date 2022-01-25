@@ -142,26 +142,6 @@ namespace TheOtherRoles.Patches {
             setPlayerOutline(Sheriff.currentTarget, Sheriff.color);
         }
 
-        static void deputySetTarget()
-        {
-            if (Deputy.deputy == null || Deputy.deputy != PlayerControl.LocalPlayer) return;
-            Deputy.currentTarget = setTarget();
-            setPlayerOutline(Deputy.currentTarget, Deputy.color);
-        }
-
-        public static void deputyCheckPromotion(bool isMeeting=false)
-        {
-            // If LocalPlayer is Deputy, the Sheriff is disconnected and Deputy promotion is enabled, then trigger promotion
-            if (Deputy.deputy == null || Deputy.deputy != PlayerControl.LocalPlayer) return;
-            if (Deputy.promotesToSheriff == 0 || Deputy.deputy.Data.IsDead == true || Deputy.promotesToSheriff == 2 && !isMeeting) return;
-            if (Sheriff.sheriff == null || Sheriff.sheriff?.Data?.Disconnected == true || Sheriff.sheriff.Data.IsDead)
-            {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.DeputyPromotes, Hazel.SendOption.Reliable, -1);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
-                RPCProcedure.deputyPromotes();
-            }
-        }
-
         static void trackerSetTarget() {
             if (Tracker.tracker == null || Tracker.tracker != PlayerControl.LocalPlayer) return;
             Tracker.currentTarget = setTarget();
@@ -250,19 +230,6 @@ namespace TheOtherRoles.Patches {
             if (Spy.spy != null) untargetables.Add(Spy.spy);
             Eraser.currentTarget = setTarget(onlyCrewmates: !Eraser.canEraseAnyone, untargetablePlayers: Eraser.canEraseAnyone ? new List<PlayerControl>() : untargetables);
             setPlayerOutline(Eraser.currentTarget, Eraser.color);
-        }
-
-        static void deputyUpdate()
-        {
-            if (PlayerControl.LocalPlayer == null || !Deputy.handcuffedKnows.ContainsKey(PlayerControl.LocalPlayer.PlayerId)) return;
-            
-            if (Deputy.handcuffedKnows[PlayerControl.LocalPlayer.PlayerId] <= 0)
-            {
-                Deputy.handcuffedKnows.Remove(PlayerControl.LocalPlayer.PlayerId);
-                // Resets the buttons
-                Deputy.setHandcuffedKnows(false);
-            }
-            
         }
 
         static void engineerUpdate() {
@@ -483,15 +450,6 @@ namespace TheOtherRoles.Patches {
             SecurityGuard.ventTarget = target;
         }
 
-        public static void securityGuardUpdate() {
-            if (SecurityGuard.securityGuard == null || PlayerControl.LocalPlayer != SecurityGuard.securityGuard || SecurityGuard.securityGuard.Data.IsDead) return;
-            var (playerCompleted, _) = TasksHandler.taskInfo(SecurityGuard.securityGuard.Data);
-            if (playerCompleted == SecurityGuard.rechargedTasks) {
-                SecurityGuard.rechargedTasks += SecurityGuard.rechargeTasksNumber;
-                if (SecurityGuard.maxCharges > SecurityGuard.charges) SecurityGuard.charges++;
-            }
-        }
-
         public static void arsonistSetTarget() {
             if (Arsonist.arsonist == null || Arsonist.arsonist != PlayerControl.LocalPlayer) return;
             List<PlayerControl> untargetables;
@@ -540,16 +498,6 @@ namespace TheOtherRoles.Patches {
                 }
             }
         }
-        
-        static void undertakerDragBodyUpdate() {
-            if (Undertaker.undertaker == null || Undertaker.undertaker.Data.IsDead ) return;
-            if (Undertaker.deadBodyDraged != null ) {
-                Vector3 currentPosition = Undertaker.undertaker.transform.position;
-                Undertaker.deadBodyDraged.transform.position = currentPosition;
-            }
-
-        }
-
 
         static void bountyHunterUpdate() {
             if (BountyHunter.bountyHunter == null || PlayerControl.LocalPlayer != BountyHunter.bountyHunter) return;
@@ -575,9 +523,8 @@ namespace TheOtherRoles.Patches {
                 BountyHunter.arrowUpdateTimer = 0f; // Force arrow to update
                 BountyHunter.bountyUpdateTimer = BountyHunter.bountyDuration;
                 var possibleTargets = new List<PlayerControl>();
-                if (Lovers.getPartner(BountyHunter.bountyHunter) != null) 
                 foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
-                    if (!p.Data.IsDead && !p.Data.Disconnected && p != p.Data.Role.IsImpostor && p != Spy.spy && (p != Mini.mini || Mini.isGrownUp()) && (Lovers.getPartner(BountyHunter.bountyHunter) == null || p != Lovers.getPartner(BountyHunter.bountyHunter))) possibleTargets.Add(p);
+                    if (!p.Data.IsDead && !p.Data.Disconnected && p != p.Data.Role.IsImpostor && p != Spy.spy && (p != Mini.mini || Mini.isGrownUp())) possibleTargets.Add(p);
                 }
                 BountyHunter.bounty = possibleTargets[TheOtherRoles.rnd.Next(0, possibleTargets.Count)];
                 if (BountyHunter.bounty == null) return;
@@ -791,9 +738,6 @@ namespace TheOtherRoles.Patches {
                 shifterSetTarget();
                 // Sheriff
                 sheriffSetTarget();
-                // Deputy
-                deputySetTarget();
-                deputyUpdate();
                 // Detective
                 detectiveUpdateFootPrints();
                 // Tracker
@@ -815,19 +759,14 @@ namespace TheOtherRoles.Patches {
                 impostorSetTarget();
                 // Warlock
                 warlockSetTarget();
-                // Check for deputy promotion on Sheriff disconnect
-                deputyCheckPromotion();
                 // Check for sidekick promotion on Jackal disconnect
                 sidekickCheckPromotion();
                 // SecurityGuard
                 securityGuardSetTarget();
-                securityGuardUpdate();
                 // Arsonist
                 arsonistSetTarget();
                 // Snitch
                 snitchUpdate();
-                // undertaker
-                undertakerDragBodyUpdate();
                 // BountyHunter
                 bountyHunterUpdate();
                 // Bait
@@ -949,7 +888,7 @@ namespace TheOtherRoles.Patches {
                     otherLover.MurderPlayer(otherLover);
                 }
             }
-
+            
             // Sidekick promotion trigger on murder
             if (Sidekick.promotesToJackal && Sidekick.sidekick != null && !Sidekick.sidekick.Data.IsDead && target == Jackal.jackal && Jackal.jackal == PlayerControl.LocalPlayer) {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SidekickPromotes, Hazel.SendOption.Reliable, -1);
@@ -968,9 +907,6 @@ namespace TheOtherRoles.Patches {
             if (Cleaner.cleaner != null && PlayerControl.LocalPlayer == Cleaner.cleaner && __instance == Cleaner.cleaner && HudManagerStartPatch.cleanerCleanButton != null) 
                 HudManagerStartPatch.cleanerCleanButton.Timer = Cleaner.cleaner.killTimer;
 
-            // Undertaker Button Sync
-            if (Undertaker.undertaker!= null && PlayerControl.LocalPlayer == Undertaker.undertaker && __instance == Undertaker.undertaker && HudManagerStartPatch.undertakerDragButton != null)
-                HudManagerStartPatch.undertakerDragButton.Timer = Undertaker.dragingDelaiAfterKill;
 
             // Witch Button Sync
             if (Witch.triggerBothCooldowns && Witch.witch != null && PlayerControl.LocalPlayer == Witch.witch && __instance == Witch.witch && HudManagerStartPatch.witchSpellButton != null) 
