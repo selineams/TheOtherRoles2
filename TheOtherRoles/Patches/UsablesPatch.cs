@@ -7,7 +7,6 @@ using static TheOtherRoles.TheOtherRoles;
 using static TheOtherRoles.GameHistory;
 using static TheOtherRoles.MapOptions;
 using System.Collections.Generic;
-using TheOtherRoles.Objects;
 
 
 namespace TheOtherRoles.Patches {
@@ -15,7 +14,8 @@ namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(Vent), nameof(Vent.CanUse))]
     public static class VentCanUsePatch
     {
-        public static bool Prefix(Vent __instance, ref float __result, [HarmonyArgument(0)] GameData.PlayerInfo pc, [HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse) {
+        public static bool Prefix(Vent __instance, ref float __result, [HarmonyArgument(0)] GameData.PlayerInfo pc, [HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse)
+        {
             float num = float.MaxValue;
             PlayerControl @object = pc.Object;
 
@@ -38,9 +38,7 @@ namespace TheOtherRoles.Patches {
                 __result = num;
                 return false;
             }
-	 
-	    if (Undertaker.deadBodyDraged != null && Undertaker.undertaker== @object)
-                roleCouldUse = false;
+
             couldUse = (@object.inVent || roleCouldUse) && !pc.IsDead && (@object.CanMove || @object.inVent);
             canUse = couldUse;
             if (canUse)
@@ -60,7 +58,7 @@ namespace TheOtherRoles.Patches {
     class VentButtonDoClickPatch {
         static  bool Prefix(VentButton __instance) {
             // Manually modifying the VentButton to use Vent.Use again in order to trigger the Vent.Use prefix patch
-		    if (__instance.currentTarget != null && !Deputy.handcuffedKnows.ContainsKey(PlayerControl.LocalPlayer.PlayerId)) __instance.currentTarget.Use();
+		    if (__instance.currentTarget != null) __instance.currentTarget.Use();
             return false;
         }
     }
@@ -68,12 +66,6 @@ namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(Vent), nameof(Vent.Use))]
     public static class VentUsePatch {
         public static bool Prefix(Vent __instance) {
-            // Deputy handcuff disables the vents
-            if (Deputy.handcuffedPlayers.Contains(PlayerControl.LocalPlayer.PlayerId)) {
-                Deputy.setHandcuffedKnows();
-                return false;
-            }
-
             bool canUse;
             bool couldUse;
             __instance.CanUse(PlayerControl.LocalPlayer.Data, out canUse, out couldUse);
@@ -130,12 +122,6 @@ namespace TheOtherRoles.Patches {
     class KillButtonDoClickPatch {
         public static bool Prefix(KillButton __instance) {
             if (__instance.isActiveAndEnabled && __instance.currentTarget && !__instance.isCoolingDown && !PlayerControl.LocalPlayer.Data.IsDead && PlayerControl.LocalPlayer.CanMove) {
-                // Deputy handcuff update.
-                if (Deputy.handcuffedPlayers.Contains(PlayerControl.LocalPlayer.PlayerId)) {
-                    Deputy.setHandcuffedKnows();
-                    return false;
-                }
-                
                 // Use an unchecked kill command, to allow shorter kill cooldowns etc. without getting kicked
                 MurderAttemptResult res = Helpers.checkMuderAttemptAndKill(PlayerControl.LocalPlayer, __instance.currentTarget);
                 // Handle blank kill
@@ -156,6 +142,7 @@ namespace TheOtherRoles.Patches {
         }
     }
 
+
     [HarmonyPatch(typeof(SabotageButton), nameof(SabotageButton.Refresh))]
     class SabotageButtonRefreshPatch {
         static void Postfix() {
@@ -165,14 +152,6 @@ namespace TheOtherRoles.Patches {
             if (blockSabotageJanitor || blockSabotageMafioso) {
                 HudManager.Instance.SabotageButton.SetDisabled();
             }
-        }
-    }
-
-    [HarmonyPatch(typeof(ReportButton), nameof(ReportButton.DoClick))]
-    class ReportButtonDoClickPatch {
-        public static bool Prefix(ReportButton __instance) {
-            if (__instance.isActiveAndEnabled && Deputy.handcuffedPlayers.Contains(PlayerControl.LocalPlayer.PlayerId)) Deputy.setHandcuffedKnows();
-            return !Deputy.handcuffedKnows.ContainsKey(PlayerControl.LocalPlayer.PlayerId);
         }
     }
 
