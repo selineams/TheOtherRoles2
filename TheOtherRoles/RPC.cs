@@ -18,6 +18,7 @@ namespace TheOtherRoles
         Mayor,
         Engineer,
         Sheriff,
+        Deputy,
         Lighter,
         Godfather,
         Mafioso,
@@ -42,6 +43,7 @@ namespace TheOtherRoles
         Spy,
         Trickster,
         Cleaner,
+        Undertaker,
         Warlock,
         SecurityGuard,
         Arsonist,
@@ -77,6 +79,8 @@ namespace TheOtherRoles
         EngineerFixLights = 91,
         EngineerUsedRepair,
         CleanBody,
+        DragBody,
+        DropBody,
         MedicSetShielded,
         ShieldedMurderAttempt,
         TimeMasterShield,
@@ -88,6 +92,8 @@ namespace TheOtherRoles
         TrackerUsedTracker,
         VampireSetBitten,
         PlaceGarlic,
+        DeputyUsedHandcuffs,
+        DeputyPromotes,
         JackalCreatesSidekick,
         SidekickPromotes,
         ErasePlayerRoles,
@@ -162,6 +168,9 @@ namespace TheOtherRoles
                     case RoleId.Sheriff:
                         Sheriff.sheriff = player;
                         break;
+                    case RoleId.Deputy:
+                        Deputy.deputy = player;
+                        break;
                     case RoleId.Lighter:
                         Lighter.lighter = player;
                         break;
@@ -234,6 +243,9 @@ namespace TheOtherRoles
                         break;
                     case RoleId.Cleaner:
                         Cleaner.cleaner = player;
+                        break;
+                    case RoleId.Undertaker:
+                        Undertaker.undertaker= player;
                         break;
                     case RoleId.Warlock:
                         Warlock.warlock = player;
@@ -339,6 +351,24 @@ namespace TheOtherRoles
             }
         }
 
+        public static void dragBody(byte playerId)
+        {
+            DeadBody[] array = UnityEngine.Object.FindObjectsOfType<DeadBody>();
+            for (int i = 0; i < array.Length; i++) {
+                if (GameData.Instance.GetPlayerById(array[i].ParentId).PlayerId == playerId) {
+                    Undertaker.deadBodyDraged = array[i];
+                }
+            }
+        }
+
+        public static void dropBody(byte playerId)
+        {
+            if (Undertaker.undertaker == null || Undertaker.deadBodyDraged == null) return;
+            var deadBody = Undertaker.deadBodyDraged;
+            Undertaker.deadBodyDraged = null;
+            deadBody.transform.position = new Vector3(Undertaker.undertaker.GetTruePosition().x, Undertaker.undertaker.GetTruePosition().y, Undertaker.undertaker.transform.position.z);
+        }
+
         public static void timeMasterRewindTime() {
             TimeMaster.shieldActive = false; // Shield is no longer active when rewinding
             if(TimeMaster.timeMaster != null && TimeMaster.timeMaster == PlayerControl.LocalPlayer) {
@@ -431,8 +461,12 @@ namespace TheOtherRoles
                 Mayor.mayor = oldShifter;
             if (Engineer.engineer != null && Engineer.engineer == player)
                 Engineer.engineer = oldShifter;
-            if (Sheriff.sheriff != null && Sheriff.sheriff == player)
+            if (Sheriff.sheriff != null && Sheriff.sheriff == player) {
+                if (Sheriff.formerDeputy != null && Sheriff.formerDeputy == Sheriff.sheriff) Sheriff.formerDeputy = oldShifter;  // Shifter also shifts info on promoted deputy (to get handcuffs)
                 Sheriff.sheriff = oldShifter;
+            }
+            if (Deputy.deputy != null && Deputy.deputy == player)
+                Deputy.deputy = oldShifter;
             if (Lighter.lighter != null && Lighter.lighter == player)
                 Lighter.lighter = oldShifter;
             if (Detective.detective != null && Detective.detective == player)
@@ -525,6 +559,22 @@ namespace TheOtherRoles
                     Tracker.tracked = player;
         }
 
+        public static void deputyUsedHandcuffs(byte targetId)
+        {
+            Deputy.remainingHandcuffs--;
+            Deputy.handcuffedPlayers.Add(targetId);
+        }
+
+        public static void deputyPromotes()
+        {
+            if (Deputy.deputy != null) {  // Deputy should never be null here, but there appeared to be a race condition during testing, which was removed.
+                Sheriff.replaceCurrentSheriff(Deputy.deputy);
+                Sheriff.formerDeputy = Deputy.deputy;
+                Deputy.deputy = null;
+                // No clear and reload, as we need to keep the number of handcuffs left etc
+            }
+        }
+
         public static void jackalCreatesSidekick(byte targetId) {
             PlayerControl player = Helpers.playerById(targetId);
             if (player == null) return;
@@ -555,6 +605,7 @@ namespace TheOtherRoles
             if (player == Mayor.mayor) Mayor.clearAndReload();
             if (player == Engineer.engineer) Engineer.clearAndReload();
             if (player == Sheriff.sheriff) Sheriff.clearAndReload();
+            if (player == Deputy.deputy) Deputy.clearAndReload();
             if (player == Lighter.lighter) Lighter.clearAndReload();
             if (player == Detective.detective) Detective.clearAndReload();
             if (player == TimeMaster.timeMaster) TimeMaster.clearAndReload();
@@ -581,6 +632,7 @@ namespace TheOtherRoles
             if (player == Eraser.eraser) Eraser.clearAndReload();
             if (player == Trickster.trickster) Trickster.clearAndReload();
             if (player == Cleaner.cleaner) Cleaner.clearAndReload();
+            if (player == Undertaker.undertaker) Undertaker.clearAndReload();
             if (player == Warlock.warlock) Warlock.clearAndReload();
             if (player == Witch.witch) Witch.clearAndReload();
 
@@ -738,6 +790,14 @@ namespace TheOtherRoles
                         pva.SetDead(pva.DidReport, true);
                         pva.Overlay.gameObject.SetActive(true);
                     }
+
+                    //Give players back their vote if target is shot dead
+                    if (pva.VotedFor != dyingTargetId || pva.VotedFor != partnerId) continue;
+                    pva.UnsetVote();
+                    var voteAreaPlayer = Helpers.playerById(pva.TargetPlayerId);
+                    if (!voteAreaPlayer.AmOwner) continue;
+                    MeetingHud.Instance.ClearVote();
+
                 }
                 if (AmongUsClient.Instance.AmHost) 
                     MeetingHud.Instance.CheckForEndVoting();
@@ -843,6 +903,12 @@ namespace TheOtherRoles
                 case (byte)CustomRPC.CleanBody:
                     RPCProcedure.cleanBody(reader.ReadByte());
                     break;
+                case (byte)CustomRPC.DragBody:
+                    RPCProcedure.dragBody(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.DropBody:
+                    RPCProcedure.dropBody(reader.ReadByte());
+                    break;
                 case (byte)CustomRPC.TimeMasterRewindTime:
                     RPCProcedure.timeMasterRewindTime();
                     break;
@@ -879,6 +945,12 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.TrackerUsedTracker:
                     RPCProcedure.trackerUsedTracker(reader.ReadByte());
+                    break;               
+                case (byte)CustomRPC.DeputyUsedHandcuffs:
+                    RPCProcedure.deputyUsedHandcuffs(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.DeputyPromotes:
+                    RPCProcedure.deputyPromotes();
                     break;
                 case (byte)CustomRPC.JackalCreatesSidekick:
                     RPCProcedure.jackalCreatesSidekick(reader.ReadByte());
