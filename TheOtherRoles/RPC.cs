@@ -722,6 +722,24 @@ namespace TheOtherRoles
                     if (playerInfo != null) playerInfo.text = "";
             }
         }
+        // Executioner
+        public static void executionerSetTarget(byte playerId) {
+            Executioner.target = Helpers.playerById(playerId);
+        }
+
+        public static void executionerTurnsToJester() {
+            PlayerControl player = Executioner.executioner;
+            PlayerControl client = Executioner.target;
+            Lawyer.clearAndReload();
+            Jester.jester = player;
+
+            if (player.PlayerId == PlayerControl.LocalPlayer.PlayerId && client != null) {
+                    Transform playerInfoTransform = client.nameText.transform.parent.FindChild("Info");
+                    TMPro.TextMeshPro playerInfo = playerInfoTransform != null ? playerInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
+                    if (playerInfo != null) playerInfo.text = "";
+            }
+        }
+        
 
         public static void guesserShoot(byte killerId, byte dyingTargetId, byte guessedTargetId, byte guessedRoleId) {
             PlayerControl dyingTarget = Helpers.playerById(dyingTargetId);
