@@ -138,7 +138,7 @@ namespace TheOtherRoles.Modules {
                 int diff = TheOtherRolesPlugin.Version.CompareTo(ver);
                 if (diff < 0) { // Update required
                     hasUpdate = true;
-                    announcement = $@"<size=150%>A new <color=#FC0303>THE OTHER ROLES</color>
+                    announcement = $@"<size=150%>A new <color=#FC0303>THE OTHER ROLES Community Version</color>
 update to v{ver} is available</size>
 
 {announcement}";
@@ -150,8 +150,7 @@ update to v{ver} is available</size>
                     for (JToken current = assets.First; current != null; current = current.Next) {
                         string browser_download_url = current["browser_download_url"]?.ToString();
                         if (browser_download_url != null && current["content_type"] != null) {
-                            if (current["content_type"].ToString().Equals("application/x-msdownload") &&
-                                browser_download_url.EndsWith(".dll")) {
+                            if (browser_download_url.EndsWith(".dll")) {
                                 updateURI = browser_download_url;
                                 return true;
                             }
