@@ -139,7 +139,7 @@ namespace TheOtherRoles.Patches {
 
                     playerVoteArea.ClearForResults();
                     int num2 = 0;
-                    bool mayorFirstVoteDisplayed = false;
+                    bool mayorFirstVoteDisplayed = true; // We hide mayor
                     for (int j = 0; j < states.Length; j++) {
                         MeetingHud.VoterState voterState = states[j];
                         GameData.PlayerInfo playerById = GameData.Instance.GetPlayerById(voterState.VoterId);
