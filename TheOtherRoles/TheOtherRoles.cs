@@ -49,6 +49,7 @@ namespace TheOtherRoles
             Spy.clearAndReload();
             Trickster.clearAndReload();
             Cleaner.clearAndReload();
+            Undertaker.clearAndReload();
             Warlock.clearAndReload();
             SecurityGuard.clearAndReload();
             Arsonist.clearAndReload();
@@ -81,9 +82,13 @@ namespace TheOtherRoles
         public static class Mayor {
             public static PlayerControl mayor;
             public static Color color = new Color32(32, 77, 66, byte.MaxValue);
+            public static bool canSeeVoteColors = false;
+            public static int tasksNeededToSeeVoteColors;
 
             public static void clearAndReload() {
                 mayor = null;
+                canSeeVoteColors = CustomOptionHolder.mayorCanSeeVoteColors.getBool();
+                tasksNeededToSeeVoteColors = (int)CustomOptionHolder.mayorTasksNeededToSeeVoteColors.getFloat();
             }
         }
 
@@ -386,7 +391,10 @@ namespace TheOtherRoles
         private static Sprite spriteCheck;
         public static bool canCallEmergency = false;
         public static bool canOnlySwapOthers = false;
-
+        public static int charges;
+        public static float rechargeTasksNumber;
+        public static float rechargedTasks;
+ 
         public static byte playerId1 = Byte.MaxValue;
         public static byte playerId2 = Byte.MaxValue;
 
@@ -402,6 +410,9 @@ namespace TheOtherRoles
             playerId2 = Byte.MaxValue;
             canCallEmergency = CustomOptionHolder.swapperCanCallEmergency.getBool();
             canOnlySwapOthers = CustomOptionHolder.swapperCanOnlySwapOthers.getBool();
+            charges = Mathf.RoundToInt(CustomOptionHolder.swapperSwapsNumber.getFloat());
+            rechargeTasksNumber = Mathf.RoundToInt(CustomOptionHolder.swapperRechargeTasksNumber.getFloat());
+            rechargedTasks = Mathf.RoundToInt(CustomOptionHolder.swapperRechargeTasksNumber.getFloat());
         }
     }
 
@@ -792,6 +803,9 @@ namespace TheOtherRoles
         public static bool jackalPromotedFromSidekickCanCreateSidekick = true;
         public static bool canCreateSidekickFromImpostor = true;
         public static bool hasImpostorVision = false;
+        public static bool wasTeamRed;
+        public static bool wasImpostor;
+        public static bool wasSpy;
 
         public static Sprite getSidekickButtonSprite() {
             if (buttonSprite) return buttonSprite;
@@ -820,6 +834,7 @@ namespace TheOtherRoles
             canCreateSidekickFromImpostor = CustomOptionHolder.jackalCanCreateSidekickFromImpostor.getBool();
             formerJackals.Clear();
             hasImpostorVision = CustomOptionHolder.jackalAndSidekickHaveImpostorVision.getBool();
+            wasTeamRed = wasImpostor = wasSpy = false;
         }
         
     }
@@ -829,6 +844,10 @@ namespace TheOtherRoles
         public static Color color = new Color32(0, 180, 235, byte.MaxValue);
 
         public static PlayerControl currentTarget;
+
+        public static bool wasTeamRed;
+        public static bool wasImpostor;
+        public static bool wasSpy;
 
         public static float cooldown = 30f;
         public static bool canUseVents = true;
@@ -844,6 +863,7 @@ namespace TheOtherRoles
             canKill = CustomOptionHolder.sidekickCanKill.getBool();
             promotesToJackal = CustomOptionHolder.sidekickPromotesToJackal.getBool();
             hasImpostorVision = CustomOptionHolder.jackalAndSidekickHaveImpostorVision.getBool();
+            wasTeamRed = wasImpostor = wasSpy = false;
         }
     }
 
@@ -948,6 +968,36 @@ namespace TheOtherRoles
         }
     }
 
+    public static class Undertaker
+    {
+        public static PlayerControl undertaker;
+        public static Color color = Palette.ImpostorRed;
+
+        public static float dragingDelaiAfterKill = 0f;
+
+        public static bool isDraging = false;
+        public static DeadBody deadBodyDraged = null;
+
+
+        private static Sprite buttonSprite;
+        public static Sprite getButtonSprite()
+        {
+            if (buttonSprite) return buttonSprite;
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.UndertakerDragButton.png", 115f);
+            return buttonSprite;
+        }
+
+        public static void clearAndReload()
+        {
+            undertaker = null;
+            isDraging = false;
+            deadBodyDraged = null;
+            dragingDelaiAfterKill = CustomOptionHolder.undertakerDragingDelaiAfterKill.getFloat();
+        }
+    }
+
+
+    
     public static class Warlock {
 
         public static PlayerControl warlock;
