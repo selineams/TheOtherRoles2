@@ -117,7 +117,7 @@ namespace TheOtherRoles.Modules {
             try {
                 HttpClient http = new HttpClient();
                 http.DefaultRequestHeaders.Add("User-Agent", "TheOtherRoles Updater");
-                var response = await http.GetAsync(new System.Uri("https://api.github.com/repos/Eisbison/TheOtherRoles/releases/latest"), HttpCompletionOption.ResponseContentRead);
+                var response = await http.GetAsync(new System.Uri("https://api.github.com/repos/JustASysAdmin/TheOtherRoles2/releases/latest"), HttpCompletionOption.ResponseContentRead);
                 // var response = await http.GetAsync(new System.Uri("https://api.github.com/repos/EoF-1141/TheOtherRoles/releases/latest"), HttpCompletionOption.ResponseContentRead);
                 if (response.StatusCode != HttpStatusCode.OK || response.Content == null) {
                     System.Console.WriteLine("Server returned no data: " + response.StatusCode.ToString());
@@ -138,7 +138,7 @@ namespace TheOtherRoles.Modules {
                 int diff = TheOtherRolesPlugin.Version.CompareTo(ver);
                 if (diff < 0) { // Update required
                     hasUpdate = true;
-                    announcement = $@"<size=150%>A new <color=#FC0303>THE OTHER ROLES</color>
+                    announcement = $@"<size=150%>A new <color=#FC0303>THE OTHER ROLES Community Version</color>
 update to v{ver} is available</size>
 
 {announcement}";
@@ -150,8 +150,7 @@ update to v{ver} is available</size>
                     for (JToken current = assets.First; current != null; current = current.Next) {
                         string browser_download_url = current["browser_download_url"]?.ToString();
                         if (browser_download_url != null && current["content_type"] != null) {
-                            if (current["content_type"].ToString().Equals("application/x-msdownload") &&
-                                browser_download_url.EndsWith(".dll")) {
+                            if (browser_download_url.EndsWith(".dll")) {
                                 updateURI = browser_download_url;
                                 return true;
                             }

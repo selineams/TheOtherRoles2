@@ -8,6 +8,7 @@ using UnityEngine;
 using System.Linq;
 using static TheOtherRoles.TheOtherRoles;
 using TheOtherRoles.Modules;
+using TheOtherRoles.Objects;
 using HarmonyLib;
 using Hazel;
 
@@ -19,7 +20,23 @@ namespace TheOtherRoles {
         BlankKill
     }
     public static class Helpers {
-
+    
+        
+        public static void enableCursor(string mode) {
+            if (mode == "init") {
+                Sprite sprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Cursor.png", 115f);
+                Cursor.SetCursor(sprite.texture, Vector2.zero, CursorMode.Auto);
+                return;
+            }
+            if (TheOtherRolesPlugin.ToggleCursor.Value) {
+                Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+            }
+            else {
+                Sprite sprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Cursor.png", 115f);
+                Cursor.SetCursor(sprite.texture, Vector2.zero, CursorMode.Auto);
+            }
+        }
+        
         public static Sprite loadSpriteFromResources(string path, float pixelsPerUnit) {
             try {
                 Texture2D texture = loadTextureFromResources(path);

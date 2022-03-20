@@ -56,6 +56,7 @@ namespace TheOtherRoles
         Lawyer,
         Pursuer,
         Witch,
+        Ninja,
         Crewmate,
         Impostor
     }
@@ -102,6 +103,7 @@ namespace TheOtherRoles
         SetFutureShifted,
         SetFutureShielded,
         SetFutureSpelled,
+        PlaceNinjaTrace,
         PlaceJackInTheBox,
         LightsOut,
         PlaceCamera,
@@ -122,6 +124,7 @@ namespace TheOtherRoles
         public static void resetVariables() {
             Garlic.clearGarlics();
             JackInTheBox.clearJackInTheBoxes();
+            NinjaTrace.clearTraces();
             clearAndReloadMapOptions();
             clearAndReloadRoles();
             clearGameHistory();
@@ -283,6 +286,9 @@ namespace TheOtherRoles
                         break;
                     case RoleId.Witch:
                         Witch.witch = player;
+                        break;
+                    case RoleId.Ninja:
+                        Ninja.ninja = player;
                         break;
                     }
                 }
@@ -650,6 +656,7 @@ namespace TheOtherRoles
             if (player == Undertaker.undertaker) Undertaker.clearAndReload();
             if (player == Warlock.warlock) Warlock.clearAndReload();
             if (player == Witch.witch) Witch.clearAndReload();
+            if (player == Ninja.ninja) Ninja.clearAndReload();
 
             // Other roles
             if (player == Jester.jester) Jester.clearAndReload();
@@ -699,6 +706,13 @@ namespace TheOtherRoles
             }
         }
 
+        public static void placeNinjaTrace(byte[] buff)
+        {
+            Vector3 position = Vector3.zero;
+            position.x = BitConverter.ToSingle(buff, 0 * sizeof(float));
+            position.y = BitConverter.ToSingle(buff, 1 * sizeof(float));
+            new NinjaTrace(position, Ninja.traceTime);
+        }
 
         public static void placeJackInTheBox(byte[] buff) {
             Vector3 position = Vector3.zero;
@@ -988,6 +1002,9 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.SetFutureShielded:
                     RPCProcedure.setFutureShielded(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.PlaceNinjaTrace:
+                    RPCProcedure.placeNinjaTrace(reader.ReadBytesAndSize());
                     break;
                 case (byte)CustomRPC.PlaceJackInTheBox:
                     RPCProcedure.placeJackInTheBox(reader.ReadBytesAndSize());
