@@ -15,6 +15,7 @@ namespace TheOtherRoles
 {
     enum RoleId {
         Jester,
+	Executioner,
         Mayor,
         Engineer,
         Sheriff,
@@ -115,6 +116,9 @@ namespace TheOtherRoles
         LawyerSetTarget,
         LawyerPromotesToPursuer,
         SetBlanked,
+	ExecutionerChangesRole,
+	ExecutionerSetTarget,
+        ExecutionerToPursuer,
     }
 
     public static class RPCProcedure {
@@ -162,6 +166,9 @@ namespace TheOtherRoles
                     switch((RoleId)roleId) {
                     case RoleId.Jester:
                         Jester.jester = player;
+                        break;
+                    case RoleId.Executioner:
+                        Executioner.executioner = player;
                         break;
                     case RoleId.Mayor:
                         Mayor.mayor = player;
@@ -599,6 +606,9 @@ namespace TheOtherRoles
                 DestroyableSingleton<RoleManager>.Instance.SetRole(player, RoleTypes.Crewmate);
                 erasePlayerRoles(player.PlayerId, true);
                 Sidekick.sidekick = player;
+		if (Executioner.executioner != null && Executioner.target == player) {
+		  executionerChangesRole();
+		}
                 if (player.PlayerId == PlayerControl.LocalPlayer.PlayerId) PlayerControl.LocalPlayer.moveable = true;
                 if (wasSpy || wasImpostor) Sidekick.wasTeamRed = true;
                 Sidekick.wasSpy = wasSpy;
@@ -660,6 +670,7 @@ namespace TheOtherRoles
 
             // Other roles
             if (player == Jester.jester) Jester.clearAndReload();
+            if (player == Executioner.executioner) Executioner.clearAndReload();
             if (player == Arsonist.arsonist) Arsonist.clearAndReload();
             if (Guesser.isGuesser(player.PlayerId)) Guesser.clear(player.PlayerId);
             if (!ignoreLovers && (player == Lovers.lover1 || player == Lovers.lover2)) { // The whole Lover couple is being erased
@@ -802,6 +813,25 @@ namespace TheOtherRoles
                     TMPro.TextMeshPro playerInfo = playerInfoTransform != null ? playerInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
                     if (playerInfo != null) playerInfo.text = "";
             }
+        }
+
+        // Executioner
+        public static void executionerSetTarget(byte playerId) {
+            Executioner.target = Helpers.playerById(playerId);
+        }
+
+        public static void executionerChangesRole() {
+            PlayerControl player = Executioner.executioner;
+            PlayerControl target = Executioner.target;
+            Executioner.clearAndReload();
+            Lawyer.lawyer = player;
+            Lawyer.target = target;
+        }
+
+        public static void executionerToPursuer() {
+            PlayerControl player = Executioner.executioner;
+            Executioner.clearAndReload();
+            Pursuer.pursuer = player;
         }
 
         public static void guesserShoot(byte killerId, byte dyingTargetId, byte guessedTargetId, byte guessedRoleId) {
@@ -1039,6 +1069,15 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.LawyerPromotesToPursuer:
                     RPCProcedure.lawyerPromotesToPursuer();
+                    break;
+                case (byte)CustomRPC.ExecutionerSetTarget:
+                    RPCProcedure.executionerSetTarget(reader.ReadByte()); 
+                    break;
+                case (byte)CustomRPC.ExecutionerChangesRole:
+                    RPCProcedure.executionerChangesRole();
+                    break;
+                case (byte)CustomRPC.ExecutionerToPursuer:
+                    RPCProcedure.executionerToPursuer();
                     break;
                 case (byte)CustomRPC.SetBlanked:
                     var pid = reader.ReadByte();
