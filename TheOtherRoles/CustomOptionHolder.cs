@@ -67,6 +67,9 @@ namespace TheOtherRoles {
         public static CustomOption jesterCanCallEmergency;
         public static CustomOption jesterHasImpostorVision;
 
+	public static CustomOption executionerSpawnRate;
+        public static CustomOption executionerMode;
+
         public static CustomOption arsonistSpawnRate;
         public static CustomOption arsonistCooldown;
         public static CustomOption arsonistDuration;
@@ -359,6 +362,8 @@ namespace TheOtherRoles {
             jesterCanCallEmergency = CustomOption.Create(61, "Jester Can Call Emergency Meeting", true, jesterSpawnRate);
             jesterHasImpostorVision = CustomOption.Create(62, "Jester Has Impostor Vision", false, jesterSpawnRate);
 
+            executionerSpawnRate = CustomOption.Create(615, cs(Executioner.color, "Executioner"), "neutral", rates, null, true);
+
             arsonistSpawnRate = CustomOption.Create(290, cs(Arsonist.color, "Arsonist"), rates, null, true);
             arsonistCooldown = CustomOption.Create(291, "Arsonist Cooldown", 12.5f, 2.5f, 60f, 2.5f, arsonistSpawnRate);
             arsonistDuration = CustomOption.Create(292, "Arsonist Douse Duration", 3f, 1f, 10f, 1f, arsonistSpawnRate);
@@ -517,6 +522,9 @@ namespace TheOtherRoles {
             blockedRolePairings.Add((byte)RoleId.Mini, new [] { (byte)RoleId.Spy});
             blockedRolePairings.Add((byte)RoleId.Vulture, new [] { (byte)RoleId.Cleaner});
             blockedRolePairings.Add((byte)RoleId.Cleaner, new [] { (byte)RoleId.Vulture});
+            blockedRolePairings.Add((byte)RoleId.Lawyer, new[] { (byte)RoleId.Executioner });
+            blockedRolePairings.Add((byte)RoleId.Executioner, new[] { (byte)RoleId.Lawyer });
+
             
         }
     }
