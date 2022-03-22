@@ -362,7 +362,7 @@ namespace TheOtherRoles {
             jesterCanCallEmergency = CustomOption.Create(61, "Jester Can Call Emergency Meeting", true, jesterSpawnRate);
             jesterHasImpostorVision = CustomOption.Create(62, "Jester Has Impostor Vision", false, jesterSpawnRate);
 
-            executionerSpawnRate = CustomOption.Create(615, cs(Executioner.color, "Executioner"), "neutral", rates, null, true);
+            executionerSpawnRate = CustomOption.Create(615, cs(Executioner.color, "Executioner"), rates, null, true);
 
             arsonistSpawnRate = CustomOption.Create(290, cs(Arsonist.color, "Arsonist"), rates, null, true);
             arsonistCooldown = CustomOption.Create(291, "Arsonist Cooldown", 12.5f, 2.5f, 60f, 2.5f, arsonistSpawnRate);
