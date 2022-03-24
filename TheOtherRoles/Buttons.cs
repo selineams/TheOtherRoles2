@@ -399,6 +399,7 @@ namespace TheOtherRoles
                     else
                         RPCProcedure.medicSetShielded(Medic.currentTarget.PlayerId);
                     SoundEffectsManager.play("medicShield");
+                    Medic.meetingAfterShielding = false;
                 },
                 () => { return Medic.medic != null && Medic.medic == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => {
