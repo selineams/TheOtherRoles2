@@ -168,7 +168,7 @@ namespace TheOtherRoles.Patches {
         {
             // If LocalPlayer is Executioner and the target is disconnected, then trigger promotion
             if (Executioner.executioner == null || Executioner.executioner != PlayerControl.LocalPlayer) return;
-            if (Executioner.executioner == null || Executioner.executioner?.Data?.Disconnected == true || Executioner.executioner.Data.IsDead)
+            if (Executioner.target == null || Executioner.target?.Data?.Disconnected == true || Executioner.target.Data.IsDead)
             {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ExecutionerToPursuer, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
