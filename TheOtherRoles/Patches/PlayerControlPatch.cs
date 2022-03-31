@@ -747,7 +747,7 @@ namespace TheOtherRoles.Patches {
 
 
             // Camouflage reset and set Morphling look if necessary
-            if (oldCamouflageTimer > 0f && Camouflager.camouflageTimer <= 0f) {
+            if (oldCamouflageTimer > 0f && Camouflager.camouflageTimer <= 0f && !Camouflager.commsCamo) {
                 Camouflager.resetCamouflage();
                 if (Morphling.morphTimer > 0f && Morphling.morphling != null && Morphling.morphTarget != null) {
                     PlayerControl target = Morphling.morphTarget;

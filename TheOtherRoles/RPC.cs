@@ -92,6 +92,7 @@ namespace TheOtherRoles
         SwapperSwap,
         MorphlingMorph,
         CamouflagerCamouflage,
+        CommsCamouflage,
         TrackerUsedTracker,
         VampireSetBitten,
         PlaceGarlic,
@@ -551,6 +552,13 @@ namespace TheOtherRoles
                 player.setLook("", 6, "", "", "", "");
         }
 
+        public static void commsCamouflage() {
+            if (!Camouflager.commsCamo) return;
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+                player.setLook("", 6, "", "", "", "");
+            Camouflager.commsCamoActive = true;
+        }
+
         public static void vampireSetBitten(byte targetId, byte performReset) {
             if (performReset != 0) {
                 Vampire.bitten = null;
@@ -998,6 +1006,9 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.CamouflagerCamouflage:
                     RPCProcedure.camouflagerCamouflage();
+                    break;
+                case (byte)CustomRPC.CommsCamouflage:
+                    RPCProcedure.commsCamouflage();
                     break;
                 case (byte)CustomRPC.VampireSetBitten:
                     byte bittenId = reader.ReadByte();

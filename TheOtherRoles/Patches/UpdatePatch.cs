@@ -1,4 +1,5 @@
 using HarmonyLib;
+using Hazel;
 using System;
 using System.IO;
 using System.Net.Http;
@@ -282,6 +283,46 @@ namespace TheOtherRoles.Patches {
 
         }
 
+        static void checkCamoComms(HudManager __instance) {
+            bool isCommsSaboActive = false;
+            if (CustomOptionHolder.camoComms.getBool()) {
+                if (ShipStatus.Instance != null) {
+                    switch (PlayerControl.GameOptions.MapId) {
+                        case 0:
+                        case 2:
+                        case 3:
+                        case 4:
+                            var comms1 = ShipStatus.Instance.Systems[SystemTypes.Comms].Cast<HudOverrideSystemType>();
+                            if (comms1.IsActive) {
+                                isCommsSaboActive = true;
+                            }
+
+                            break;
+                        case 1:
+                            var comms2 = ShipStatus.Instance.Systems[SystemTypes.Comms].Cast<HqHudSystemType>();
+                            if (comms2.IsActive) {
+                                isCommsSaboActive = true;
+                            }
+
+                            break;
+                    }
+                }
+                if (isCommsSaboActive) {
+                    Camouflager.commsCamo = true;
+                } else {
+                    Camouflager.commsCamo = false;
+                    Camouflager.commsCamoActive = false;
+                    if (Camouflager.camouflageTimer == 0f) Camouflager.resetCamouflage();
+                }
+            }
+            if (Camouflager.commsCamo && !Camouflager.commsCamoActive) {
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.CommsCamouflage, Hazel.SendOption.Reliable, -1);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.commsCamouflage();
+            }
+        }
+
+
         static void Postfix(HudManager __instance)
         {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
@@ -302,6 +343,8 @@ namespace TheOtherRoles.Patches {
             // Deputy Sabotage, Use and Vent Button Disabling
             updateReportButton(__instance);
             updateVentButton(__instance);
+
+            checkCamoComms(__instance);
 
         }
     }
