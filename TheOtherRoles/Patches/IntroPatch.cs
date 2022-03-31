@@ -79,6 +79,21 @@ namespace TheOtherRoles.Patches {
                 }
                 yourTeam = fakeImpostorTeam;
             }
+
+
+
+            // Add the Executioner Target to the Executioner team (for the Executioner)
+            if (Executioner.executioner != null && PlayerControl.LocalPlayer == Executioner.executioner) {
+                List<PlayerControl> players = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
+                var fakeExecutionerTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>(); // The local player always has to be the first one in the list (to be displayed in the center)
+                fakeExecutionerTeam.Add(PlayerControl.LocalPlayer);
+                foreach (PlayerControl p in players) {
+                    if (PlayerControl.LocalPlayer != p && (p == Executioner.target))
+                        fakeExecutionerTeam.Add(p);
+                }
+                yourTeam = fakeExecutionerTeam;
+            }
+
         }
 
         public static void setupIntroTeam(IntroCutscene __instance, ref  Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam) {
