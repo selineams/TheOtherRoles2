@@ -563,6 +563,8 @@ namespace TheOtherRoles
         public static float cooldown = 30f;
         public static float duration = 10f;
         public static float camouflageTimer = 0f;
+        public static bool commsCamo = false;
+        public static bool commsCamoActive = false;
 
         private static Sprite buttonSprite;
         public static Sprite getButtonSprite() {
@@ -572,6 +574,7 @@ namespace TheOtherRoles
         }
 
         public static void resetCamouflage() {
+            if (commsCamo) return;
             camouflageTimer = 0f;
             foreach (PlayerControl p in PlayerControl.AllPlayerControls)
                 p.setDefaultLook();
