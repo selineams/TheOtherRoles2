@@ -510,7 +510,6 @@ namespace TheOtherRoles {
             dynamicMapEnableMira = CustomOption.Create(502, "Enable Mira Rotation", true, dynamicMap, false);
             dynamicMapEnablePolus = CustomOption.Create(503, "Enable Polus Rotation", true, dynamicMap, false);
             dynamicMapEnableAirShip = CustomOption.Create(504, "Enable Airship Rotation", true, dynamicMap, false);
-            dynamicMapEnableDleks = CustomOption.Create(505, "Enable dlekS Rotation", false, dynamicMap, false);
             
             //LVK. Setting if the target of a button should be shown
             showButtonTarget = CustomOption.Create(9994, "Show Button Target", true);
