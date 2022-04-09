@@ -21,7 +21,7 @@ namespace TheOtherRoles
     public class TheOtherRolesPlugin : BasePlugin
     {
         public const string Id = "me.eisbison.theotherroles";
-        public const string VersionString = "3.4.4.13";
+        public const string VersionString = "3.4.5";
 
         public static System.Version Version = System.Version.Parse(VersionString);
         internal static BepInEx.Logging.ManualLogSource Logger;
@@ -40,6 +40,7 @@ namespace TheOtherRoles
         public static ConfigEntry<bool> ShowLighterDarker { get; set; }
         public static ConfigEntry<bool> ToggleCursor { get; set; }
         public static ConfigEntry<bool> ToggleShake { get; set; }
+        public static ConfigEntry<bool> EnableHorseMode { get; set; }
         public static ConfigEntry<string> StreamerModeReplacementText { get; set; }
         public static ConfigEntry<string> StreamerModeReplacementColor { get; set; }
         public static ConfigEntry<string> Ip { get; set; }
@@ -70,7 +71,7 @@ namespace TheOtherRoles
             ShowLighterDarker = Config.Bind("Custom", "Show Lighter / Darker", true);
             ToggleCursor = Config.Bind("Custom", "Better Cursor", true);
             ToggleShake = Config.Bind("Custom", "Remove Shake", true);
-
+            EnableHorseMode = Config.Bind("Custom", "Enable Horse Mode", false);
             ShowPopUpVersion = Config.Bind("Custom", "Show PopUp", "0");
             StreamerModeReplacementText = Config.Bind("Custom", "Streamer Mode Replacement Text", "\n\nThe Other Roles");
             StreamerModeReplacementColor = Config.Bind("Custom", "Streamer Mode Replacement Text Hex Color", "#87AAF5FF");
