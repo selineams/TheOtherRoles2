@@ -254,7 +254,6 @@ namespace TheOtherRoles {
         public static CustomOption dynamicMapEnableSkeld;
         public static CustomOption dynamicMapEnableMira;
         public static CustomOption dynamicMapEnablePolus;
-        public static CustomOption dynamicMapEnableDleks;
         public static CustomOption dynamicMapEnableAirShip;
 
 
