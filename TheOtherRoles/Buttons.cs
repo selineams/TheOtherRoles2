@@ -14,22 +14,24 @@ namespace TheOtherRoles
     {
         private static CustomButton engineerRepairButton;
         private static CustomButton janitorCleanButton;
-        private static CustomButton sheriffKillButton;
+        public static CustomButton sheriffKillButton;
         private static CustomButton deputyHandcuffButton;
         private static CustomButton timeMasterShieldButton;
         private static CustomButton medicShieldButton;
         private static CustomButton shifterShiftButton;
         private static CustomButton morphlingButton;
         private static CustomButton camouflagerButton;
+        private static CustomButton portalmakerPlacePortalButton;
+        private static CustomButton usePortalButton;
         private static CustomButton hackerButton;
         private static CustomButton hackerVitalsButton;
         private static CustomButton hackerAdminTableButton;
         private static CustomButton trackerTrackPlayerButton;
         private static CustomButton trackerTrackCorpsesButton;
-        private static CustomButton vampireKillButton;
+        public static CustomButton vampireKillButton;
         private static CustomButton garlicButton;
-        private static CustomButton jackalKillButton;
-        private static CustomButton sidekickKillButton;
+        public static CustomButton jackalKillButton;
+        public static CustomButton sidekickKillButton;
         private static CustomButton jackalSidekickButton;
         private static CustomButton lighterButton;
         private static CustomButton eraserButton;
@@ -66,6 +68,8 @@ namespace TheOtherRoles
             shifterShiftButton.MaxTimer = 0f;
             morphlingButton.MaxTimer = Morphling.cooldown;
             camouflagerButton.MaxTimer = Camouflager.cooldown;
+            portalmakerPlacePortalButton.MaxTimer = Portalmaker.cooldown;
+            usePortalButton.MaxTimer = Portalmaker.usePortalCooldown;
             hackerButton.MaxTimer = Hacker.cooldown;
             hackerVitalsButton.MaxTimer = Hacker.cooldown;
             hackerAdminTableButton.MaxTimer = Hacker.cooldown;
@@ -773,7 +777,65 @@ namespace TheOtherRoles
                 true
             );
 
-            
+            portalmakerPlacePortalButton = new CustomButton(
+                () => {
+                    portalmakerPlacePortalButton.Timer = portalmakerPlacePortalButton.MaxTimer;
+
+                    var pos = PlayerControl.LocalPlayer.transform.position;
+                    byte[] buff = new byte[sizeof(float) * 2];
+                    Buffer.BlockCopy(BitConverter.GetBytes(pos.x), 0, buff, 0 * sizeof(float), sizeof(float));
+                    Buffer.BlockCopy(BitConverter.GetBytes(pos.y), 0, buff, 1 * sizeof(float), sizeof(float));
+
+                    MessageWriter writer = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.PlacePortal, Hazel.SendOption.Reliable);
+                    writer.WriteBytesAndSize(buff);
+                    writer.EndMessage();
+                    RPCProcedure.placePortal(buff);
+                },
+                () => { return Portalmaker.portalmaker != null && Portalmaker.portalmaker == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead && Portal.secondPortal == null; },
+                () => { return PlayerControl.LocalPlayer.CanMove && Portal.secondPortal == null; },
+                () => { portalmakerPlacePortalButton.Timer = portalmakerPlacePortalButton.MaxTimer; },
+                Portalmaker.getPlacePortalButtonSprite(),
+                new Vector3(-1.8f, -0.06f, 0),
+                __instance,
+                KeyCode.F
+            );
+
+            usePortalButton = new CustomButton(
+                () => {
+                    bool didTeleport = false;
+                    Vector2 exit = Portal.findExit(PlayerControl.LocalPlayer.transform.position);
+                    Vector2 entry = Portal.findEntry(PlayerControl.LocalPlayer.transform.position);
+                    PlayerControl.LocalPlayer.NetTransform.RpcSnapTo(entry);  // TODO: check for bans on servers
+
+                    if (!PlayerControl.LocalPlayer.Data.IsDead) {  // Ghosts can portal too, but non-blocking and only with a local animation
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UsePortal, Hazel.SendOption.Reliable, -1);
+                        writer.Write((byte)PlayerControl.LocalPlayer.PlayerId);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    }
+                    RPCProcedure.usePortal(PlayerControl.LocalPlayer.PlayerId);
+                    usePortalButton.Timer = usePortalButton.MaxTimer;
+                    HudManager.Instance.StartCoroutine(Effects.Lerp(Portal.teleportDuration, new Action<float>((p) => { // Delayed action
+                        PlayerControl.LocalPlayer.moveable = false;
+                        PlayerControl.LocalPlayer.NetTransform.Halt();
+                        if (p >= 0.5f && p <= 0.53f && !didTeleport) {
+                            PlayerControl.LocalPlayer.NetTransform.RpcSnapTo(exit);
+                            didTeleport = true;
+                        }
+                        if (p == 1f) {
+                            PlayerControl.LocalPlayer.moveable = true;
+                        }
+                    })));
+                    },
+                () => { return Portal.bothPlacedAndEnabled; },
+                () => { return PlayerControl.LocalPlayer.CanMove && Portal.locationNearEntry(PlayerControl.LocalPlayer.transform.position) && !Portal.isTeleporting; },
+                () => { usePortalButton.Timer = usePortalButton.MaxTimer; },
+                Portalmaker.getUsePortalButtonSprite(),
+                new Vector3(0.9f, -0.06f, 0),
+                __instance,
+                KeyCode.H,
+                mirror: true
+            );
+
             // Jackal Sidekick Button
             jackalSidekickButton = new CustomButton(
                 () => {
@@ -1448,10 +1510,14 @@ namespace TheOtherRoles
                         RPCProcedure.setFutureSpelled(Witch.currentTarget.PlayerId);
                     }
                     if (attempt == MurderAttemptResult.BlankKill || attempt == MurderAttemptResult.PerformKill) {
-                        witchSpellButton.MaxTimer += Witch.cooldownAddition;
+                        Witch.currentCooldownAddition += Witch.cooldownAddition;
+                        witchSpellButton.MaxTimer = Witch.cooldown + Witch.currentCooldownAddition;
+                        Patches.PlayerControlFixedUpdatePatch.miniCooldownUpdate();  // Modifies the MaxTimer if the witch is the mini
                         witchSpellButton.Timer = witchSpellButton.MaxTimer;
-                        if (Witch.triggerBothCooldowns)
-                            Witch.witch.killTimer = PlayerControl.GameOptions.KillCooldown;
+                        if (Witch.triggerBothCooldowns) {
+                            float multiplier = (Mini.mini != null && PlayerControl.LocalPlayer == Mini.mini) ? (Mini.isGrownUp() ? 0.66f : 2f) : 1f;
+                            Witch.witch.killTimer = PlayerControl.GameOptions.KillCooldown * multiplier;
+                        }
                     } else {
                         witchSpellButton.Timer = 0f;
                     }
