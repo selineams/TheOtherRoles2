@@ -52,6 +52,9 @@ namespace TheOtherRoles.Patches {
                 JackInTheBox.convertToVents();
             }
 
+            // Activate portals.
+            Portal.meetingEndsUpdate();
+
             // Witch execute casted spells
             if (Witch.witch != null && Witch.futureSpelled != null && AmongUsClient.Instance.AmHost) {
                 bool exiledIsWitch = exiled != null && exiled.PlayerId == Witch.witch.PlayerId;
@@ -111,7 +114,7 @@ namespace TheOtherRoles.Patches {
 
         static void WrapUpPostfix(GameData.PlayerInfo exiled) {
             // Mini exile lose condition
-            if (exiled != null && Mini.mini != null && Mini.mini.PlayerId == exiled.PlayerId && !Mini.isGrownUp() && !Mini.mini.Data.Role.IsImpostor) {
+            if (exiled != null && Mini.mini != null && Mini.mini.PlayerId == exiled.PlayerId && !Mini.isGrownUp() && !Mini.mini.Data.Role.IsImpostor && !RoleInfo.getRoleInfoForPlayer(Mini.mini).Any(x => x.isNeutral)) {
                 Mini.triggerMiniLose = true;
             }
             // Jester win condition
@@ -203,9 +206,17 @@ namespace TheOtherRoles.Patches {
                     Medium.featureDeadBodies = new List<Tuple<DeadPlayer, Vector3>>();
                 }
             }
-
+            // Lawyer add meeting
             if (Lawyer.lawyer != null && PlayerControl.LocalPlayer == Lawyer.lawyer && !Lawyer.lawyer.Data.IsDead)
                 Lawyer.meetings++;
+
+            // AntiTeleport set position
+            if (AntiTeleport.antiTeleport.FindAll(x => x.PlayerId == PlayerControl.LocalPlayer.PlayerId).Count > 0) {
+                PlayerControl.LocalPlayer.transform.position = AntiTeleport.position;
+            }
+
+            // Invert add meeting
+            if (Invert.meetings > 0) Invert.meetings--;
         }
     }
 
@@ -218,12 +229,14 @@ namespace TheOtherRoles.Patches {
                     if (player == null) return;
                     // Exile role text
                     if (id == StringNames.ExileTextPN || id == StringNames.ExileTextSN || id == StringNames.ExileTextPP || id == StringNames.ExileTextSP) {
-                        __result = player.Data.PlayerName + " was The " + String.Join(" ", RoleInfo.getRoleInfoForPlayer(player).Select(x => x.name).ToArray());
+                        __result = player.Data.PlayerName + " was The " + String.Join(" ", RoleInfo.getRoleInfoForPlayer(player, false).Select(x => x.name).ToArray());
                     }
                     // Hide number of remaining impostors on Jester win
                     if (id == StringNames.ImpostorsRemainP || id == StringNames.ImpostorsRemainS) {
                         if (Jester.jester != null && player.PlayerId == Jester.jester.PlayerId) __result = "";
                     }
+                    if (Tiebreaker.isTiebreak) __result += " (Tiebreaker)";
+                    Tiebreaker.isTiebreak = false;
                 }
             } catch {
                 // pass - Hopefully prevent leaving while exiling to softlock game
