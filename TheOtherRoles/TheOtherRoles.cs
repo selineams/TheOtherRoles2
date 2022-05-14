@@ -21,6 +21,7 @@ namespace TheOtherRoles
 
         public static void clearAndReloadRoles() {
             Jester.clearAndReload();
+            Prosecutor.clearAndReload();
             Mayor.clearAndReload();
             Portalmaker.clearAndReload();
             Engineer.clearAndReload();
@@ -128,6 +129,21 @@ namespace TheOtherRoles
             }
 
 
+        }
+		
+        public static class Prosecutor {
+            public static PlayerControl prosecutor;
+            public static PlayerControl target;
+            public static Color color = new Color32(201, 204, 63, byte.MaxValue);
+            public static Color targetColor = new Color32(0, 0, 0, byte.MaxValue);
+
+            public static bool triggerProsecutorWin = false;
+
+            public static void clearAndReload() {
+              prosecutor = null;
+              triggerProsecutorWin = false;
+              target = null;
+            }
         }
 
         public static class Mayor {
@@ -1404,6 +1420,7 @@ namespace TheOtherRoles
         public static int blanks = 0;
         public static Sprite blank;
         public static bool notAckedExiled = false;
+		public static bool wasProsecutor = false;
 
         public static float cooldown = 30f;
         public static int blanksNumber = 5;
