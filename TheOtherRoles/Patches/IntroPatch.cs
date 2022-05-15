@@ -76,6 +76,14 @@ namespace TheOtherRoles.Patches {
                 soloTeam.Add(PlayerControl.LocalPlayer);
                 yourTeam = soloTeam;
             }
+			
+            // Intro Exe and Target
+            if (PlayerControl.LocalPlayer == Prosecutor.prosecutor) {
+                var soloTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
+                soloTeam.Add(PlayerControl.LocalPlayer);
+				soloTeam.Add(Prosecutor.target);
+                yourTeam = soloTeam;
+            }
 
             // Add the Spy to the Impostor team (for the Impostors)
             if (Spy.spy != null && PlayerControl.LocalPlayer.Data.Role.IsImpostor) {
@@ -133,6 +141,12 @@ namespace TheOtherRoles.Patches {
                         __instance.RoleBlurbText.text += Helpers.cs(Lovers.color, $"\n♥ You are in love with {otherLover?.Data?.PlayerName ?? ""} ♥");
                     }
                 }
+				
+				if (infos.Any(info => info.roleId == RoleId.Prosecutor)) {
+                    PlayerControl target = Prosecutor.target;
+                    __instance.RoleBlurbText.text += Helpers.cs(Prosecutor.color, $"\nVote out {target?.Data?.PlayerName ?? ""} ");
+                }
+
                 if (Deputy.knowsSheriff && Deputy.deputy != null && Sheriff.sheriff != null) {
                     if (infos.Any(info => info.roleId == RoleId.Sheriff))
                         __instance.RoleBlurbText.text += Helpers.cs(Sheriff.color, $"\nYour Deputy is {Deputy.deputy?.Data?.PlayerName ?? ""}");
