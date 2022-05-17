@@ -130,7 +130,7 @@ namespace TheOtherRoles
         SetFirstKill,
         Invert,
         SetTiebreak,
-        SetInvisible
+        SetInvisible,
 	ProsecutorChangesRole,
 	ProsecutorSetTarget,
         ProsecutorToPursuer,
