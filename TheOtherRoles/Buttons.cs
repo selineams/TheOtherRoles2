@@ -1464,6 +1464,7 @@ namespace TheOtherRoles
                () => { // Action when Pressed
                    if (Blackmailer.currentTarget != null) {
                         Blackmailer.blackmailed = Blackmailer.currentTarget;
+			blackmailerButton.MaxTimer = 2f;
                     }
                },
                () => { return Blackmailer.blackmailer != null && Blackmailer.blackmailer == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead ;},
