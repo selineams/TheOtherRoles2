@@ -1512,6 +1512,7 @@ namespace TheOtherRoles
     public static class Blackmailer {
         public static PlayerControl blackmailer;
         public static Color color = Palette.ImpostorRed;
+        public static Color blackmailedColor = Palette.White;
 
         public static PlayerControl blackmailed;
         public static PlayerControl currentTarget;
