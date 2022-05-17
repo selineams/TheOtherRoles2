@@ -54,6 +54,7 @@ namespace TheOtherRoles
         Pursuer,
         Witch,
         Ninja,
+	Blackmailer,
         Crewmate,
         Impostor,
         // Modifier ---
