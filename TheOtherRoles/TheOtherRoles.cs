@@ -59,7 +59,8 @@ namespace TheOtherRoles
             Lawyer.clearAndReload();
             Pursuer.clearAndReload();
             Witch.clearAndReload();
-            Ninja.clearAndReload();
+            Ninja.clearAndReload()
+	    Blackmailer.clearAndReload();
 
             // Modifier
             Bait.clearAndReload();
@@ -1475,6 +1476,29 @@ namespace TheOtherRoles
             if (arrow?.arrow != null) UnityEngine.Object.Destroy(arrow.arrow);
             arrow = new Arrow(Color.black);
             if (arrow.arrow != null) arrow.arrow.SetActive(false);
+        }
+    }
+
+    public static class Blackmailer {
+        public static PlayerControl blackmailer;
+        public static Color color = Palette.ImpostorRed;
+
+        public static PlayerControl blackmailed;
+        public static PlayerControl currentTarget;
+        public static float cooldown = 30f;
+
+        private static Sprite blackmailButtonSprite;
+
+        public static Sprite getBlackmailButtonSprite() {
+            if (blackmailButtonSprite) return blackmailButtonSprite;
+            blackmailButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.BlackmailerBlackmailButton.png", 115f);
+            return blackmailButtonSprite;
+        }
+
+        public static void clearAndReload() {
+            blackmailer = null;
+            currentTarget = blackmailed = null;
+            cooldown = CustomOptionHolder.blackmailerCooldown.getFloat();
         }
     }
 

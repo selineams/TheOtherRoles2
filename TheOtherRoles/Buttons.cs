@@ -47,6 +47,7 @@ namespace TheOtherRoles
         public static CustomButton pursuerButton;
         public static CustomButton witchSpellButton;
         public static CustomButton ninjaButton;
+        public static CustomButton blackmailerButton;
 
         public static Dictionary<byte, List<CustomButton>> deputyHandcuffedButtons = null;
 
@@ -93,6 +94,7 @@ namespace TheOtherRoles
             trackerTrackCorpsesButton.MaxTimer = Tracker.corpsesTrackingCooldown;
             witchSpellButton.MaxTimer = Witch.cooldown;
             ninjaButton.MaxTimer = Ninja.cooldown;
+            blackmailerButton.MaxTimer = Blackmailer.cooldown;
 
             timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
             hackerButton.EffectDuration = Hacker.duration;

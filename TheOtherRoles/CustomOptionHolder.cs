@@ -97,6 +97,9 @@ namespace TheOtherRoles {
         public static CustomOption ninjaTraceTime;
         public static CustomOption ninjaTraceColorTime;
 
+        public static CustomOption blackmailerSpawnRate;
+        public static CustomOption blackmailerCooldown;
+
         public static CustomOption shifterSpawnRate;
         public static CustomOption shifterShiftsModifiers;
 
@@ -360,7 +363,11 @@ namespace TheOtherRoles {
             ninjaKnowsTargetLocation = CustomOption.Create(382, Types.Impostor, "Ninja Knows Location Of Target", true, ninjaSpawnRate);
             ninjaTraceTime = CustomOption.Create(383, Types.Impostor, "Trace Duration", 5f, 1f, 20f, 0.5f, ninjaSpawnRate);
             ninjaTraceColorTime = CustomOption.Create(384, Types.Impostor, "Time Till Trace Color Has Faded", 2f, 0f, 20f, 0.5f, ninjaSpawnRate);
-            guesserSpawnRate = CustomOption.Create(310, Types.Neutral, cs(Guesser.color, "Guesser"), rates, null, true);
+           
+            blackmailerSpawnRate = CustomOption.Create(380, Types.Impostor, cs(Ninja.color, "Ninja"), rates, null, true);
+            blackmailerCooldown = CustomOption.Create(381, Types.Impostor, "Ninja Mark Cooldown", 30f, 5f, 120f, 5f, blackmailerSpawnRate);
+
+     	    guesserSpawnRate = CustomOption.Create(310, Types.Neutral, cs(Guesser.color, "Guesser"), rates, null, true);
             guesserIsImpGuesserRate = CustomOption.Create(311, Types.Neutral, "Chance That The Guesser Is An Impostor", rates, guesserSpawnRate);
             guesserNumberOfShots = CustomOption.Create(312, Types.Neutral, "Guesser Number Of Shots", 2f, 1f, 15f, 1f, guesserSpawnRate);
             guesserHasMultipleShotsPerMeeting = CustomOption.Create(313, Types.Neutral, "Guesser Can Shoot Multiple Times Per Meeting", false, guesserSpawnRate);
