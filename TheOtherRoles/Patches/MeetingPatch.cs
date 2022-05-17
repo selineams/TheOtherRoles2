@@ -23,6 +23,14 @@ namespace TheOtherRoles.Patches {
         private static PassiveButton[] swapperButtonList;
         private static TMPro.TextMeshPro swapperConfirmButtonLabel;
 
+        public static bool shookAlready = false;
+        public static Sprite PrevXMark = null;
+        public static Sprite PrevOverlay = null;
+
+        public const float LetterXOffset = 0.22f;
+        public const float LetterYOffset = -0.32f;
+
+
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.CheckForEndVoting))]
         class MeetingCalculateVotesPatch {
             private static Dictionary<byte, int> CalculateVotes(MeetingHud __instance) {
@@ -561,6 +569,10 @@ namespace TheOtherRoles.Patches {
 			var playerState = __instance.playerStates.FirstOrDefault(x => x.TargetPlayerId == Blackmailer.blackmailed.PlayerId);
 			playerState.Overlay.gameObject.SetActive(true);
 			playerState.Overlay.sprite = Overlay;
+                        if (__instance.state != MeetingHud.VoteStates.Animating && shookAlready == false) {
+                            shookAlready = true;
+                            (__instance as MonoBehaviour).StartCoroutine(Effects.SwayX(playerState.transform));
+                        }
 		}
 
             }
@@ -569,13 +581,29 @@ namespace TheOtherRoles.Patches {
         [HarmonyPatch(typeof(TextBoxTMP), nameof(TextBoxTMP.SetText))]
         public class BlockChatBlackmailed {
             public static bool Prefix(TextBoxTMP __instance) {
-		if (Blackmailer.blackmailed != null) {
-		  if (Blackmailer.blackmailed == PlayerControl.LocalPlayer && MeetingHud.Instance != null) {
-                    return false;
+		if (Blackmailer.blackmailer != null) {
+		  if (Blackmailer.blackmailed != null) {
+		    if (Blackmailer.blackmailed == PlayerControl.LocalPlayer) {
+                      return false;
+  		    }
+		    return true;
 		  }
 		}
                 return true;
             }
         }
+    
+
+    [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Start))]
+    public class MeetingHudStart {
+	public static Sprite Letter => Blackmailer.getBlackmailOverlaySprite();
+	public static void Postfix(MeetingHud __instance) {
+		shookAlready = false;
+		if (Blackmailer.blackmailed.Data.PlayerId == PlayerControl.LocalPlayer.PlayerId && !Blackmailer.blackmailed.Data.IsDead) {
+			  // Nothing here for now. What to do when local player who is blackmailed starts meeting
+			  //Coroutines.Start(BlackmailShhh());
+		}
+	}
     }
+  }
 }

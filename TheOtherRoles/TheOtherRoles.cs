@@ -1514,6 +1514,7 @@ namespace TheOtherRoles
         public static Color color = Palette.ImpostorRed;
         public static Color blackmailedColor = Palette.White;
 
+	public static bool alreadyShook = false;
         public static PlayerControl blackmailed;
         public static PlayerControl currentTarget;
         public static float cooldown = 30f;
@@ -1528,6 +1529,12 @@ namespace TheOtherRoles
             return overlaySprite;
         }
 
+        public static Sprite getBlackmailLetterSprite() {
+            if (overlaySprite) return overlaySprite;
+            overlaySprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.BlackmailerLetter.png", 115f);
+            return overlaySprite;
+        }
+
         public static Sprite getBlackmailButtonSprite() {
             if (blackmailButtonSprite) return blackmailButtonSprite;
             blackmailButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.BlackmailerBlackmailButton.png", 115f);
@@ -1536,7 +1543,8 @@ namespace TheOtherRoles
 
         public static void clearAndReload() {
             blackmailer = null;
-            currentTarget = blackmailed = null;
+            currentTarget = null;
+	    blackmailed = null;
             cooldown = CustomOptionHolder.blackmailerCooldown.getFloat();
         }
     }

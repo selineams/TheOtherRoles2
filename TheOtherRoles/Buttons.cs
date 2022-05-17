@@ -1462,10 +1462,13 @@ namespace TheOtherRoles
 
             blackmailerButton = new CustomButton(
                () => { // Action when Pressed
-                   if (Blackmailer.currentTarget != null) {
-                        Blackmailer.blackmailed = Blackmailer.currentTarget;
-			blackmailerButton.Timer = blackmailerButton.MaxTimer;
-                    }
+                  if (Blackmailer.currentTarget != null) {
+		    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.BlackmailPlayer, Hazel.SendOption.Reliable, -1);
+                    writer.Write(Blackmailer.currentTarget.PlayerId);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.blackmailPlayer(Blackmailer.currentTarget.PlayerId);
+	    	    blackmailerButton.Timer = blackmailerButton.MaxTimer;
+                  }
                },
                () => { return Blackmailer.blackmailer != null && Blackmailer.blackmailer == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead ;},
                () => { // Could Use
