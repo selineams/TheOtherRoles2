@@ -561,7 +561,7 @@ namespace TheOtherRoles.Patches {
         public class BlockChatBlackmailed {
             public static bool Prefix(TextBoxTMP __instance) {
 		if (Blackmailer.blackmailed != null) {
-		  if (Blackmailer.blackmailed = PlayerControl.LocalPlayer.PlayerId) {
+		  if (Blackmailer.blackmailed = PlayerControl.LocalPlayer.PlayerId && MeetingHud.Instance) {
                     return false;
 		  }
 		}
