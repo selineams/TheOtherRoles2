@@ -296,6 +296,9 @@ namespace TheOtherRoles
                     case RoleId.Ninja:
                         Ninja.ninja = player;
                         break;
+                    case RoleId.Blackmailer:
+                        Blackmailer.blackmailer = player;
+                        break;
                     }
                 }
         }
