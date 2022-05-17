@@ -1464,7 +1464,7 @@ namespace TheOtherRoles
                () => { // Action when Pressed
                    if (Blackmailer.currentTarget != null) {
                         Blackmailer.blackmailed = Blackmailer.currentTarget;
-			blackmailerButton.MaxTimer = 2f;
+			blackmailerButton.Timer = 1f;
                     }
                },
                () => { return Blackmailer.blackmailer != null && Blackmailer.blackmailer == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead ;},
@@ -1472,7 +1472,7 @@ namespace TheOtherRoles
 		   var text = "Blackmail";
 		   if (Blackmailer.blackmailed != null) text = Blackmailer.blackmailed.Data.PlayerName;
                    showTargetNameOnButtonExplicit(Blackmailer.currentTarget, blackmailerButton, text); //Show target name under button if setting is true
-                   return PlayerControl.LocalPlayer.CanMove;
+                   return (Blackmailer.currentTarget != null && PlayerControl.LocalPlayer.CanMove);
                },
                () => { blackmailerButton.Timer = blackmailerButton.MaxTimer; },
                Blackmailer.getBlackmailButtonSprite(),
