@@ -59,7 +59,7 @@ namespace TheOtherRoles
             Lawyer.clearAndReload();
             Pursuer.clearAndReload();
             Witch.clearAndReload();
-            Ninja.clearAndReload()
+            Ninja.clearAndReload();
 	    Blackmailer.clearAndReload();
 
             // Modifier
