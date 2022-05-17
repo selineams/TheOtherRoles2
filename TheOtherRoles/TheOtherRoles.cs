@@ -1519,6 +1519,14 @@ namespace TheOtherRoles
         public static float cooldown = 30f;
 
         private static Sprite blackmailButtonSprite;
+        private static Sprite overlaySprite;
+
+
+        public static Sprite getBlackmailOverlaySprite() {
+            if (overlaySprite) return overlaySprite;
+            overlaySprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.BlackmailerOverlay.png", 115f);
+            return overlaySprite;
+        }
 
         public static Sprite getBlackmailButtonSprite() {
             if (blackmailButtonSprite) return blackmailButtonSprite;
