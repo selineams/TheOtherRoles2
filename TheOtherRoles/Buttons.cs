@@ -122,6 +122,14 @@ namespace TheOtherRoles
             timeMasterShieldButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
         }
 
+        public static void showTargetNameOnButtonExplicit(PlayerControl target, CustomButton button, string defaultText) {
+            var text = defaultText;
+            if (target == null) text = defaultText; // Set text to defaultText if no target
+            else text = target.Data.PlayerName; // Set text to playername
+            button.actionButton.OverrideText(text);
+            button.showButtonText = true;
+        }
+
         private static void addReplacementHandcuffedButton(CustomButton button, Vector3? positionOffset = null, Func<bool> couldUse = null)
         {
             Vector3 positionOffsetValue = positionOffset ?? button.PositionOffset;  // For non custom buttons, we can set these manually.
@@ -1451,6 +1459,31 @@ namespace TheOtherRoles
                 __instance,
                 KeyCode.F                   
             );
+
+            blackmailerButton = new CustomButton(
+               () => { // Action when Pressed
+                   if (Blackmailer.currentTarget != null) {
+                        Blackmailer.blackmailed = Blackmailer.currentTarget;
+                    }
+               },
+               () => { return Blackmailer.blackmailer != null && Blackmailer.blackmailer == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead ;},
+               () => { // Could Use
+		   var text = "Blackmail";
+		   if (Blackmailer.blackmailed != null) text = Blackmailer.blackmailed.Data.PlayerName;
+                   showTargetNameOnButtonExplicit(Blackmailer.currentTarget, blackmailerButton, text); //Show target name under button if setting is true
+                   return PlayerControl.LocalPlayer.CanMove;
+               },
+               () => { blackmailerButton.Timer = blackmailerButton.MaxTimer; },
+               Blackmailer.getBlackmailButtonSprite(),
+               new Vector3(-1.8f, -0.06f, 0),
+               __instance,
+               KeyCode.F,
+               true,
+               0f,
+               () => {},
+               false,
+               "Meeting"
+           );
 
             mayorMeetingButton = new CustomButton(
                () => {
