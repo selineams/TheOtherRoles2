@@ -1483,7 +1483,7 @@ namespace TheOtherRoles
                0f,
                () => {},
                false,
-               "Meeting"
+               "Blackmail"
            );
 
             mayorMeetingButton = new CustomButton(

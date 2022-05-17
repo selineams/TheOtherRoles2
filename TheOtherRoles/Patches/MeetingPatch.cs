@@ -556,5 +556,17 @@ namespace TheOtherRoles.Patches {
                     __instance.SkipVoteButton.gameObject.SetActive(false);
             }
         }
+
+        [HarmonyPatch(typeof(TextBoxTMP), nameof(TextBoxTMP.SetText))]
+        public class BlockChatBlackmailed {
+            public static bool Prefix(TextBoxTMP __instance) {
+		if (Blackmailer.blackmailed != null) {
+		  if (Blackmailer.blackmailed = PlayerControl.LocalPlayer.PlayerId) {
+                    return false;
+		  }
+		}
+                return true;
+            }
+        }
     }
 }
