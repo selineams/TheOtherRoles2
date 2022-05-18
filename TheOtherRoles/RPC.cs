@@ -473,7 +473,7 @@ namespace TheOtherRoles
             Shifter.clearAndReload();
 
             // Suicide (exile) when impostor or impostor variants
-            if (player.Data.Role.IsImpostor || player == Jackal.jackal || player == Sidekick.sidekick || Jackal.formerJackals.Contains(player) || player == Jester.jester || player == Arsonist.arsonist || player == Vulture.vulture || player == Lawyer.lawyer) {
+            if (player.Data.Role.IsImpostor || player == Jackal.jackal || player == Sidekick.sidekick || Jackal.formerJackals.Contains(player) || player == Jester.jester || player == Arsonist.arsonist || player == Vulture.vulture || player == Lawyer.lawyer || player == Prosecutor.prosecutor) {
                 oldShifter.Exiled();
                 return;
             }
@@ -494,6 +494,10 @@ namespace TheOtherRoles
 
                 // TODO other Modifiers?
             }
+
+	     if (Prosecutor.shiftTarget) {
+		Prosecutor.target = oldShifter;
+	     }
 
             // Shift role
             if (Mayor.mayor != null && Mayor.mayor == player)
