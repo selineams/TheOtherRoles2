@@ -27,6 +27,7 @@ namespace TheOtherRoles
         }
 
         public static RoleInfo jester = new RoleInfo("Jester", Jester.color, "Get voted out", "Get voted out", RoleId.Jester, true);
+        public static RoleInfo prosecutor = new RoleInfo("Prosecutor", Prosecutor.color, "Vote out your target", "Vote our your target", RoleId.Prosecutor, true);
         public static RoleInfo mayor = new RoleInfo("Mayor", Mayor.color, "Your vote counts twice", "Your vote counts twice", RoleId.Mayor);
         public static RoleInfo portalmaker = new RoleInfo("Portalmaker", Portalmaker.color, "You can create portals", "You can create portals", RoleId.Portalmaker);
         public static RoleInfo engineer = new RoleInfo("Engineer",  Engineer.color, "Maintain important systems on the ship", "Repair the ship", RoleId.Engineer);
@@ -68,6 +69,7 @@ namespace TheOtherRoles
         public static RoleInfo crewmate = new RoleInfo("Crewmate", Color.white, "Find the Impostors", "Find the Impostors", RoleId.Crewmate);
         public static RoleInfo witch = new RoleInfo("Witch", Witch.color, "Cast a spell upon your foes", "Cast a spell upon your foes", RoleId.Witch);
         public static RoleInfo ninja = new RoleInfo("Ninja", Ninja.color, "Surprise and assassinate your foes", "Surprise and assassinate your foes", RoleId.Ninja);
+        public static RoleInfo blackmailer = new RoleInfo("Blackmailer", Blackmailer.color, "Blackmail those who seek to hurt you", "Blackmail those who seek to hurt you", RoleId.Blackmailer);
 
 
 
@@ -102,6 +104,7 @@ namespace TheOtherRoles
             badGuesser,
             lover,
             jester,
+            prosecutor,
             arsonist,
             jackal,
             sidekick,
@@ -128,6 +131,7 @@ namespace TheOtherRoles
             securityGuard,
             bait,
             medium,
+	    blackmailer,
             bloody,
             antiTeleport,
             tiebreaker,
@@ -156,6 +160,7 @@ namespace TheOtherRoles
 
             // Special roles
             if (p == Jester.jester) infos.Add(jester);
+            if (p == Prosecutor.prosecutor) infos.Add(prosecutor);
             if (p == Mayor.mayor) infos.Add(mayor);
             if (p == Portalmaker.portalmaker) infos.Add(portalmaker);
             if (p == Engineer.engineer) infos.Add(engineer);
@@ -174,6 +179,7 @@ namespace TheOtherRoles
             if (p == Warlock.warlock) infos.Add(warlock);
             if (p == Witch.witch) infos.Add(witch);
             if (p == Ninja.ninja) infos.Add(ninja);
+            if (p == Blackmailer.blackmailer) infos.Add(blackmailer);
             if (p == Detective.detective) infos.Add(detective);
             if (p == TimeMaster.timeMaster) infos.Add(timeMaster);
             if (p == Medic.medic) infos.Add(medic);

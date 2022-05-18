@@ -48,6 +48,7 @@ namespace TheOtherRoles
         public static CustomButton witchSpellButton;
         public static CustomButton ninjaButton;
         public static CustomButton mayorMeetingButton;
+        public static CustomButton blackmailerButton;
 
         public static Dictionary<byte, List<CustomButton>> deputyHandcuffedButtons = null;
 
@@ -95,6 +96,7 @@ namespace TheOtherRoles
             witchSpellButton.MaxTimer = Witch.cooldown;
             ninjaButton.MaxTimer = Ninja.cooldown;
             mayorMeetingButton.MaxTimer = PlayerControl.GameOptions.EmergencyCooldown;
+            blackmailerButton.MaxTimer = Blackmailer.cooldown;
 
             timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
             hackerButton.EffectDuration = Hacker.duration;
@@ -118,6 +120,14 @@ namespace TheOtherRoles
             timeMasterShieldButton.Timer = timeMasterShieldButton.MaxTimer;
             timeMasterShieldButton.isEffectActive = false;
             timeMasterShieldButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
+        }
+
+        public static void showTargetNameOnButtonExplicit(PlayerControl target, CustomButton button, string defaultText) {
+            var text = defaultText;
+            if (target == null) text = defaultText; // Set text to defaultText if no target
+            else text = target.Data.PlayerName; // Set text to playername
+            button.actionButton.OverrideText(text);
+            button.showButtonText = true;
         }
 
         private static void addReplacementHandcuffedButton(CustomButton button, Vector3? positionOffset = null, Func<bool> couldUse = null)
@@ -382,7 +392,8 @@ namespace TheOtherRoles
                     Medic.meetingAfterShielding = false;
                 },
                 () => { return Medic.medic != null && Medic.medic == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
-                () => { return !Medic.usedShield && Medic.currentTarget && PlayerControl.LocalPlayer.CanMove; },
+                () => {
+                    return !Medic.usedShield && Medic.currentTarget && PlayerControl.LocalPlayer.CanMove; },
                 () => {},
                 Medic.getButtonSprite(),
                 new Vector3(-1.8f, -0.06f, 0),
@@ -400,7 +411,8 @@ namespace TheOtherRoles
                     RPCProcedure.setFutureShifted(Shifter.currentTarget.PlayerId);
                 },
                 () => { return Shifter.shifter != null && Shifter.shifter == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
-                () => { return Shifter.currentTarget && Shifter.futureShift == null && PlayerControl.LocalPlayer.CanMove; },
+                () => {
+                    return Shifter.currentTarget && Shifter.futureShift == null && PlayerControl.LocalPlayer.CanMove; },
                 () => { },
                 Shifter.getButtonSprite(),
                 new Vector3(-1.8f, -0.06f, 0),
@@ -425,7 +437,8 @@ namespace TheOtherRoles
                     }
                 },
                 () => { return Morphling.morphling != null && Morphling.morphling == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
-                () => { return (Morphling.currentTarget || Morphling.sampledTarget) && PlayerControl.LocalPlayer.CanMove; },
+                () => {
+                    return (Morphling.currentTarget || Morphling.sampledTarget) && PlayerControl.LocalPlayer.CanMove; },
                 () => { 
                     morphlingButton.Timer = morphlingButton.MaxTimer;
                     morphlingButton.Sprite = Morphling.getSampleSprite();
@@ -605,7 +618,8 @@ namespace TheOtherRoles
                     RPCProcedure.trackerUsedTracker(Tracker.currentTarget.PlayerId);
                 },
                 () => { return Tracker.tracker != null && Tracker.tracker == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
-                () => { return PlayerControl.LocalPlayer.CanMove && Tracker.currentTarget != null && !Tracker.usedTracker; },
+                () => {
+                    return PlayerControl.LocalPlayer.CanMove && Tracker.currentTarget != null && !Tracker.usedTracker; },
                 () => { if(Tracker.resetTargetAfterMeeting) Tracker.resetTracked(); },
                 Tracker.getButtonSprite(),
                 new Vector3(-1.8f, -0.06f, 0),
@@ -677,7 +691,8 @@ namespace TheOtherRoles
                         vampireKillButton.HasEffect = false;
                     }
                 },
-                () => { return Vampire.vampire != null && Vampire.vampire == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => {
+                    return Vampire.vampire != null && Vampire.vampire == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => {
                     if (Vampire.targetNearGarlic && Vampire.canKillNearGarlics) {
                         vampireKillButton.actionButton.graphic.sprite = __instance.KillButton.graphic.sprite;
@@ -798,7 +813,8 @@ namespace TheOtherRoles
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     RPCProcedure.jackalCreatesSidekick(Jackal.currentTarget.PlayerId);
                 },
-                () => { return Jackal.canCreateSidekick && Jackal.jackal != null && Jackal.jackal == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => {
+                    return Jackal.canCreateSidekick && Jackal.currentTarget != null && PlayerControl.LocalPlayer.CanMove; },
                 () => { return Jackal.canCreateSidekick && Jackal.currentTarget != null && PlayerControl.LocalPlayer.CanMove; },
                 () => { jackalSidekickButton.Timer = jackalSidekickButton.MaxTimer;},
                 Jackal.getSidekickButtonSprite(),
@@ -816,7 +832,8 @@ namespace TheOtherRoles
                     Jackal.currentTarget = null;
                 },
                 () => { return Jackal.jackal != null && Jackal.jackal == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
-                () => { return Jackal.currentTarget && PlayerControl.LocalPlayer.CanMove; },
+                () => {
+                    return Jackal.currentTarget && PlayerControl.LocalPlayer.CanMove; },
                 () => { jackalKillButton.Timer = jackalKillButton.MaxTimer;},
                 __instance.KillButton.graphic.sprite,
                 new Vector3(0, 1f, 0),
@@ -832,7 +849,8 @@ namespace TheOtherRoles
                     Sidekick.currentTarget = null;
                 },
                 () => { return Sidekick.canKill && Sidekick.sidekick != null && Sidekick.sidekick == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
-                () => { return Sidekick.currentTarget && PlayerControl.LocalPlayer.CanMove; },
+                () => {
+                    return Sidekick.currentTarget && PlayerControl.LocalPlayer.CanMove; },
                 () => { sidekickKillButton.Timer = sidekickKillButton.MaxTimer;},
                 __instance.KillButton.graphic.sprite,
                 new Vector3(0, 1f, 0),
@@ -873,7 +891,8 @@ namespace TheOtherRoles
                     RPCProcedure.setFutureErased(Eraser.currentTarget.PlayerId);
                 },
                 () => { return Eraser.eraser != null && Eraser.eraser == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
-                () => { return PlayerControl.LocalPlayer.CanMove && Eraser.currentTarget != null; },
+                () => {
+                    return PlayerControl.LocalPlayer.CanMove && Eraser.currentTarget != null; },
                 () => { eraserButton.Timer = eraserButton.MaxTimer;},
                 Eraser.getButtonSprite(),
                 new Vector3(-1.8f, -0.06f, 0),
@@ -993,7 +1012,8 @@ namespace TheOtherRoles
                     }
                 },
                 () => { return Warlock.warlock != null && Warlock.warlock == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
-                () => { return ((Warlock.curseVictim == null && Warlock.currentTarget != null) || (Warlock.curseVictim != null && Warlock.curseVictimTarget != null)) && PlayerControl.LocalPlayer.CanMove; },
+                () => {
+                    return ((Warlock.curseVictim == null && Warlock.currentTarget != null) || (Warlock.curseVictim != null && Warlock.curseVictimTarget != null)) && PlayerControl.LocalPlayer.CanMove; },
                 () => { 
                     warlockCurseButton.Timer = warlockCurseButton.MaxTimer;
                     warlockCurseButton.Sprite = Warlock.getCurseButtonSprite();
@@ -1449,6 +1469,35 @@ namespace TheOtherRoles
                 __instance,
                 KeyCode.F                   
             );
+
+            blackmailerButton = new CustomButton(
+               () => { // Action when Pressed
+                  if (Blackmailer.currentTarget != null) {
+		    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.BlackmailPlayer, Hazel.SendOption.Reliable, -1);
+                    writer.Write(Blackmailer.currentTarget.PlayerId);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.blackmailPlayer(Blackmailer.currentTarget.PlayerId);
+	    	    blackmailerButton.Timer = blackmailerButton.MaxTimer;
+                  }
+               },
+               () => { return Blackmailer.blackmailer != null && Blackmailer.blackmailer == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead ;},
+               () => { // Could Use
+		   var text = "Blackmail";
+		   if (Blackmailer.blackmailed != null) text = Blackmailer.blackmailed.Data.PlayerName;
+                   showTargetNameOnButtonExplicit(Blackmailer.currentTarget, blackmailerButton, text); //Show target name under button if setting is true
+                   return (Blackmailer.currentTarget != null && PlayerControl.LocalPlayer.CanMove);
+               },
+               () => { blackmailerButton.Timer = blackmailerButton.MaxTimer; },
+               Blackmailer.getBlackmailButtonSprite(),
+               new Vector3(-1.8f, -0.06f, 0),
+               __instance,
+               KeyCode.F,
+               true,
+               0f,
+               () => {},
+               false,
+               "Blackmail"
+           );
 
             mayorMeetingButton = new CustomButton(
                () => {

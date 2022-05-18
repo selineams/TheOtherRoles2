@@ -21,6 +21,7 @@ namespace TheOtherRoles
 
         public static void clearAndReloadRoles() {
             Jester.clearAndReload();
+            Prosecutor.clearAndReload();
             Mayor.clearAndReload();
             Portalmaker.clearAndReload();
             Engineer.clearAndReload();
@@ -60,6 +61,7 @@ namespace TheOtherRoles
             Pursuer.clearAndReload();
             Witch.clearAndReload();
             Ninja.clearAndReload();
+	    Blackmailer.clearAndReload();
 
             // Modifier
             Bait.clearAndReload();
@@ -128,6 +130,21 @@ namespace TheOtherRoles
             }
 
 
+        }
+		
+        public static class Prosecutor {
+            public static PlayerControl prosecutor;
+            public static PlayerControl target;
+            public static Color color = new Color32(201, 204, 63, byte.MaxValue);
+            public static Color targetColor = new Color32(0, 0, 0, byte.MaxValue);
+
+            public static bool triggerProsecutorWin = false;
+
+            public static void clearAndReload() {
+              prosecutor = null;
+              triggerProsecutorWin = false;
+              target = null;
+            }
         }
 
         public static class Mayor {
@@ -1408,6 +1425,7 @@ namespace TheOtherRoles
         public static int blanks = 0;
         public static Sprite blank;
         public static bool notAckedExiled = false;
+		public static bool wasProsecutor = false;
 
         public static float cooldown = 30f;
         public static int blanksNumber = 5;
@@ -1509,6 +1527,46 @@ namespace TheOtherRoles
             if (arrow?.arrow != null) UnityEngine.Object.Destroy(arrow.arrow);
             arrow = new Arrow(Color.black);
             if (arrow.arrow != null) arrow.arrow.SetActive(false);
+        }
+    }
+
+    public static class Blackmailer {
+        public static PlayerControl blackmailer;
+        public static Color color = Palette.ImpostorRed;
+        public static Color blackmailedColor = Palette.White;
+
+	public static bool alreadyShook = false;
+        public static PlayerControl blackmailed;
+        public static PlayerControl currentTarget;
+        public static float cooldown = 30f;
+
+        private static Sprite blackmailButtonSprite;
+        private static Sprite overlaySprite;
+
+
+        public static Sprite getBlackmailOverlaySprite() {
+            if (overlaySprite) return overlaySprite;
+            overlaySprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.BlackmailerOverlay.png", 115f);
+            return overlaySprite;
+        }
+
+        public static Sprite getBlackmailLetterSprite() {
+            if (overlaySprite) return overlaySprite;
+            overlaySprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.BlackmailerLetter.png", 115f);
+            return overlaySprite;
+        }
+
+        public static Sprite getBlackmailButtonSprite() {
+            if (blackmailButtonSprite) return blackmailButtonSprite;
+            blackmailButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.BlackmailerBlackmailButton.png", 115f);
+            return blackmailButtonSprite;
+        }
+
+        public static void clearAndReload() {
+            blackmailer = null;
+            currentTarget = null;
+	    blackmailed = null;
+            cooldown = CustomOptionHolder.blackmailerCooldown.getFloat();
         }
     }
 

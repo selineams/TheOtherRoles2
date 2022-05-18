@@ -133,6 +133,13 @@ namespace TheOtherRoles.Patches {
             if (!Medic.usedShield) setPlayerOutline(Medic.currentTarget, Medic.shieldedColor);
         }
 
+        static void blackMailerSetTarget() {
+            if (Blackmailer.blackmailer == null || Blackmailer.blackmailer != PlayerControl.LocalPlayer) return;
+            Blackmailer.currentTarget = setTarget();
+            setPlayerOutline(Medic.currentTarget, Blackmailer.blackmailedColor);
+        }
+
+
         static void shifterSetTarget() {
             if (Shifter.shifter == null || Shifter.shifter != PlayerControl.LocalPlayer) return;
             Shifter.currentTarget = setTarget();
@@ -169,6 +176,18 @@ namespace TheOtherRoles.Patches {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.DeputyPromotes, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.deputyPromotes();
+            }
+        }
+		
+        public static void prosecutorCheckPromotion(bool isMeeting=false)
+        {
+            // If LocalPlayer is Prosecutor and the target is disconnected, then trigger promotion
+            if (Prosecutor.prosecutor == null || Prosecutor.prosecutor != PlayerControl.LocalPlayer) return;
+            if (Prosecutor.target == null || Prosecutor.target?.Data?.Disconnected == true || Prosecutor.target.Data.IsDead)
+            {
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ProsecutorToPursuer, Hazel.SendOption.Reliable, -1);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.prosecutorToPursuer();
             }
         }
 
@@ -890,6 +909,8 @@ namespace TheOtherRoles.Patches {
                 lawyerUpdate();
                 // Pursuer
                 pursuerSetTarget();
+                // Blackmailer
+                blackMailerSetTarget();
                 // Witch
                 witchSetTarget();
                 // Ninja
@@ -1061,6 +1082,14 @@ namespace TheOtherRoles.Patches {
                 Mini.mini.SetKillTimer(__instance.killTimer * multiplier);
             }
 
+            // This section may be causing instant game end.
+            // Change Prosecutor to Pursuerer on murder of target
+            if (target == Prosecutor.target && AmongUsClient.Instance.AmHost) {
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ProsecutorToPursuer, Hazel.SendOption.Reliable, -1);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.prosecutorToPursuer();
+            }
+
             // Cleaner Button Sync
             if (Cleaner.cleaner != null && PlayerControl.LocalPlayer == Cleaner.cleaner && __instance == Cleaner.cleaner && HudManagerStartPatch.cleanerCleanButton != null)
                 HudManagerStartPatch.cleanerCleanButton.Timer = Cleaner.cleaner.killTimer;
@@ -1188,11 +1217,20 @@ namespace TheOtherRoles.Patches {
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.lawyerPromotesToPursuer();
             }
+
             if (__instance == Lawyer.target)
             {
                 if (Lawyer.lawyer != null) Lawyer.lawyer.Exiled();
                 if (Pursuer.pursuer != null) Pursuer.pursuer.Exiled();
             }
+
+            // Prosecutor promotion trigger on target exile (the host sends the call such that everyone recieves the update before a possible game End)
+            if (__instance == Prosecutor.target && AmongUsClient.Instance.AmHost) {
+                MessageWriter murderAttemptWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ProsecutorToPursuer, Hazel.SendOption.Reliable, -1);
+                AmongUsClient.Instance.FinishRpcImmediately(murderAttemptWriter);
+                RPCProcedure.prosecutorToPursuer();
+            }
+
 
         }
     }

@@ -135,7 +135,11 @@ namespace TheOtherRoles.Patches {
             // Jester win condition
             else if (exiled != null && Jester.jester != null && Jester.jester.PlayerId == exiled.PlayerId) {
                 Jester.triggerJesterWin = true;
-            } 
+            }
+            // Prosecutor win condition
+            else if (exiled != null && Prosecutor.prosecutor != null && Prosecutor.target.PlayerId == exiled.PlayerId && !Prosecutor.prosecutor.Data.IsDead) {
+                Prosecutor.triggerProsecutorWin = true;
+            }
 
             // Reset custom button timers where necessary
             CustomButton.MeetingEndedUpdate();
@@ -174,6 +178,12 @@ namespace TheOtherRoles.Patches {
             // Tracker reset deadBodyPositions
             Tracker.deadBodyPositions = new List<Vector3>();
 
+	    if (Blackmailer.blackmailer != null && Blackmailer.blackmailed != null) {
+    	        // Blackmailer reset blackmailed
+ 	        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UnblackmailPlayer, Hazel.SendOption.Reliable, -1);
+	        AmongUsClient.Instance.FinishRpcImmediately(writer);
+	        RPCProcedure.unblackmailPlayer();
+	    }	    
             // Arsonist deactivate dead poolable players
             if (Arsonist.arsonist != null && Arsonist.arsonist == PlayerControl.LocalPlayer) {
                 int visibleCounter = 0;

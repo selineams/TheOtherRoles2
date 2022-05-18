@@ -15,6 +15,7 @@ namespace TheOtherRoles
 {
     enum RoleId {
         Jester,
+		Prosecutor,
         Mayor,
         Portalmaker,
         Engineer,
@@ -54,6 +55,7 @@ namespace TheOtherRoles
         Pursuer,
         Witch,
         Ninja,
+	Blackmailer,
         Crewmate,
         Impostor,
         // Modifier ---
@@ -124,9 +126,14 @@ namespace TheOtherRoles
         LawyerSetTarget,
         LawyerPromotesToPursuer,
         SetBlanked,
+        BlackmailPlayer,
+        UnblackmailPlayer,
         Bloody,
         SetFirstKill,
         Invert,
+		ProsecutorChangesRole,
+		ProsecutorSetTarget,
+        ProsecutorToPursuer,
         SetTiebreak
     }
 
@@ -177,6 +184,9 @@ namespace TheOtherRoles
                     switch((RoleId)roleId) {
                     case RoleId.Jester:
                         Jester.jester = player;
+                        break;
+                    case RoleId.Prosecutor:
+                        Prosecutor.prosecutor = player;
                         break;
                     case RoleId.Mayor:
                         Mayor.mayor = player;
@@ -294,6 +304,9 @@ namespace TheOtherRoles
                         break;
                     case RoleId.Ninja:
                         Ninja.ninja = player;
+                        break;
+                    case RoleId.Blackmailer:
+                        Blackmailer.blackmailer = player;
                         break;
                     }
                 }
@@ -609,6 +622,9 @@ namespace TheOtherRoles
                 DestroyableSingleton<RoleManager>.Instance.SetRole(player, RoleTypes.Crewmate);
                 erasePlayerRoles(player.PlayerId, true);
                 Sidekick.sidekick = player;
+				if (Prosecutor.prosecutor != null && Prosecutor.target == player) {
+						  prosecutorChangesRole();
+				}
                 if (player.PlayerId == PlayerControl.LocalPlayer.PlayerId) PlayerControl.LocalPlayer.moveable = true;
                 if (wasSpy || wasImpostor) Sidekick.wasTeamRed = true;
                 Sidekick.wasSpy = wasSpy;
@@ -665,9 +681,11 @@ namespace TheOtherRoles
             if (player == Warlock.warlock) Warlock.clearAndReload();
             if (player == Witch.witch) Witch.clearAndReload();
             if (player == Ninja.ninja) Ninja.clearAndReload();
+            if (player == Blackmailer.blackmailer) Blackmailer.clearAndReload();
 
             // Other roles
             if (player == Jester.jester) Jester.clearAndReload();
+            if (player == Prosecutor.prosecutor) Prosecutor.clearAndReload();
             if (player == Arsonist.arsonist) Arsonist.clearAndReload();
             if (Guesser.isGuesser(player.PlayerId)) Guesser.clear(player.PlayerId);
             if (player == Jackal.jackal) { // Promote Sidekick and hence override the the Jackal or erase Jackal
@@ -845,6 +863,27 @@ namespace TheOtherRoles
             }
         }
 
+        // Prosecutor
+        public static void prosecutorSetTarget(byte playerId) {
+            Prosecutor.target = Helpers.playerById(playerId);
+        }
+
+        public static void prosecutorChangesRole() {
+            PlayerControl player = Prosecutor.prosecutor;
+            PlayerControl target = Prosecutor.target;
+            Prosecutor.clearAndReload();
+            Lawyer.lawyer = player;
+            Lawyer.target = target;
+        }
+
+        public static void prosecutorToPursuer() {
+            PlayerControl player = Prosecutor.prosecutor;
+            Prosecutor.clearAndReload();
+			Pursuer.clearAndReload();
+            Pursuer.pursuer = player;
+			Pursuer.wasProsecutor = true;
+        }
+
         public static void guesserShoot(byte killerId, byte dyingTargetId, byte guessedTargetId, byte guessedRoleId) {
             PlayerControl dyingTarget = Helpers.playerById(dyingTargetId);
             if (dyingTarget == null ) return;
@@ -889,6 +928,16 @@ namespace TheOtherRoles
                     DestroyableSingleton<Assets.CoreScripts.Telemetry>.Instance.SendWho();
             }
         }
+
+	public static void blackmailPlayer(byte playerId) {
+	  PlayerControl target = Helpers.playerById(playerId);
+	  Blackmailer.blackmailed = target;
+	}
+
+	public static void unblackmailPlayer() {
+	  Blackmailer.blackmailed = null;
+	  Blackmailer.alreadyShook = false;
+	}
 
         public static void setBlanked(byte playerId, byte value) {
             PlayerControl target = Helpers.playerById(playerId);
@@ -1002,6 +1051,12 @@ namespace TheOtherRoles
                 case (byte)CustomRPC.CleanBody:
                     RPCProcedure.cleanBody(reader.ReadByte());
                     break;
+                case (byte)CustomRPC.BlackmailPlayer:
+                    RPCProcedure.blackmailPlayer(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.UnblackmailPlayer:
+                    RPCProcedure.unblackmailPlayer();
+                    break;
                 case (byte)CustomRPC.TimeMasterRewindTime:
                     RPCProcedure.timeMasterRewindTime();
                     break;
@@ -1105,6 +1160,15 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.LawyerPromotesToPursuer:
                     RPCProcedure.lawyerPromotesToPursuer();
+                    break;
+                case (byte)CustomRPC.ProsecutorSetTarget:
+                    RPCProcedure.prosecutorSetTarget(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.ProsecutorChangesRole:
+                    RPCProcedure.prosecutorChangesRole();
+                    break;
+                case (byte)CustomRPC.ProsecutorToPursuer:
+                    RPCProcedure.prosecutorToPursuer();
                     break;
                 case (byte)CustomRPC.SetBlanked:
                     var pid = reader.ReadByte();
