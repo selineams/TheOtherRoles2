@@ -280,6 +280,10 @@ namespace TheOtherRoles {
         public static CustomOption allowParallelMedBayScans;
         public static CustomOption shieldFirstKill;
 
+
+        public static CustomOption randomGameStartPosition;
+        public static CustomOption resetRoundStartCooldown;
+
         public static CustomOption dynamicMap;
         public static CustomOption dynamicMapEnableSkeld;
         public static CustomOption dynamicMapEnableMira;
@@ -581,6 +585,8 @@ namespace TheOtherRoles {
             dynamicMapEnableSubmerged = CustomOption.Create(505, Types.General, "Enable Submerged Rotation", true, dynamicMap, false);
 
 	    showButtonTarget = CustomOption.Create(9994, Types.General, "Show Button Target", true);
+            randomGameStartPosition = CustomOption.Create(9041, "Random Spawn Location", "option", true);
+            resetRoundStartCooldown = CustomOption.Create(9042, "Reset Spawn Cooldown", "option", true);
 
             blockedRolePairings.Add((byte)RoleId.Vampire, new [] { (byte)RoleId.Warlock});
             blockedRolePairings.Add((byte)RoleId.Warlock, new [] { (byte)RoleId.Vampire});
@@ -589,8 +595,8 @@ namespace TheOtherRoles {
             blockedRolePairings.Add((byte)RoleId.Vulture, new [] { (byte)RoleId.Cleaner});
             blockedRolePairings.Add((byte)RoleId.Cleaner, new [] { (byte)RoleId.Vulture});
 
-			// Prosecutor
-			blockedRolePairings.Add((byte)RoleId.Lawyer, new[] { (byte)RoleId.Prosecutor });
+    	    // Prosecutor
+	    blockedRolePairings.Add((byte)RoleId.Lawyer, new[] { (byte)RoleId.Prosecutor });
             blockedRolePairings.Add((byte)RoleId.Prosecutor, new[] { (byte)RoleId.Lawyer });            
         }
     }
