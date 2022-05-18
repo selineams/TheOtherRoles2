@@ -56,6 +56,7 @@ namespace TheOtherRoles
         Pursuer,
         Witch,
         Ninja,
+	Blackmailer,
         Crewmate,
         Impostor,
         // Modifier ---
@@ -126,6 +127,8 @@ namespace TheOtherRoles
         LawyerSetTarget,
         LawyerPromotesToPursuer,
         SetBlanked,
+        BlackmailPlayer,
+        UnblackmailPlayer,
         Bloody,
         SetFirstKill,
         Invert,
@@ -303,6 +306,9 @@ namespace TheOtherRoles
                         break;
                     case RoleId.Ninja:
                         Ninja.ninja = player;
+                        break;
+                    case RoleId.Blackmailer:
+                        Blackmailer.blackmailer = player;
                         break;
                     }
                 }
@@ -683,6 +689,7 @@ namespace TheOtherRoles
             if (player == Warlock.warlock) Warlock.clearAndReload();
             if (player == Witch.witch) Witch.clearAndReload();
             if (player == Ninja.ninja) Ninja.clearAndReload();
+            if (player == Blackmailer.blackmailer) Blackmailer.clearAndReload();
 
             // Other roles
             if (player == Jester.jester) Jester.clearAndReload();
@@ -952,6 +959,16 @@ namespace TheOtherRoles
             }
         }
 
+	public static void blackmailPlayer(byte playerId) {
+	  PlayerControl target = Helpers.playerById(playerId);
+	  Blackmailer.blackmailed = target;
+	}
+
+	public static void unblackmailPlayer() {
+	  Blackmailer.blackmailed = null;
+	  Blackmailer.alreadyShook = false;
+	}
+
         public static void setBlanked(byte playerId, byte value) {
             PlayerControl target = Helpers.playerById(playerId);
             if (target == null) return;
@@ -1063,6 +1080,12 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.CleanBody:
                     RPCProcedure.cleanBody(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.BlackmailPlayer:
+                    RPCProcedure.blackmailPlayer(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.UnblackmailPlayer:
+                    RPCProcedure.unblackmailPlayer();
                     break;
                 case (byte)CustomRPC.TimeMasterRewindTime:
                     RPCProcedure.timeMasterRewindTime();

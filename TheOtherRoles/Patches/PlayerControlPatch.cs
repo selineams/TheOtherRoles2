@@ -132,6 +132,13 @@ namespace TheOtherRoles.Patches {
             if (!Medic.usedShield) setPlayerOutline(Medic.currentTarget, Medic.shieldedColor);
         }
 
+        static void blackMailerSetTarget() {
+            if (Blackmailer.blackmailer == null || Blackmailer.blackmailer != PlayerControl.LocalPlayer) return;
+            Blackmailer.currentTarget = setTarget();
+            setPlayerOutline(Medic.currentTarget, Blackmailer.blackmailedColor);
+        }
+
+
         static void shifterSetTarget() {
             if (Shifter.shifter == null || Shifter.shifter != PlayerControl.LocalPlayer) return;
             Shifter.currentTarget = setTarget();
@@ -908,6 +915,8 @@ namespace TheOtherRoles.Patches {
                 lawyerUpdate();
                 // Pursuer
                 pursuerSetTarget();
+                // Blackmailer
+                blackMailerSetTarget();
                 // Witch
                 witchSetTarget();
                 // Ninja
