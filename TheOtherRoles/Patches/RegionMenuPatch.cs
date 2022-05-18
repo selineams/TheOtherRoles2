@@ -27,7 +27,6 @@ using HarmonyLib;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
-using TheOtherRoles.Utilities;
 using UnityEngine.Events;
 
 namespace TheOtherRoles.Patches {
@@ -38,8 +37,7 @@ namespace TheOtherRoles.Patches {
         private static TextBoxTMP portField;
 
         public static void Postfix(RegionMenu __instance) {
-            if (!__instance.TryCast<RegionMenu>()) return;
-            var template = FastDestroyableSingleton<JoinGameButton>.Instance;
+            var template = DestroyableSingleton<JoinGameButton>.Instance;
             var joinGameButtons = GameObject.FindObjectsOfType<JoinGameButton>();
             foreach (var t in joinGameButtons) {  // The correct button has a background, the other 2 dont
                 if (t.GameIdText != null && t.GameIdText.Background != null) {

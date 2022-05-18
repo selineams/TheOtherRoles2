@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
-using TheOtherRoles.Utilities;
+using System.Collections;
 using UnityEngine;
+using static TheOtherRoles.TheOtherRoles;
 
 namespace TheOtherRoles.Objects {
     class Footprint {
@@ -27,7 +28,7 @@ namespace TheOtherRoles.Objects {
             else
                 this.color = Palette.PlayerColors[(int) player.Data.DefaultOutfit.ColorId];
 
-            footprint = new GameObject("Footprint");
+            footprint = new GameObject("Footprint") { layer = 11 };
             footprint.AddSubmergedComponent(SubmergedCompatibility.Classes.ElevatorMover);
             Vector3 position = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.y / 1000 + 0.001f);
             footprint.transform.position = position;
@@ -44,7 +45,7 @@ namespace TheOtherRoles.Objects {
             footprint.SetActive(true);
             footprints.Add(this);
 
-            FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(footprintDuration, new Action<float>((p) => {
+            HudManager.Instance.StartCoroutine(Effects.Lerp(footprintDuration, new Action<float>((p) => {
             Color c = color;
             if (!anonymousFootprints && owner != null) {
                 if (owner == Morphling.morphling && Morphling.morphTimer > 0 && Morphling.morphTarget?.Data != null)

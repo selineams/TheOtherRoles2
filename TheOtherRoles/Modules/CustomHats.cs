@@ -1,15 +1,25 @@
+using System;
+using BepInEx;
+using BepInEx.Configuration;
+using BepInEx.IL2CPP;
+using Il2CppSystem;
 using HarmonyLib;
 using UnityEngine;
+using UnhollowerBaseLib;
 using System.IO;
+using System.Reflection;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 using Newtonsoft.Json.Linq;
-using TheOtherRoles.Utilities;
+using Newtonsoft.Json;
 
 namespace TheOtherRoles.Modules {
     [HarmonyPatch]
@@ -118,7 +128,7 @@ namespace TheOtherRoles.Modules {
 
         private static HatData CreateHatBehaviour(CustomHat ch, bool fromDisk = false, bool testOnly = false) {
             if (hatShader == null) {
-                Material tmpShader = FastDestroyableSingleton<HatManager>.Instance.PlayerMaterial;
+                Material tmpShader = DestroyableSingleton<HatManager>.Instance.PlayerMaterial;
                 hatShader = tmpShader;
             }
 
@@ -229,8 +239,6 @@ namespace TheOtherRoles.Modules {
                 if (DestroyableSingleton<TutorialManager>.InstanceExists) {
                     try {
                         string filePath = Path.GetDirectoryName(Application.dataPath) + @"\TheOtherHats\Test";
-                        if (!Directory.Exists(filePath))
-                            Directory.CreateDirectory(filePath);
                         DirectoryInfo d = new DirectoryInfo(filePath);
                         string[] filePaths = d.GetFiles("*.png").Select(x => x.FullName).ToArray(); // Getting Text files
                         List<CustomHat> hats = createCustomHatDetails(filePaths, true);
@@ -274,7 +282,7 @@ namespace TheOtherRoles.Modules {
                     ColorChip colorChip = UnityEngine.Object.Instantiate<ColorChip>(__instance.ColorTabPrefab, __instance.scroller.Inner);
                     if (ActiveInputManager.currentControlType == ActiveInputManager.InputType.Keyboard) {
                         colorChip.Button.OnMouseOver.AddListener((System.Action)(() => __instance.SelectHat(hat)));
-                        colorChip.Button.OnMouseOut.AddListener((System.Action)(() => __instance.SelectHat(FastDestroyableSingleton<HatManager>.Instance.GetHatById(SaveManager.LastHat))));
+                        colorChip.Button.OnMouseOut.AddListener((System.Action)(() => __instance.SelectHat(DestroyableSingleton<HatManager>.Instance.GetHatById(SaveManager.LastHat))));
                         colorChip.Button.OnClick.AddListener((System.Action)(() => __instance.ClickEquip()));
                     } else {
                         colorChip.Button.OnClick.AddListener((System.Action)(() => __instance.SelectHat(hat)));
@@ -316,7 +324,7 @@ namespace TheOtherRoles.Modules {
                     UnityEngine.Object.Destroy(__instance.scroller.Inner.GetChild(i).gameObject);
                 __instance.ColorChips = new Il2CppSystem.Collections.Generic.List<ColorChip>();
 
-                HatData[] unlockedHats = FastDestroyableSingleton<HatManager>.Instance.GetUnlockedHats();
+                HatData[] unlockedHats = DestroyableSingleton<HatManager>.Instance.GetUnlockedHats();
                 Dictionary<string, List<System.Tuple<HatData, HatExtension>>> packages = new Dictionary<string, List<System.Tuple<HatData, HatExtension>>>();
 
                 foreach (HatData hatBehaviour in unlockedHats) {

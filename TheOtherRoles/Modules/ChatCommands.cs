@@ -1,7 +1,13 @@
 using System;
+using System.Security.Cryptography;
+using System.Text;
+using BepInEx;
+using BepInEx.Configuration;
+using BepInEx.IL2CPP;
 using HarmonyLib;
+using UnityEngine;
 using System.Linq;
-using TheOtherRoles.Utilities;
+using UnhollowerBaseLib;
 
 namespace TheOtherRoles.Modules {
     [HarmonyPatch]
@@ -40,7 +46,7 @@ namespace TheOtherRoles.Modules {
                 if (AmongUsClient.Instance.GameMode == GameModes.FreePlay) {
                     if (text.ToLower().Equals("/murder")) {
                         PlayerControl.LocalPlayer.Exiled();
-                        FastDestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(PlayerControl.LocalPlayer.Data, PlayerControl.LocalPlayer.Data);
+                        HudManager.Instance.KillOverlay.ShowKillAnimation(PlayerControl.LocalPlayer.Data, PlayerControl.LocalPlayer.Data);
                         handled = true;
                     } else if (text.ToLower().StartsWith("/color ")) {
                         handled = true;
@@ -89,7 +95,7 @@ namespace TheOtherRoles.Modules {
         [HarmonyPatch(typeof(ChatController), nameof(ChatController.AddChat))]
         public static class AddChat {
             public static bool Prefix(ChatController __instance, [HarmonyArgument(0)] PlayerControl sourcePlayer) {
-                if (__instance != FastDestroyableSingleton<HudManager>.Instance.Chat)
+                if (__instance != DestroyableSingleton<HudManager>.Instance.Chat)
                     return true;
                 PlayerControl localPlayer = PlayerControl.LocalPlayer;
                 return localPlayer == null || (MeetingHud.Instance != null || LobbyBehaviour.Instance != null || (localPlayer.Data.IsDead || localPlayer.isLover() && Lovers.enableChat) || (int)sourcePlayer.PlayerId == (int)PlayerControl.LocalPlayer.PlayerId);

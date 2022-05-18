@@ -2,11 +2,15 @@ using HarmonyLib;
 using Hazel;
 using System.Collections.Generic;
 using System.Linq;
+using UnhollowerBaseLib;
 using static TheOtherRoles.TheOtherRoles;
 using TheOtherRoles.Objects;
+using static TheOtherRoles.MapOptions;
+using System.Collections;
 using System;
-using TheOtherRoles.Utilities;
+using System.Text;
 using UnityEngine;
+using System.Reflection;
 
 namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(ExileController), nameof(ExileController.Begin))]
@@ -74,13 +78,13 @@ namespace TheOtherRoles.Patches {
             Witch.futureSpelled = new List<PlayerControl>();
 
             // SecurityGuard vents and cameras
-            var allCameras = MapUtilities.CachedShipStatus.AllCameras.ToList();
+            var allCameras = ShipStatus.Instance.AllCameras.ToList();
             MapOptions.camerasToAdd.ForEach(camera => {
                 camera.gameObject.SetActive(true);
                 camera.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
                 allCameras.Add(camera);
             });
-            MapUtilities.CachedShipStatus.AllCameras = allCameras.ToArray();
+            ShipStatus.Instance.AllCameras = allCameras.ToArray();
             MapOptions.camerasToAdd = new List<SurvCamera>();
 
             foreach (Vent vent in MapOptions.ventsToSeal) {
@@ -88,8 +92,8 @@ namespace TheOtherRoles.Patches {
                 animator?.Stop();
                 vent.EnterVentAnim = vent.ExitVentAnim = null;
                 vent.myRend.sprite = animator == null ? SecurityGuard.getStaticVentSealedSprite() : SecurityGuard.getAnimatedVentSealedSprite();
-                if (SubmergedCompatibility.IsSubmerged && vent.Id == 0) vent.myRend.sprite = SecurityGuard.getSubmergedCentralUpperSealedSprite();
-                if (SubmergedCompatibility.IsSubmerged && vent.Id == 14) vent.myRend.sprite = SecurityGuard.getSubmergedCentralLowerSealedSprite();
+                if (SubmergedCompatibility.isSubmerged() && vent.Id == 0) vent.myRend.sprite = SecurityGuard.getSubmergedCentralUpperSealedSprite();
+                if (SubmergedCompatibility.isSubmerged() && vent.Id == 14) vent.myRend.sprite = SecurityGuard.getSubmergedCentralLowerSealedSprite();
                 vent.myRend.color = Color.white;
                 vent.name = "SealedVent_" + vent.name;
             }
@@ -117,7 +121,7 @@ namespace TheOtherRoles.Patches {
         // Workaround to add a "postfix" to the destroying of the exile controller (i.e. cutscene) of submerged
         [HarmonyPatch(typeof(UnityEngine.Object), nameof(UnityEngine.Object.Destroy), new Type[] { typeof(GameObject) })]
         public static void Prefix(GameObject obj) {
-            if (!SubmergedCompatibility.IsSubmerged) return;
+            if (!SubmergedCompatibility.isSubmerged()) return;
             if (obj.name.Contains("ExileCutscene")) { 
                 WrapUpPostfix(ExileControllerBeginPatch.lastExiled);
             }            
@@ -131,11 +135,7 @@ namespace TheOtherRoles.Patches {
             // Jester win condition
             else if (exiled != null && Jester.jester != null && Jester.jester.PlayerId == exiled.PlayerId) {
                 Jester.triggerJesterWin = true;
-            }
-            // Prosecutor win condition
-            else if (exiled != null && Prosecutor.prosecutor != null && Prosecutor.target.PlayerId == exiled.PlayerId && !Prosecutor.prosecutor.Data.IsDead) {
-                Prosecutor.triggerProsecutorWin = true;
-            }
+            } 
 
             // Reset custom button timers where necessary
             CustomButton.MeetingEndedUpdate();
@@ -158,7 +158,7 @@ namespace TheOtherRoles.Patches {
                     rend.sprite = Seer.getSoulSprite();
                     
                     if(Seer.limitSoulDuration) {
-                        FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(Seer.soulDuration, new Action<float>((p) => {
+                        HudManager.Instance.StartCoroutine(Effects.Lerp(Seer.soulDuration, new Action<float>((p) => {
                             if (rend != null) {
                                 var tmp = rend.color;
                                 tmp.a = Mathf.Clamp01(1 - p);
@@ -183,9 +183,9 @@ namespace TheOtherRoles.Patches {
             // Arsonist deactivate dead poolable players
             if (Arsonist.arsonist != null && Arsonist.arsonist == PlayerControl.LocalPlayer) {
                 int visibleCounter = 0;
-                Vector3 bottomLeft = new Vector3(-FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition.x, FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition.y, FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition.z);
+                Vector3 bottomLeft = new Vector3(-HudManager.Instance.UseButton.transform.localPosition.x, HudManager.Instance.UseButton.transform.localPosition.y, HudManager.Instance.UseButton.transform.localPosition.z);
                 bottomLeft += new Vector3(-0.25f, -0.25f, 0);
-                foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator()) {
+                foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
                     if (!MapOptions.playerIcons.ContainsKey(p.PlayerId)) continue;
                     if (p.Data.IsDead || p.Data.Disconnected) {
                         MapOptions.playerIcons[p.PlayerId].gameObject.SetActive(false);
@@ -232,7 +232,7 @@ namespace TheOtherRoles.Patches {
             // AntiTeleport set position
             if (AntiTeleport.antiTeleport.FindAll(x => x.PlayerId == PlayerControl.LocalPlayer.PlayerId).Count > 0) {
                 PlayerControl.LocalPlayer.transform.position = AntiTeleport.position;
-                if (SubmergedCompatibility.IsSubmerged) {
+                if (SubmergedCompatibility.isSubmerged()) {
                     SubmergedCompatibility.ChangeFloor(AntiTeleport.position.y > -7);
                 }
             }

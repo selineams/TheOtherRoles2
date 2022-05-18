@@ -1,6 +1,8 @@
 using HarmonyLib;
+using static TheOtherRoles.TheOtherRoles;
+using System.Collections;
+using System.Collections.Generic;
 using System;
-using TheOtherRoles.Utilities;
 
 namespace TheOtherRoles {
     [HarmonyPatch]
@@ -11,10 +13,11 @@ namespace TheOtherRoles {
             int CompletedTasks = 0;
             if (!playerInfo.Disconnected && playerInfo.Tasks != null &&
                 playerInfo.Object &&
+                (PlayerControl.GameOptions.GhostsDoTasks || !playerInfo.IsDead) &&
                 playerInfo.Role && playerInfo.Role.TasksCountTowardProgress &&
                 !playerInfo.Object.hasFakeTasks()
                 ) {
-                foreach (var playerInfoTask in playerInfo.Tasks.GetFastEnumerator())
+                foreach (var playerInfoTask in playerInfo.Tasks)
                 {
                     if (playerInfoTask.Complete) CompletedTasks++;
                     TotalTasks++;
@@ -26,12 +29,9 @@ namespace TheOtherRoles {
         [HarmonyPatch(typeof(GameData), nameof(GameData.RecomputeTaskCounts))]
         private static class GameDataRecomputeTaskCountsPatch {
             private static bool Prefix(GameData __instance) {
-               
-
-                var totalTasks = 0;
-                var completedTasks = 0;
-                
-                foreach (var playerInfo in GameData.Instance.AllPlayers.GetFastEnumerator())
+                __instance.TotalTasks = 0;
+                __instance.CompletedTasks = 0;
+                foreach (var playerInfo in GameData.Instance.AllPlayers)
                 {
                     if (playerInfo.Object
                         && playerInfo.Object.hasAliveKillingLover() // Tasks do not count if a Crewmate has an alive killing Lover
@@ -40,12 +40,9 @@ namespace TheOtherRoles {
                        )
                         continue;
                     var (playerCompleted, playerTotal) = taskInfo(playerInfo);
-                    totalTasks += playerTotal;
-                    completedTasks += playerCompleted;
+                    __instance.TotalTasks += playerTotal;
+                    __instance.CompletedTasks += playerCompleted;
                 }
-                
-                __instance.TotalTasks = totalTasks;
-                __instance.CompletedTasks = completedTasks;
                 return false;
             }
         }
