@@ -391,7 +391,7 @@ namespace TheOtherRoles {
             jesterHasImpostorVision = CustomOption.Create(62, Types.Neutral, "Jester Has Impostor Vision", false, jesterSpawnRate);
 			
             prosecutorSpawnRate = CustomOption.Create(615, Types.Neutral, cs(Prosecutor.color, "Prosecutor"),   rates, null, true);
-            prosecutorShifterShiftsTarget = CustomOption.Create(616, Types.Neutral, "Shifting Shifts Target", true, jesterSpawnRate);
+            prosecutorShifterShiftsTarget = CustomOption.Create(616, Types.Neutral, "Shifting Shifts Target", true, prosecutorSpawnRate);
 
 
             arsonistSpawnRate = CustomOption.Create(290, Types.Neutral, cs(Arsonist.color, "Arsonist"), rates, null, true);
