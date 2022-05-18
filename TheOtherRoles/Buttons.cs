@@ -48,6 +48,7 @@ namespace TheOtherRoles
         public static CustomButton witchSpellButton;
         public static CustomButton ninjaButton;
         public static CustomButton mayorMeetingButton;
+        public static CustomButton blackmailerButton;
 
         public static Dictionary<byte, List<CustomButton>> deputyHandcuffedButtons = null;
 
@@ -95,6 +96,7 @@ namespace TheOtherRoles
             witchSpellButton.MaxTimer = Witch.cooldown;
             ninjaButton.MaxTimer = Ninja.cooldown;
             mayorMeetingButton.MaxTimer = PlayerControl.GameOptions.EmergencyCooldown;
+            blackmailerButton.MaxTimer = Blackmailer.cooldown;
 
             timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
             hackerButton.EffectDuration = Hacker.duration;
@@ -118,6 +120,14 @@ namespace TheOtherRoles
             timeMasterShieldButton.Timer = timeMasterShieldButton.MaxTimer;
             timeMasterShieldButton.isEffectActive = false;
             timeMasterShieldButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
+        }
+
+        public static void showTargetNameOnButtonExplicit(PlayerControl target, CustomButton button, string defaultText) {
+            var text = defaultText;
+            if (target == null) text = defaultText; // Set text to defaultText if no target
+            else text = target.Data.PlayerName; // Set text to playername
+            button.actionButton.OverrideText(text);
+            button.showButtonText = true;
         }
 
         private static void addReplacementHandcuffedButton(CustomButton button, Vector3? positionOffset = null, Func<bool> couldUse = null)
@@ -1458,6 +1468,35 @@ namespace TheOtherRoles
                 __instance,
                 KeyCode.F                   
             );
+
+            blackmailerButton = new CustomButton(
+               () => { // Action when Pressed
+                  if (Blackmailer.currentTarget != null) {
+		    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.BlackmailPlayer, Hazel.SendOption.Reliable, -1);
+                    writer.Write(Blackmailer.currentTarget.PlayerId);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.blackmailPlayer(Blackmailer.currentTarget.PlayerId);
+	    	    blackmailerButton.Timer = blackmailerButton.MaxTimer;
+                  }
+               },
+               () => { return Blackmailer.blackmailer != null && Blackmailer.blackmailer == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead ;},
+               () => { // Could Use
+		   var text = "Blackmail";
+		   if (Blackmailer.blackmailed != null) text = Blackmailer.blackmailed.Data.PlayerName;
+                   showTargetNameOnButtonExplicit(Blackmailer.currentTarget, blackmailerButton, text); //Show target name under button if setting is true
+                   return (Blackmailer.currentTarget != null && PlayerControl.LocalPlayer.CanMove);
+               },
+               () => { blackmailerButton.Timer = blackmailerButton.MaxTimer; },
+               Blackmailer.getBlackmailButtonSprite(),
+               new Vector3(-1.8f, -0.06f, 0),
+               __instance,
+               KeyCode.F,
+               true,
+               0f,
+               () => {},
+               false,
+               "Blackmail"
+           );
 
             mayorMeetingButton = new CustomButton(
                () => {
