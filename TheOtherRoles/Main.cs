@@ -1,28 +1,28 @@
-﻿using BepInEx;
+﻿global using UnhollowerBaseLib;
+global using UnhollowerBaseLib.Attributes;
+global using UnhollowerRuntimeLib;
+
+using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.IL2CPP;
 using HarmonyLib;
 using Hazel;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 using System.Linq;
-using System.Net;
-using System.IO;
 using System;
-using System.Reflection;
-using UnhollowerBaseLib;
 using UnityEngine;
 using TheOtherRoles.Modules;
+using TheOtherRoles.Utilities;
 
 namespace TheOtherRoles
 {
-    [BepInPlugin(Id, "The Other Roles", VersionString)]
+    [BepInPlugin(Id, "The Other Roles CE", VersionString)]
     [BepInDependency(SubmergedCompatibility.SUBMERGED_GUID, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInProcess("Among Us.exe")]
     public class TheOtherRolesPlugin : BasePlugin
     {
         public const string Id = "me.eisbison.theotherroles";
-        public const string VersionString = "4.1.1";
+        public const string VersionString = "5.0.5";
 
         public static Version Version = Version.Parse(VersionString);
         internal static BepInEx.Logging.ManualLogSource Logger;
@@ -46,16 +46,18 @@ namespace TheOtherRoles
         public static ConfigEntry<string> Ip { get; set; }
         public static ConfigEntry<ushort> Port { get; set; }
         public static ConfigEntry<string> ShowPopUpVersion { get; set; }
+        public static ConfigEntry<bool> ToggleCursor { get; set; }
+
 
         public static Sprite ModStamp;
 
         public static IRegionInfo[] defaultRegions;
         public static void UpdateRegions() {
-            ServerManager serverManager = DestroyableSingleton<ServerManager>.Instance;
+            ServerManager serverManager = FastDestroyableSingleton<ServerManager>.Instance;
             IRegionInfo[] regions = defaultRegions;
 
             var CustomRegion = new DnsRegionInfo(Ip.Value, "Custom", StringNames.NoTranslation, Ip.Value, Port.Value, false);
-            regions = regions.Concat(new IRegionInfo[] { CustomRegion.Cast<IRegionInfo>() }).ToArray();
+            regions = regions.Concat(new IRegionInfo[] { CustomRegion.CastFast<IRegionInfo>() }).ToArray();
             ServerManager.DefaultRegions = regions;
             serverManager.AvailableRegions = regions;
         }
@@ -70,6 +72,7 @@ namespace TheOtherRoles
             GhostsSeeVotes = Config.Bind("Custom", "Ghosts See Votes", true);
             ShowRoleSummary = Config.Bind("Custom", "Show Role Summary", true);
             ShowLighterDarker = Config.Bind("Custom", "Show Lighter / Darker", true);
+            ToggleCursor = Config.Bind("Custom", "Better Cursor", true);
             EnableHorseMode = Config.Bind("Custom", "Enable Horse Mode", false);
             ShowPopUpVersion = Config.Bind("Custom", "Show PopUp", "0");
             StreamerModeReplacementText = Config.Bind("Custom", "Streamer Mode Replacement Text", "\n\nThe Other Roles");
@@ -91,6 +94,9 @@ namespace TheOtherRoles
             CustomColors.Load();
             Patches.FreeNamePatch.Initialize();
             Harmony.PatchAll();
+            if (ToggleCursor.Value) {
+                Helpers.enableCursor(true);
+            }       
             SubmergedCompatibility.Initialize();
             AddComponent<ModUpdateBehaviour>();
         }
