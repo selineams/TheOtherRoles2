@@ -565,6 +565,7 @@ namespace TheOtherRoles {
 
             dynamicMapEnableSubmerged = CustomOption.Create(505, Types.General, "Enable Submerged Rotation", true, dynamicMap, false);
 
+
             blockedRolePairings.Add((byte)RoleId.Vampire, new [] { (byte)RoleId.Warlock});
             blockedRolePairings.Add((byte)RoleId.Warlock, new [] { (byte)RoleId.Vampire});
             blockedRolePairings.Add((byte)RoleId.Spy, new [] { (byte)RoleId.Mini});
