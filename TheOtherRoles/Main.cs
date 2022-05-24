@@ -102,11 +102,7 @@ namespace TheOtherRoles
                 Helpers.enableCursor(true);
             }       
 
-            if (BepInExUpdater.UpdateRequired)
-            {
-                AddComponent<BepInExUpdater>();
-                return;
-            }
+           
             
             SubmergedCompatibility.Initialize();
             AddComponent<ModUpdateBehaviour>();
