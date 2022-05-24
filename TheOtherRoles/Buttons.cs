@@ -353,7 +353,7 @@ namespace TheOtherRoles
                 () => {
                     byte targetId = 0;
                     targetId = Sheriff.sheriff == CachedPlayer.LocalPlayer.PlayerControl ? Sheriff.currentTarget.PlayerId : Deputy.currentTarget.PlayerId;  // If the deputy is now the sheriff, sheriffs target, else deputies target
-                    if (Helpers.checkAndDoVetKill(target)) return;
+                    if (Helpers.checkAndDoVetKill(Helpers.playerById(targetId))) return;
 
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.DeputyUsedHandcuffs, Hazel.SendOption.Reliable, -1);
                     writer.Write(targetId);
@@ -770,8 +770,6 @@ namespace TheOtherRoles
                     }
                 },
                 () => { return Vampire.vampire != null && Vampire.vampire == CachedPlayer.LocalPlayer.PlayerControl && !CachedPlayer.LocalPlayer.Data.IsDead; },
-                () => {
-                    return Vampire.vampire != null && Vampire.vampire == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => {
 					showTargetNameOnButton(Vampire.currentTarget, vampireKillButton, "");
                     if (Vampire.targetNearGarlic && Vampire.canKillNearGarlics) {
