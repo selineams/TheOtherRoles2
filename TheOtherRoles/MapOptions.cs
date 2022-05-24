@@ -17,7 +17,11 @@ namespace TheOtherRoles{
         public static bool showLighterDarker = true;
         public static bool toggleCursor = true;
 
+        public static bool camoComms = false;
+
+
         public static int restrictDevices = 0;
+		
         public static float restrictAdminTime = 600f;
         public static float restrictAdminTimeMax = 600f;
         public static float restrictCamerasTime = 600f;
@@ -50,6 +54,8 @@ namespace TheOtherRoles{
             allowParallelMedBayScans = CustomOptionHolder.allowParallelMedBayScans.getBool();
             shieldFirstKill = CustomOptionHolder.shieldFirstKill.getBool();
             firstKillPlayer = null;
+            camoComms = CustomOptionHolder.enableCamoComms.getBool();
+
             restrictDevices = CustomOptionHolder.restrictDevices.getSelection();
             restrictAdminTime = restrictAdminTimeMax = CustomOptionHolder.restrictAdmin.getFloat();
             restrictCamerasTime = restrictCamerasTimeMax = CustomOptionHolder.restrictCameras.getFloat();
