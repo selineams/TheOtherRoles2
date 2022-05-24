@@ -9,6 +9,7 @@ using TheOtherRoles.Modules;
 using TheOtherRoles.Objects;
 using HarmonyLib;
 using Hazel;
+using TheOtherRoles.Players;
 using TheOtherRoles.Utilities;
 
 namespace TheOtherRoles {
@@ -174,7 +175,7 @@ namespace TheOtherRoles {
 
         public static PlayerControl playerById(byte id)
         {
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls.GetFastEnumerator())
+            foreach (PlayerControl player in CachedPlayer.AllPlayers)
                 if (player.PlayerId == id)
                     return player;
             return null;
@@ -183,7 +184,7 @@ namespace TheOtherRoles {
         public static Dictionary<byte, PlayerControl> allPlayersById()
         {
             Dictionary<byte, PlayerControl> res = new Dictionary<byte, PlayerControl>();
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls.GetFastEnumerator())
+            foreach (PlayerControl player in CachedPlayer.AllPlayers)
                 res.Add(player.PlayerId, player);
             return res;
         }
@@ -191,7 +192,7 @@ namespace TheOtherRoles {
         public static void handleVampireBiteOnBodyReport() {
             // Murder the bitten player and reset bitten (regardless whether the kill was successful or not)
             Helpers.checkMuderAttemptAndKill(Vampire.vampire, Vampire.bitten, true, false);
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireSetBitten, Hazel.SendOption.Reliable, -1);
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.VampireSetBitten, Hazel.SendOption.Reliable, -1);
             writer.Write(byte.MaxValue);
             writer.Write(byte.MaxValue);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -353,7 +354,7 @@ namespace TheOtherRoles {
             target.RawSetColor(colorId);
             target.RawSetVisor(visorId);
             target.RawSetHat(hatId, colorId);
-            target.RawSetName(hidePlayerName(PlayerControl.LocalPlayer, target) ? "" : playerName);
+            target.RawSetName(hidePlayerName(CachedPlayer.LocalPlayer.PlayerControl, target) ? "" : playerName);
 
             SkinViewData nextSkin = FastDestroyableSingleton<HatManager>.Instance.GetSkinById(skinId).viewData.viewData;
             PlayerPhysics playerPhysics = target.MyPhysics;
@@ -413,9 +414,9 @@ namespace TheOtherRoles {
             else if (Vulture.canUseVents && Vulture.vulture != null && Vulture.vulture == player)
                 roleCouldUse = true;
             else if (player.Data?.Role != null && player.Data.Role.CanVent)  {
-                if (Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer)
+                if (Janitor.janitor != null && Janitor.janitor == CachedPlayer.LocalPlayer.PlayerControl)
                     roleCouldUse = false;
-                else if (Mafioso.mafioso != null && Mafioso.mafioso == PlayerControl.LocalPlayer && Godfather.godfather != null && !Godfather.godfather.Data.IsDead)
+                else if (Mafioso.mafioso != null && Mafioso.mafioso == CachedPlayer.LocalPlayer.PlayerControl && Godfather.godfather != null && !Godfather.godfather.Data.IsDead)
                     roleCouldUse = false;
                 else
                     roleCouldUse = true;
@@ -434,7 +435,7 @@ namespace TheOtherRoles {
 
             // Handle blank shot
             if (Pursuer.blankedList.Any(x => x.PlayerId == killer.PlayerId)) {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetBlanked, Hazel.SendOption.Reliable, -1);
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SetBlanked, Hazel.SendOption.Reliable, -1);
                 writer.Write(killer.PlayerId);
                 writer.Write((byte)0);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -489,7 +490,7 @@ namespace TheOtherRoles {
             MurderAttemptResult murder = checkMuderAttempt(killer, target, isMeetingStart);
 
             if (murder == MurderAttemptResult.PerformKill) {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
                 writer.Write(killer.PlayerId);
                 writer.Write(target.PlayerId);
                 writer.Write(showAnimation ? Byte.MaxValue : 0);
@@ -517,7 +518,7 @@ namespace TheOtherRoles {
 	}
 
         public static void shareGameVersion() {
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VersionHandshake, Hazel.SendOption.Reliable, -1);
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.VersionHandshake, Hazel.SendOption.Reliable, -1);
             writer.Write((byte)TheOtherRolesPlugin.Version.Major);
             writer.Write((byte)TheOtherRolesPlugin.Version.Minor);
             writer.Write((byte)TheOtherRolesPlugin.Version.Build);
@@ -530,7 +531,7 @@ namespace TheOtherRoles {
 
         public static List<PlayerControl> getKillerTeamMembers(PlayerControl player) {
             List<PlayerControl> team = new List<PlayerControl>();
-            foreach(PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator()) {
+            foreach(PlayerControl p in CachedPlayer.AllPlayers) {
                 if (player.Data.Role.IsImpostor && p.Data.Role.IsImpostor && player.PlayerId != p.PlayerId && team.All(x => x.PlayerId != p.PlayerId)) team.Add(p);
                 else if (player == Jackal.jackal && p == Sidekick.sidekick) team.Add(p); 
                 else if (player == Sidekick.sidekick && p == Jackal.jackal) team.Add(p);
