@@ -1374,6 +1374,7 @@ namespace TheOtherRoles
 
         public static void prosecutorToPursuer() {
             PlayerControl player = Prosecutor.prosecutor;
+            if (player == null) return;
             Prosecutor.clearAndReload();
             Pursuer.pursuer = player;
             Pursuer.wasProsecutor = true;
