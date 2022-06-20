@@ -68,6 +68,7 @@ namespace TheOtherRoles
         Impostor,
         // Modifier ---
         Lover,
+        LifeGuard,
         Bait,
         Bloody,
         AntiTeleport,
@@ -372,6 +373,9 @@ namespace TheOtherRoles
                 case RoleId.Tiebreaker:
                     Tiebreaker.tiebreaker = player;
                     break;
+                case RoleId.LifeGuard:
+                    LifeGuard.lifeGuard = player;
+                    break;
                 case RoleId.Sunglasses:
                     Sunglasses.sunglasses.Add(player);
                     break;
@@ -382,7 +386,6 @@ namespace TheOtherRoles
                     Vip.vip.Add(player);
                     break;
                 case RoleId.Indomitable:
-                    TheOtherRolesPlugin.Logger.LogError("Assigning "+ player.Data.PlayerName +" the Indomitable modifier...does it fail somewhere?");
                     Indomitable.indomitable = player;
                     break;
                 case RoleId.Invert:

@@ -408,6 +408,7 @@ namespace TheOtherRoles.Patches {
                 RoleId.Sunglasses,
                 RoleId.Vip,
                 RoleId.Invert,
+                RoleId.LifeGuard,
                 RoleId.Indomitable
             });
 
@@ -531,6 +532,8 @@ namespace TheOtherRoles.Patches {
                     selection = CustomOptionHolder.modifierLover.getSelection(); break;
                 case RoleId.Tiebreaker:
                     selection = CustomOptionHolder.modifierTieBreaker.getSelection(); break;
+                case RoleId.LifeGuard:
+                    selection = CustomOptionHolder.modifierLifeGuard.getSelection(); break;
                 case RoleId.Indomitable:
                     selection = CustomOptionHolder.modifierIndomitable.getSelection(); break;
                 case RoleId.Mini:

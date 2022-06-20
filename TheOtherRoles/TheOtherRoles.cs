@@ -70,6 +70,7 @@ namespace TheOtherRoles
             AntiTeleport.clearAndReload();
             Tiebreaker.clearAndReload();
             Sunglasses.clearAndReload();
+            LifeGuard.clearAndReload();
             Mini.clearAndReload();
             Indomitable.clearAndReload();
             Vip.clearAndReload();
@@ -1842,6 +1843,25 @@ namespace TheOtherRoles
 
         public static void clearAndReload() {
             indomitable = null;
+        }
+    }
+
+    public static class LifeGuard {
+        public static PlayerControl lifeGuard;
+        public static bool hasSaved = false;
+        public static byte playerId1 = Byte.MaxValue;
+        private static Sprite spriteCheck;
+
+        public static Sprite getSaveSprite() {
+            if (spriteCheck) return spriteCheck;
+            spriteCheck = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.SwapperCheck.png", 150f);
+            return spriteCheck;
+        }
+
+        
+        public static void clearAndReload() {
+            lifeGuard = null;
+            hasSaved = false;
         }
     }
 
