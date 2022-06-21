@@ -434,6 +434,9 @@ namespace TheOtherRoles.Patches {
                     }
                     if (Tiebreaker.isTiebreak) __result += " (Tiebreaker)";
                     Tiebreaker.isTiebreak = false;
+                    
+                    
+                    
                 }
             } catch {
                 // pass - Hopefully prevent leaving while exiling to softlock game

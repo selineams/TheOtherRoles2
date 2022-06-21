@@ -587,6 +587,7 @@ namespace TheOtherRoles
             return existing() && (lover1 == Jackal.jackal     || lover2 == Jackal.jackal
                                || lover1 == Sidekick.sidekick || lover2 == Sidekick.sidekick
                                || lover1 == Swooper.swooper || lover2 == Swooper.swooper
+                               || lover1 == Werewolf.werewolf || lover2 == Werewolf.werewolf
                                || lover1.Data.Role.IsImpostor      || lover2.Data.Role.IsImpostor);
         }
 
@@ -1851,10 +1852,11 @@ namespace TheOtherRoles
         public static bool hasSaved = false;
         public static byte playerId1 = Byte.MaxValue;
         private static Sprite spriteCheck;
+        public static bool isLifeGuard = false;
 
         public static Sprite getSaveSprite() {
             if (spriteCheck) return spriteCheck;
-            spriteCheck = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.SwapperCheck.png", 150f);
+            spriteCheck = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.LGSave.png", 150f);
             return spriteCheck;
         }
 
@@ -1862,6 +1864,7 @@ namespace TheOtherRoles
         public static void clearAndReload() {
             lifeGuard = null;
             hasSaved = false;
+            playerId1 = Byte.MaxValue;
         }
     }
 

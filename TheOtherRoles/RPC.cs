@@ -148,6 +148,7 @@ namespace TheOtherRoles
         UseCameraTime,
         UseVitalsTime,
         UnblackmailPlayer,
+        LifeGuardSave,
         SetBlanked,
         Bloody,
         SetFirstKill,
@@ -1013,6 +1014,14 @@ namespace TheOtherRoles
                 Swapper.playerId2 = playerId2;
             }
         }
+        
+
+        public static void lifeGuardSave(byte playerId1) {
+            if (MeetingHud.Instance) {
+                LifeGuard.playerId1 = playerId1;
+                LifeGuard.isLifeGuard = true;
+            }
+        }
 
         public static void morphlingMorph(byte playerId) {  
             PlayerControl target = Helpers.playerById(playerId);
@@ -1703,6 +1712,10 @@ namespace TheOtherRoles
                     byte playerId1 = reader.ReadByte();
                     byte playerId2 = reader.ReadByte();
                     RPCProcedure.swapperSwap(playerId1, playerId2);
+                    break;
+                case (byte)CustomRPC.LifeGuardSave:
+                    byte savedId = reader.ReadByte();
+                    RPCProcedure.lifeGuardSave(savedId);
                     break;
                 case (byte)CustomRPC.MorphlingMorph:
                     RPCProcedure.morphlingMorph(reader.ReadByte());

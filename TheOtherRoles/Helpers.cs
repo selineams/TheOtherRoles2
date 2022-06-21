@@ -182,6 +182,9 @@ namespace TheOtherRoles {
             }
         }
 
+        public static void Log(string e) {
+            TheOtherRolesPlugin.Logger.LogMessage(e);
+        }
 
         public static void showTargetNameOnButtonExplicit(PlayerControl target, CustomButton button, string defaultText) {
             var text = defaultText;

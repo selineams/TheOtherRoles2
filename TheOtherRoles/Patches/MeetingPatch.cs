@@ -121,7 +121,17 @@ namespace TheOtherRoles.Patches {
                             RPCProcedure.setTiebreak();
                         }
                     }
+                    
+                    if (LifeGuard.isLifeGuard) {
+                        if (exiled.Object.PlayerId == LifeGuard.playerId1) {
+                            exiled = null;
+                            tie = false;
+                        }
+                        LifeGuard.isLifeGuard = false;
+                        LifeGuard.playerId1 = Byte.MaxValue;
 
+                    }
+                    
                     // RPCVotingComplete
                     __instance.RpcVotingComplete(array, exiled, tie);
                 }
@@ -309,9 +319,8 @@ namespace TheOtherRoles.Patches {
         static void lifeGuardConfirm(MeetingHud __instance) {
             __instance.playerStates[0].Cancel();  // This will stop the underlying buttons of the template from showing up
             if (__instance.state == MeetingHud.VoteStates.Results) return;
-            if (selectionsLG.Where(b => b).Count() != 2) return;
+            if (selectionsLG.Where(b => b).Count() != 1) return;
             if (LifeGuard.hasSaved || LifeGuard.playerId1 != Byte.MaxValue) return;
-
             PlayerVoteArea savedPlayer = null;
             for (int A = 0; A < selectionsLG.Length; A++) {
                 if (selectionsLG[A]) {
@@ -325,13 +334,12 @@ namespace TheOtherRoles.Patches {
                 if (lifeGuardButtonList[A] != null) lifeGuardButtonList[A].OnClick.RemoveAllListeners();  // Swap buttons can't be clicked / changed anymore
             }
             if (savedPlayer != null  || true) {
-                /*
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SwapperSwap, Hazel.SendOption.Reliable, -1);
-                writer.Write((byte)firstPlayer.TargetPlayerId);
-                writer.Write((byte)secondPlayer.TargetPlayerId);
+                
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.LifeGuardSave, Hazel.SendOption.Reliable, -1);
+                writer.Write((byte)savedPlayer.TargetPlayerId);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
-
-                RPCProcedure.swapperSwap((byte)firstPlayer.TargetPlayerId, (byte)secondPlayer.TargetPlayerId); */
+                
+                RPCProcedure.lifeGuardSave((byte)savedPlayer.TargetPlayerId); 
                 lifeGuardConfirmButtonLabel.text = Helpers.cs(Color.green, "Saving!");
                 LifeGuard.hasSaved = true;
             }
@@ -485,7 +493,7 @@ namespace TheOtherRoles.Patches {
                     GameObject checkbox = UnityEngine.Object.Instantiate(template);
                     checkbox.transform.SetParent(playerVoteArea.transform);
                     checkbox.transform.position = template.transform.position;
-                    checkbox.transform.localPosition = new Vector3(-0.95f, 0.03f, -1.3f);
+                    checkbox.transform.localPosition = new Vector3(-0.35f, 0.03f, -1.3f);
                     SpriteRenderer renderer = checkbox.GetComponent<SpriteRenderer>();
                     renderer.sprite = LifeGuard.getSaveSprite();
                     renderer.color = Color.red;
@@ -500,7 +508,7 @@ namespace TheOtherRoles.Patches {
                     selectionsLG[i] = false;
                     renderers[i] = renderer;
                 }
-                // Add the "Confirm Save" button and "Swaps: X" text next to it
+                // Add the "Confirm Save" button
                 Transform meetingUI = __instance.transform.FindChild("PhoneUI");
                 var buttonTemplate = __instance.playerStates[0].transform.FindChild("votePlayerBase");
                 var maskTemplate = __instance.playerStates[0].transform.FindChild("MaskArea");
@@ -508,16 +516,7 @@ namespace TheOtherRoles.Patches {
                 Transform confirmSaveButtonParent = (new GameObject()).transform;
                 confirmSaveButtonParent.SetParent(meetingUI);
               
-              Transform confirmSaveButtonLG = UnityEngine.Object.Instantiate(buttonTemplate, confirmSaveButtonParent);
-/*
-                Transform infoTransform = __instance.playerStates[0].NameText.transform.parent.FindChild("Info");
-                TMPro.TextMeshPro meetingInfo = infoTransform != null ? infoTransform.GetComponent<TMPro.TextMeshPro>() : null;
-                swapperChargesText = UnityEngine.Object.Instantiate(__instance.playerStates[0].NameText, confirmSaveButtonParent);
-                swapperChargesText.text = $"Swaps: {Swapper.charges}";
-                swapperChargesText.enableWordWrapping = false;
-                swapperChargesText.transform.localScale = Vector3.one * 1.7f;
-                swapperChargesText.transform.localPosition = new Vector3(-2.5f, 0f, 0f);
-*/
+                Transform confirmSaveButtonLG = UnityEngine.Object.Instantiate(buttonTemplate, confirmSaveButtonParent);
                 Transform confirmSaveButtonMask = UnityEngine.Object.Instantiate(maskTemplate, confirmSaveButtonParent);
                 lifeGuardConfirmButtonLabel = UnityEngine.Object.Instantiate(textTemplate, confirmSaveButtonLG);
                 confirmSaveButtonLG.GetComponent<SpriteRenderer>().sprite = FastDestroyableSingleton<HatManager>.Instance.GetNamePlateById("nameplate_NoPlate")?.viewData?.viewData?.Image;
@@ -622,7 +621,7 @@ namespace TheOtherRoles.Patches {
                         SpriteRenderer rend = (new GameObject()).AddComponent<SpriteRenderer>();
                         rend.transform.SetParent(pva.transform);
                         rend.gameObject.layer = pva.Megaphone.gameObject.layer;
-                        rend.transform.localPosition = new Vector3(-0.5f, -0.03f, -1f);
+                        rend.transform.localPosition = new Vector3(1f, -0.03f, -1f);
                         rend.sprite = Witch.getSpelledOverlaySprite();
                     }
                 }
