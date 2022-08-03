@@ -438,6 +438,7 @@ namespace TheOtherRoles.Patches {
                 RoleId.Vip,
                 RoleId.Invert,
                 RoleId.Indomitable,
+                RoleId.Flash,
                 RoleId.Slueth,
                 RoleId.Blind
             });
@@ -565,6 +566,8 @@ namespace TheOtherRoles.Patches {
                     selection = CustomOptionHolder.modifierTieBreaker.getSelection(); break;
                 case RoleId.Indomitable:
                     selection = CustomOptionHolder.modifierIndomitable.getSelection(); break;
+                case RoleId.Flash:      
+                    selection = CustomOptionHolder.modifierFlash.getSelection(); break;
                 case RoleId.Slueth:
                     selection = CustomOptionHolder.modifierSlueth.getSelection(); break;
                 case RoleId.Blind:

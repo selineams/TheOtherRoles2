@@ -94,6 +94,7 @@ namespace TheOtherRoles
         public static RoleInfo slueth  = new RoleInfo("Slueth", Color.yellow, "Learn the roles of bodies you report", "Who dat?", RoleId.Indomitable, false, true);
         public static RoleInfo invert = new RoleInfo("Invert", Color.yellow, "Your movement is inverted", "Your movement is inverted", RoleId.Invert, false, true);
         public static RoleInfo blind  = new RoleInfo("Blind", Color.yellow, "You cannot see your report button!", "Was that a dead body?", RoleId.Blind, false, true);
+        public static RoleInfo flash  = new RoleInfo("Flash", Color.yellow, "You are the Flash!", "ZOOOMIES", RoleId.Flash, false, true);
 
 
 
@@ -160,6 +161,7 @@ namespace TheOtherRoles
             vip,
             indomitable,
             slueth,
+            flash,
             blind,
             invert
         };
@@ -184,6 +186,7 @@ namespace TheOtherRoles
                 if (Sunglasses.sunglasses.Any(x => x.PlayerId == p.PlayerId)) infos.Add(sunglasses);
                 if (p == Mini.mini) infos.Add(mini);
                 if (p == Blind.blind) infos.Add(blind);
+                if (p == Flash.flash) infos.Add(flash);
                 if (p == Slueth.slueth) infos.Add(slueth);
                 if (Invert.invert.Any(x => x.PlayerId == p.PlayerId)) infos.Add(invert);
             }

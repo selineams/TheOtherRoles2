@@ -302,6 +302,9 @@ namespace TheOtherRoles {
         public static CustomOption modifierMiniGrowingUpDuration;
 
         public static CustomOption modifierIndomitable;
+        public static CustomOption modifierFlash;
+        public static CustomOption modifierFlashSpeed;
+        
         public static CustomOption modifierBlind;
         public static CustomOption modifierSlueth;
 
@@ -661,6 +664,11 @@ namespace TheOtherRoles {
             
             modifierIndomitable = CustomOption.Create(1276, Types.Modifier, cs(Color.yellow, "Indomitable"), rates, null, true);
             modifierBlind = CustomOption.Create(8810, Types.Modifier, cs(Color.yellow, "Blind"), rates, null, true);
+            
+            modifierFlash = CustomOption.Create(8850, Types.Modifier, cs(Color.yellow, "Flash"), rates, null, true);
+            modifierFlashSpeed = CustomOption.Create(8851, Types.Modifier, "Flash Speed", 1f, 1f, 3f, 0.25f, modifierFlash);
+
+
             modifierSlueth = CustomOption.Create(8830, Types.Modifier, cs(Color.yellow, "Slueth"), rates, null, true);
 
             modifierVip = CustomOption.Create(1070, Types.Modifier, cs(Color.yellow, "VIP"), rates, null, true);

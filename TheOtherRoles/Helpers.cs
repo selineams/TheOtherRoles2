@@ -473,6 +473,17 @@ public static bool isPlayerLover(PlayerControl player) {
             return cs(roleInfo.color, $"{roleInfo.name}: {roleInfo.shortDescription}");
         }
         
+        
+        public static VisualAppearance GetAppearance(this PlayerControl player)
+        {
+            if (player.TryGetAppearance(Role.GetRole(player) as IVisualAlteration, out var appearance))
+                return appearance;
+            else if (player.TryGetAppearance(Modifier.GetModifier(player) as IVisualAlteration, out appearance))
+                return appearance;
+            else
+                return player.GetDefaultAppearance();
+        }
+
         public static bool isLighterColor(int colorId) {
             return CustomColors.lighterColors.Contains(colorId);
         }
