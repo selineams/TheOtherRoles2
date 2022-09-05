@@ -370,12 +370,12 @@ namespace TheOtherRoles {
             modifiersCountMin = CustomOption.Create(306, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Minimum Modifiers"), 15f, 0f, 15f, 1f);
             modifiersCountMax = CustomOption.Create(307, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Maximum Modifiers"), 15f, 0f, 15f, 1f);
 
-            mafiaSpawnRate = CustomOption.Create(10, Types.Impostor, cs(Janitor.color, Helpers.transl("mafia")), rates, null, true);
-            janitorCooldown = CustomOption.Create(11, Types.Impostor, "Janitor Cooldown", 30f, 10f, 60f, 2.5f, mafiaSpawnRate);
+            mafiaSpawnRate = CustomOption.Create(10, Types.Impostor, cs(Janitor.color, Helpers.transl(Helpers.transl("mafia"))), rates, null, true);
+            janitorCooldown = CustomOption.Create(11, Types.Impostor, Helpers.transl("janitorCooldown"), 30f, 10f, 60f, 2.5f, mafiaSpawnRate);
 
-            morphlingSpawnRate = CustomOption.Create(20, Types.Impostor, cs(Morphling.color, "Morphling"), rates, null, true);
-            morphlingCooldown = CustomOption.Create(21, Types.Impostor, "Morphling Cooldown", 30f, 10f, 60f, 2.5f, morphlingSpawnRate);
-            morphlingDuration = CustomOption.Create(22, Types.Impostor, "Morph Duration", 10f, 1f, 20f, 0.5f, morphlingSpawnRate);
+            morphlingSpawnRate = CustomOption.Create(20, Types.Impostor, cs(Morphling.color, Helpers.transl("morphling")), rates, null, true);
+            morphlingCooldown = CustomOption.Create(21, Types.Impostor, Helpers.transl("morphlingCooldown"), 30f, 10f, 60f, 2.5f, morphlingSpawnRate);
+            morphlingDuration = CustomOption.Create(22, Types.Impostor, Helpers.transl("morphlingDuration"), 10f, 1f, 20f, 0.5f, morphlingSpawnRate);
 
         // public static CustomOption bomberSpawnRate;
         // public static CustomOption bomberBombCooldown;
@@ -394,33 +394,33 @@ namespace TheOtherRoles {
             undertakerCanDragAndVent = CustomOption.Create(1203, Types.Impostor, "Can Vent while dragging", true, undertakerSpawnRate);
 
 
-            camouflagerSpawnRate = CustomOption.Create(30, Types.Impostor, cs(Camouflager.color, "Camouflager"), rates, null, true);
-            camouflagerCooldown = CustomOption.Create(31, Types.Impostor, "Camouflager Cooldown", 30f, 10f, 60f, 2.5f, camouflagerSpawnRate);
-            camouflagerDuration = CustomOption.Create(32, Types.Impostor, "Camo Duration", 10f, 1f, 20f, 0.5f, camouflagerSpawnRate);
+            camouflagerSpawnRate = CustomOption.Create(30, Types.Impostor, cs(Camouflager.color, Helpers.transl("camouflager")), rates, null, true);
+            camouflagerCooldown = CustomOption.Create(31, Types.Impostor, Helpers.transl("camouflagerCooldown"), 30f, 10f, 60f, 2.5f, camouflagerSpawnRate);
+            camouflagerDuration = CustomOption.Create(32, Types.Impostor, Helpers.transl("camouflagerDuration"), 10f, 1f, 20f, 0.5f, camouflagerSpawnRate);
 
-            vampireSpawnRate = CustomOption.Create(40, Types.Impostor, cs(Vampire.color, "Vampire"), rates, null, true);
-            vampireKillDelay = CustomOption.Create(41, Types.Impostor, "Vampire Kill Delay", 10f, 1f, 20f, 1f, vampireSpawnRate);
-            vampireCooldown = CustomOption.Create(42, Types.Impostor, "Vampire Cooldown", 30f, 10f, 60f, 2.5f, vampireSpawnRate);
+            vampireSpawnRate = CustomOption.Create(40, Types.Impostor, cs(Vampire.color, Helpers.transl("vampire")), rates, null, true);
+            vampireKillDelay = CustomOption.Create(41, Types.Impostor, Helpers.transl("vampireKillDelay"), 10f, 1f, 20f, 1f, vampireSpawnRate);
+            vampireCooldown = CustomOption.Create(42, Types.Impostor, Helpers.transl("vampireCooldown"), 30f, 10f, 60f, 2.5f, vampireSpawnRate);
             vampireGarlicButton = CustomOption.Create(43, Types.Impostor, "Enable Garlic", true, vampireSpawnRate);
-            vampireCanKillNearGarlics = CustomOption.Create(44, Types.Impostor, "Vampire Can Kill Near Garlics", true, vampireGarlicButton);
+            vampireCanKillNearGarlics = CustomOption.Create(44, Types.Impostor, Helpers.transl("vampireCanKillNearGarlics"), true, vampireGarlicButton);
 
-            eraserSpawnRate = CustomOption.Create(230, Types.Impostor, cs(Eraser.color, "Eraser"), rates, null, true);
+            eraserSpawnRate = CustomOption.Create(230, Types.Impostor, cs(Eraser.color, Helpers.transl("eraser")), rates, null, true);
             eraserCooldown = CustomOption.Create(231, Types.Impostor, "Eraser Cooldown", 30f, 10f, 120f, 5f, eraserSpawnRate);
-            eraserCanEraseAnyone = CustomOption.Create(232, Types.Impostor, "Eraser Can Erase Anyone", false, eraserSpawnRate);
+            eraserCanEraseAnyone = CustomOption.Create(232, Types.Impostor, Helpers.transl("eraserCanEraseAnyone"), false, eraserSpawnRate);
             
             //cultistSpawnRate =  CustomOption.Create(3801, Types.Impostor, cs(Cultist.color, "Cultist"), rates, null, true);
 
-            tricksterSpawnRate = CustomOption.Create(250, Types.Impostor, cs(Trickster.color, "Trickster"), rates, null, true);
-            tricksterPlaceBoxCooldown = CustomOption.Create(251, Types.Impostor, "Trickster Box Cooldown", 10f, 2.5f, 30f, 2.5f, tricksterSpawnRate);
-            tricksterLightsOutCooldown = CustomOption.Create(252, Types.Impostor, "Trickster Lights Out Cooldown", 30f, 10f, 60f, 5f, tricksterSpawnRate);
-            tricksterLightsOutDuration = CustomOption.Create(253, Types.Impostor, "Trickster Lights Out Duration", 15f, 5f, 60f, 2.5f, tricksterSpawnRate);
+            tricksterSpawnRate = CustomOption.Create(250, Types.Impostor, cs(Trickster.color, Helpers.transl("trickster")), rates, null, true);
+            tricksterPlaceBoxCooldown = CustomOption.Create(251, Types.Impostor, Helpers.transl("tricksterPlaceBoxCooldown"), 10f, 2.5f, 30f, 2.5f, tricksterSpawnRate);
+            tricksterLightsOutCooldown = CustomOption.Create(252, Types.Impostor, Helpers.transl("tricksterLightsOutCooldown"), 30f, 10f, 60f, 5f, tricksterSpawnRate);
+            tricksterLightsOutDuration = CustomOption.Create(253, Types.Impostor, Helpers.transl("tricksterLightsOutDuration"), 15f, 5f, 60f, 2.5f, tricksterSpawnRate);
 
-            cleanerSpawnRate = CustomOption.Create(260, Types.Impostor, cs(Cleaner.color, "Cleaner"), rates, null, true);
-            cleanerCooldown = CustomOption.Create(261, Types.Impostor, "Cleaner Cooldown", 30f, 10f, 60f, 2.5f, cleanerSpawnRate);
+            cleanerSpawnRate = CustomOption.Create(260, Types.Impostor, cs(Cleaner.color, Helpers.transl("cleaner")), rates, null, true);
+            cleanerCooldown = CustomOption.Create(261, Types.Impostor, Helpers.transl("cleanerCooldown"), 30f, 10f, 60f, 2.5f, cleanerSpawnRate);
 
-            warlockSpawnRate = CustomOption.Create(270, Types.Impostor, cs(Cleaner.color, "Warlock"), rates, null, true);
-            warlockCooldown = CustomOption.Create(271, Types.Impostor, "Warlock Cooldown", 30f, 10f, 60f, 2.5f, warlockSpawnRate);
-            warlockRootTime = CustomOption.Create(272, Types.Impostor, "Warlock Root Time", 5f, 0f, 15f, 1f, warlockSpawnRate);
+            warlockSpawnRate = CustomOption.Create(270, Types.Impostor, cs(Cleaner.color, Helpers.transl("warlock")), rates, null, true);
+            warlockCooldown = CustomOption.Create(271, Types.Impostor, Helpers.transl("warlockCooldown"), 30f, 10f, 60f, 2.5f, warlockSpawnRate);
+            warlockRootTime = CustomOption.Create(272, Types.Impostor, Helpers.transl("warlockRootTime"), 5f, 0f, 15f, 1f, warlockSpawnRate);
 
             bountyHunterSpawnRate = CustomOption.Create(320, Types.Impostor, cs(BountyHunter.color, "Bounty Hunter"), rates, null, true);
             bountyHunterBountyDuration = CustomOption.Create(321, Types.Impostor, "Duration After Which Bounty Changes",  60f, 10f, 180f, 10f, bountyHunterSpawnRate);
