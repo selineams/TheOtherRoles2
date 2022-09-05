@@ -103,6 +103,10 @@ namespace TheOtherRoles {
             return powerCrewAlive;
         }
 
+        public static string transl(string tag) {
+            return ModTranslation.getString(tag);
+        }
+
         public static bool isNeutral(PlayerControl p) {
             if (p == Jester.jester) return true;
             if (p == Werewolf.werewolf) return true;

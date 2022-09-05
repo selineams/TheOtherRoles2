@@ -145,7 +145,7 @@ namespace TheOtherRoles {
     class GameOptionsMenuStartPatch {
         public static void Postfix(GameOptionsMenu __instance) {
             if (GameObject.Find("TORSettings") != null) { // Settings setup has already been performed, fixing the title of the tab and returning
-                GameObject.Find("TORSettings").transform.FindChild("GameGroup").FindChild("Text").GetComponent<TMPro.TextMeshPro>().SetText("The Other Roles Settings");
+                GameObject.Find("TORSettings").transform.FindChild("GameGroup").FindChild("Text").GetComponent<TMPro.TextMeshPro>().SetText(ModTranslation.getString("torSettings"));
                 return;
             }
             if (GameObject.Find("ImpostorSettings") != null) {
@@ -514,7 +514,7 @@ namespace TheOtherRoles {
                     hudString += "Page 1: Vanilla Settings \n\n" + __result;
                     break;
                 case 1:
-                    hudString += "Page 2: The Other Roles Settings \n" + buildOptionsOfType(CustomOption.CustomOptionType.General, false);
+                    hudString += "Page 2: " + Helpers.transl("torSettings") + "\n" + buildOptionsOfType(CustomOption.CustomOptionType.General, false);
                     break;
                 case 2:
                     hudString += "Page 3: Role and Modifier Rates \n" + buildRoleOptions();

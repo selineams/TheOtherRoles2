@@ -21,12 +21,15 @@ namespace TheOtherRoles.Patches
             new SelectionBehaviour("Show Role Summary", () => MapOptions.showRoleSummary = TheOtherRolesPlugin.ShowRoleSummary.Value = !TheOtherRolesPlugin.ShowRoleSummary.Value, TheOtherRolesPlugin.ShowRoleSummary.Value),
             new SelectionBehaviour("Show Lighter / Darker", () => MapOptions.showLighterDarker = TheOtherRolesPlugin.ShowLighterDarker.Value = !TheOtherRolesPlugin.ShowLighterDarker.Value, TheOtherRolesPlugin.ShowLighterDarker.Value),
             new SelectionBehaviour("Better Cursor", () => MapOptions.toggleCursor = TheOtherRolesPlugin.ToggleCursor.Value = !TheOtherRolesPlugin.ToggleCursor.Value, TheOtherRolesPlugin.ToggleCursor.Value),
-            // new SelectionBehaviour("Hide Kill Animation", () => MapOptions.showKillAnimation = TheOtherRolesPlugin.showKillAnimation.Value = !TheOtherRolesPlugin.showKillAnimation.Value, TheOtherRolesPlugin.showKillAnimation.Value),
             new SelectionBehaviour("Enable Sound Effects", () => MapOptions.enableSoundEffects = TheOtherRolesPlugin.EnableSoundEffects.Value = !TheOtherRolesPlugin.EnableSoundEffects.Value, TheOtherRolesPlugin.EnableSoundEffects.Value),
         };
         
         private static GameObject popUp;
         private static TextMeshPro titleText;
+
+        private static TextMeshPro titleTextTitle;
+        private static ToggleButtonBehaviour moreOptions;
+        private static List<ToggleButtonBehaviour> modButtons;
 
         private static ToggleButtonBehaviour buttonPrefab;
         private static Vector3? _origin;
@@ -68,6 +71,8 @@ namespace TheOtherRoles.Patches
             InitializeMoreButton(__instance);
         }
 
+
+
         private static void CreateCustom(OptionsMenuBehaviour prefab)
         {
             popUp = Object.Instantiate(prefab.gameObject);
@@ -89,7 +94,7 @@ namespace TheOtherRoles.Patches
 
         private static void InitializeMoreButton(OptionsMenuBehaviour __instance)
         {
-            var moreOptions = Object.Instantiate(buttonPrefab, __instance.CensorChatButton.transform.parent);
+            moreOptions = Object.Instantiate(buttonPrefab, __instance.CensorChatButton.transform.parent);
             var transform = __instance.CensorChatButton.transform;
             __instance.CensorChatButton.Text.transform.localScale = new Vector3(1 / 0.66f, 1, 1);
             _origin ??= transform.localPosition;
@@ -104,8 +109,10 @@ namespace TheOtherRoles.Patches
             moreOptions.transform.localScale = new Vector3(0.66f, 1, 1);
 
             moreOptions.gameObject.SetActive(true);
-            moreOptions.Text.text = "Mod Options...";
+            moreOptions.Text.text = ModTranslation.getString("modOptionsText");
             moreOptions.Text.transform.localScale = new Vector3(1 / 0.66f, 1, 1);
+            moreOptions.Background.color = Palette.White;
+
             var moreOptionsButton = moreOptions.GetComponent<PassiveButton>();
             moreOptionsButton.OnClick = new ButtonClickedEvent();
             moreOptionsButton.OnClick.AddListener((Action) (() =>
@@ -139,10 +146,10 @@ namespace TheOtherRoles.Patches
         {
             if (!popUp || popUp.GetComponentInChildren<TextMeshPro>() || !titleText) return;
             
-            var title = Object.Instantiate(titleText, popUp.transform);
+            var title = titleTextTitle = Object.Instantiate(titleText, popUp.transform);
             title.GetComponent<RectTransform>().localPosition = Vector3.up * 2.3f;
             title.gameObject.SetActive(true);
-            title.text = "More Options...";
+            title.text = "Options"; //ModTranslation.getString("moreOptionsText");
             title.name = "TitleText";
         }
 
@@ -150,6 +157,8 @@ namespace TheOtherRoles.Patches
         {
             if (popUp.transform.GetComponentInChildren<ToggleButtonBehaviour>()) return;
             
+            modButtons = new List<ToggleButtonBehaviour>();
+
             for (var i = 0; i < AllOptions.Length; i++)
             {
                 var info = AllOptions[i];
@@ -194,6 +203,8 @@ namespace TheOtherRoles.Patches
 
                 foreach (var spr in button.gameObject.GetComponentsInChildren<SpriteRenderer>())
                     spr.size = new Vector2(2.2f, .7f);
+
+                modButtons.Add(button);
             }
         }
         
@@ -205,6 +216,21 @@ namespace TheOtherRoles.Patches
             }
         }
         
+        public static void updateTranslations()
+        {
+            if (titleTextTitle)
+                titleTextTitle.text = ModTranslation.getString("moreOptionsText");
+
+            if (moreOptions)
+                moreOptions.Text.text = ModTranslation.getString("modOptionsText");
+
+            for (int i = 0; i < AllOptions.Length; i++)
+            {
+                if (i >= modButtons.Count) break;
+                modButtons[i].Text.text = ModTranslation.getString(AllOptions[i].Title);
+            }
+        }
+
         public class SelectionBehaviour
         {
             public string Title;
