@@ -7,7 +7,7 @@ namespace TheOtherRoles {
     public class CustomOptionHolder {
         public static string[] rates = new string[]{"0%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"};
         public static string[] ratesModifier = new string[]{"1", "2", "3"};
-        public static string[] presets = new string[]{"Preset 1", "Preset 2", "Preset 3", "Preset 4", "Preset 5"};
+        public static string[] presets = new string[]{"Preset 1", "Preset 2", "Random Preset Skeld", "Random Preset Mira HQ", "Random Preset Polus", "Random Preset Airship", "Random Preset Submerged" };
 
         public static CustomOption presetSelection;
         public static CustomOption activateRoles;
@@ -376,6 +376,7 @@ namespace TheOtherRoles {
         public static CustomOption restrictAdmin;
         public static CustomOption restrictCameras;
         public static CustomOption restrictVents;
+        public static CustomOption dynamicMapSeparateSettings;
 
         //Guesser Gamemode
         public static CustomOption guesserGamemodeCrewNumber;
@@ -432,8 +433,9 @@ namespace TheOtherRoles {
         }
 
         public static void Load() {
-            
-            
+
+            CustomOption.vanillaSettings = TheOtherRolesPlugin.Instance.Config.Bind("Preset0", "VanillaOptions", "");
+
             // Role Options
             presetSelection = CustomOption.Create(0, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Preset"), presets, null, true);
             activateRoles = CustomOption.Create(1, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Enable Mod Roles And Block Vanilla Roles"), true, null, true);
@@ -860,6 +862,7 @@ namespace TheOtherRoles {
             randomGameStartPosition = CustomOption.Create(9041, Types.General, "Random Spawn Location", false);
             allowModGuess = CustomOption.Create(9043, Types.General, "Allow Guessing Some Modifiers", false);
             resetRoundStartCooldown = CustomOption.Create(9042, Types.General, "Reset Spawn Cooldown", false);
+            dynamicMapSeparateSettings = CustomOption.Create(509, Types.General, "Use Random Map Setting Presets", true, dynamicMap, false);
 
             blockedRolePairings.Add((byte)RoleId.Vampire, new [] { (byte)RoleId.Warlock});
             blockedRolePairings.Add((byte)RoleId.Warlock, new [] { (byte)RoleId.Vampire});

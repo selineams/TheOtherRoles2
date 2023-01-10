@@ -70,9 +70,7 @@ namespace TheOtherRoles
                 new DnsRegionInfo(Ip.Value, "Custom", StringNames.NoTranslation, Ip.Value, Port.Value, false).CastFast<IRegionInfo>(),
                 new DnsRegionInfo("play.scumscyb.org", "Scoom", StringNames.NoTranslation, "play.scumscyb.org", 22023, false).CastFast<IRegionInfo>()
             };
-#nullable enable
-            IRegionInfo ? currentRegion = serverManager.CurrentRegion;
-#nullable disable
+            IRegionInfo currentRegion = serverManager.CurrentRegion;
             Logger.LogInfo($"Adding {regions.Length} regions");
             foreach (IRegionInfo region in regions) {
                 if (region == null) 
@@ -95,7 +93,7 @@ namespace TheOtherRoles
             Logger = Log;
             Instance = this;
 
-            Helpers.checkBeta(); // Exit if running an expired beta
+            _ = Helpers.checkBeta(); // Exit if running an expired beta
 
             DebugMode = Config.Bind("Custom", "Enable Debug Mode", "false");
             GhostsSeeTasks = Config.Bind("Custom", "Ghosts See Remaining Tasks", true);
@@ -132,6 +130,7 @@ namespace TheOtherRoles
             }
             SubmergedCompatibility.Initialize();
             AddComponent<ModUpdateBehaviour>();
+            Modules.MainMenuPatch.addSceneChangeCallbacks();
         }
         public static Sprite GetModStamp() {
             if (ModStamp) return ModStamp;
