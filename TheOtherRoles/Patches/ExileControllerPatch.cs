@@ -69,6 +69,11 @@ namespace TheOtherRoles.Patches {
                         writer.Write(target.PlayerId);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         RPCProcedure.uncheckedExilePlayer(target.PlayerId);
+                        if (target == Lawyer.target && Lawyer.lawyer != null) {
+                            MessageWriter writer2 = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.LawyerPromotesToPursuer, Hazel.SendOption.Reliable, -1);
+                            AmongUsClient.Instance.FinishRpcImmediately(writer2);
+                            RPCProcedure.lawyerPromotesToPursuer();
+                        }
                     }
                 }
             }
@@ -152,7 +157,7 @@ namespace TheOtherRoles.Patches {
             // Mini set adapted cooldown
             if (Mini.mini != null && CachedPlayer.LocalPlayer.PlayerControl == Mini.mini && Mini.mini.Data.Role.IsImpostor) {
                 var multiplier = Mini.isGrownUp() ? 0.66f : 2f;
-                Mini.mini.SetKillTimer(PlayerControl.GameOptions.KillCooldown * multiplier);
+                Mini.mini.SetKillTimer(GameOptionsManager.Instance.currentNormalGameOptions.KillCooldown * multiplier);
             }
 
             // Seer spawn souls
@@ -194,14 +199,14 @@ namespace TheOtherRoles.Patches {
             // Arsonist deactivate dead poolable players
             if (Arsonist.arsonist != null && Arsonist.arsonist == CachedPlayer.LocalPlayer.PlayerControl) {
                 int visibleCounter = 0;
-                Vector3 bottomLeft = new Vector3(-FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition.x, FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition.y, FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition.z);
-                bottomLeft += new Vector3(-0.25f, -0.25f, 0);
+                Vector3 newBottomLeft = IntroCutsceneOnDestroyPatch.bottomLeft;
+                var BottomLeft = newBottomLeft + new Vector3(-0.25f, -0.25f, 0);
                 foreach (PlayerControl p in CachedPlayer.AllPlayers) {
                     if (!MapOptions.playerIcons.ContainsKey(p.PlayerId)) continue;
                     if (p.Data.IsDead || p.Data.Disconnected) {
                         MapOptions.playerIcons[p.PlayerId].gameObject.SetActive(false);
                     } else {
-                        MapOptions.playerIcons[p.PlayerId].transform.localPosition = bottomLeft + Vector3.right * visibleCounter * 0.35f;
+                        MapOptions.playerIcons[p.PlayerId].transform.localPosition = newBottomLeft + Vector3.right * visibleCounter * 0.35f;
                         visibleCounter++;
                     }
                 }
@@ -399,11 +404,11 @@ namespace TheOtherRoles.Patches {
 
                 List<Vector3> airshipSpawn = new List<Vector3>() { }; //no spawns since it already has random spawns
 
-                if (PlayerControl.GameOptions.MapId == 0) CachedPlayer.LocalPlayer.PlayerControl.transform.position = skeldSpawn[rnd.Next(skeldSpawn.Count)];
-                if (PlayerControl.GameOptions.MapId == 1) CachedPlayer.LocalPlayer.PlayerControl.transform.position = miraSpawn[rnd.Next(miraSpawn.Count)];
-                if (PlayerControl.GameOptions.MapId == 2) CachedPlayer.LocalPlayer.PlayerControl.transform.position = polusSpawn[rnd.Next(polusSpawn.Count)];
-                if (PlayerControl.GameOptions.MapId == 3) CachedPlayer.LocalPlayer.PlayerControl.transform.position = dleksSpawn[rnd.Next(dleksSpawn.Count)];
-                if (PlayerControl.GameOptions.MapId == 4) CachedPlayer.LocalPlayer.PlayerControl.transform.position = airshipSpawn[rnd.Next(airshipSpawn.Count)];
+                if (GameOptionsManager.Instance.currentNormalGameOptions.MapId == 0) CachedPlayer.LocalPlayer.PlayerControl.transform.position = skeldSpawn[rnd.Next(skeldSpawn.Count)];
+                if (GameOptionsManager.Instance.currentNormalGameOptions.MapId == 1) CachedPlayer.LocalPlayer.PlayerControl.transform.position = miraSpawn[rnd.Next(miraSpawn.Count)];
+                if (GameOptionsManager.Instance.currentNormalGameOptions.MapId == 2) CachedPlayer.LocalPlayer.PlayerControl.transform.position = polusSpawn[rnd.Next(polusSpawn.Count)];
+                if (GameOptionsManager.Instance.currentNormalGameOptions.MapId == 3) CachedPlayer.LocalPlayer.PlayerControl.transform.position = dleksSpawn[rnd.Next(dleksSpawn.Count)];
+                if (GameOptionsManager.Instance.currentNormalGameOptions.MapId == 4) CachedPlayer.LocalPlayer.PlayerControl.transform.position = airshipSpawn[rnd.Next(airshipSpawn.Count)];
 
             }
 
@@ -413,7 +418,7 @@ namespace TheOtherRoles.Patches {
             Chameleon.lastMoved.Clear();
 
             foreach (Trap trap in Trap.traps) trap.triggerable = false;
-            FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(PlayerControl.GameOptions.KillCooldown / 2 + 2, new Action<float>((p) => {
+            FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(GameOptionsManager.Instance.currentNormalGameOptions.KillCooldown / 2 + 2, new Action<float>((p) => {
             if (p == 1f) foreach (Trap trap in Trap.traps) trap.triggerable = true;
             })));
         }
