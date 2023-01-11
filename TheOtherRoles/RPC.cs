@@ -73,6 +73,10 @@ namespace TheOtherRoles
         Ninja,
         Blackmailer,
         Thief,
+		Swooper,
+		Werewolf,
+		BodyGuard,
+		Veteren,
         Crewmate,
         Impostor,
         // Modifier ---
