@@ -3,7 +3,7 @@ using Hazel;
 using static TheOtherRoles.TheOtherRoles;
 using static TheOtherRoles.HudManagerStartPatch;
 using static TheOtherRoles.GameHistory;
-using static TheOtherRoles.MapOptions;
+using static TheOtherRoles.MapOptionsTor;
 using TheOtherRoles.Objects;
 using TheOtherRoles.Patches;
 using System.Collections.Generic;
@@ -244,7 +244,7 @@ namespace TheOtherRoles
         }
 
         public static void shareGamemode(byte gm) {
-            MapOptions.gameMode = (CustomGamemodes) gm;
+            MapOptionsTor.gameMode = (CustomGamemodes) gm;
         }
 
         public static void workaroundSetRoles(byte numberOfRoles, MessageReader reader)
@@ -931,21 +931,21 @@ namespace TheOtherRoles
                         Vector3 bottomLeft = new Vector3(-FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition.x, FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition.y, FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition.z);
                         foreach (PlayerControl p in CachedPlayer.AllPlayers)
                         {
-                            if (MapOptions.playerIcons.ContainsKey(p.PlayerId) && p != Arsonist.arsonist)
+                            if (MapOptionsTor.playerIcons.ContainsKey(p.PlayerId) && p != Arsonist.arsonist)
                             {
                                 //Arsonist.poolIcons.Add(p);
                                 if (Arsonist.dousedPlayers.Contains(p))
                                 {
-                                    MapOptions.playerIcons[p.PlayerId].setSemiTransparent(false);
+                                    MapOptionsTor.playerIcons[p.PlayerId].setSemiTransparent(false);
                                 }
                                 else
                                 {
-                                    MapOptions.playerIcons[p.PlayerId].setSemiTransparent(true);
+                                    MapOptionsTor.playerIcons[p.PlayerId].setSemiTransparent(true);
                                 }
 
-                                MapOptions.playerIcons[p.PlayerId].transform.localPosition = bottomLeft + new Vector3(-0.25f, -0.25f, 0) + Vector3.right * playerCounter++ * 0.35f;
-                                MapOptions.playerIcons[p.PlayerId].transform.localScale = Vector3.one * 0.2f;
-                                MapOptions.playerIcons[p.PlayerId].gameObject.SetActive(true);
+                                MapOptionsTor.playerIcons[p.PlayerId].transform.localPosition = bottomLeft + new Vector3(-0.25f, -0.25f, 0) + Vector3.right * playerCounter++ * 0.35f;
+                                MapOptionsTor.playerIcons[p.PlayerId].transform.localScale = Vector3.one * 0.2f;
+                                MapOptionsTor.playerIcons[p.PlayerId].gameObject.SetActive(true);
                             }
                         }
                     }
@@ -981,12 +981,12 @@ namespace TheOtherRoles
 
                         foreach (PlayerControl p in CachedPlayer.AllPlayers)
                         {
-                            if (MapOptions.playerIcons.ContainsKey(p.PlayerId))
+                            if (MapOptionsTor.playerIcons.ContainsKey(p.PlayerId))
                             {
-                                MapOptions.playerIcons[p.PlayerId].setSemiTransparent(false);
-                                MapOptions.playerIcons[p.PlayerId].transform.localPosition = bottomLeft + new Vector3(0f, -1f, 0);
-                                MapOptions.playerIcons[p.PlayerId].transform.localScale = Vector3.one * 0.4f;
-                                MapOptions.playerIcons[p.PlayerId].gameObject.SetActive(false);
+                                MapOptionsTor.playerIcons[p.PlayerId].setSemiTransparent(false);
+                                MapOptionsTor.playerIcons[p.PlayerId].transform.localPosition = bottomLeft + new Vector3(0f, -1f, 0);
+                                MapOptionsTor.playerIcons[p.PlayerId].transform.localScale = Vector3.one * 0.4f;
+                                MapOptionsTor.playerIcons[p.PlayerId].gameObject.SetActive(false);
                             }
                         }
                     }
@@ -1338,7 +1338,6 @@ namespace TheOtherRoles
             if (player == Swooper.swooper) Swooper.clearAndReload();
             if (player == Miner.miner) Miner.clearAndReload();
             if (player == Arsonist.arsonist) Arsonist.clearAndReload();
-            if (Guesser.isGuesser(player.PlayerId)) Guesser.clear(player.PlayerId);
             if (player == Jackal.jackal) { // Promote Sidekick and hence override the the Jackal or erase Jackal
                 if (Sidekick.promotesToJackal && Sidekick.sidekick != null && !Sidekick.sidekick.Data.IsDead) {
                     RPCProcedure.sidekickPromotes();
@@ -1511,12 +1510,14 @@ namespace TheOtherRoles
             if (target == null) return;
             if (flag == byte.MaxValue) {
                 target.cosmetics.currentBodySprite.BodySprite.color = Color.white;
+				target.cosmetics.colorBlindText.gameObject.SetActive(DataManager.Settings.Accessibility.ColorBlindMode);
                 if (Camouflager.camouflageTimer <= 0 && !Helpers.isActiveCamoComms()) target.setDefaultLook();
                 Swooper.isInvisable = false;
                 return;
             }
             target.setLook("", 6, "", "", "", "");
-            Color color = Color.clear;           
+            Color color = Color.clear;    
+			target.cosmetics.colorBlindText.gameObject.SetActive(false);			
             if (Swooper.swooper == CachedPlayer.LocalPlayer.PlayerControl || CachedPlayer.LocalPlayer.Data.IsDead || (Swooper.swooper == Jackal.jackal && Sidekick.sidekick == CachedPlayer.LocalPlayer.PlayerControl)) color.a = 0.1f;
             target.cosmetics.currentBodySprite.BodySprite.color = color;
             Swooper.swoopTimer = Swooper.duration;
@@ -1600,7 +1601,7 @@ namespace TheOtherRoles
             } else {
                 camera.gameObject.SetActive(false);
             }
-            MapOptions.camerasToAdd.Add(camera);
+            MapOptionsTor.camerasToAdd.Add(camera);
         }
 
         public static void sealVent(int ventId) {
@@ -1619,7 +1620,7 @@ namespace TheOtherRoles
                 vent.name = "FutureSealedVent_" + vent.name;
             }
 
-            MapOptions.ventsToSeal.Add(vent);
+            MapOptionsTor.ventsToSeal.Add(vent);
         }
 
         public static void arsonistWin() {
@@ -1742,17 +1743,17 @@ namespace TheOtherRoles
 
         public static void useAdminTime(float time)
         {
-            MapOptions.restrictAdminTime -= time;
+            MapOptionsTor.restrictAdminTime -= time;
         }
 
         public static void useCameraTime(float time)
         {
-            MapOptions.restrictCamerasTime -= time;
+            MapOptionsTor.restrictCamerasTime -= time;
         }
 
         public static void useVitalsTime(float time)
         {
-            MapOptions.restrictVitalsTime -= time;
+            MapOptionsTor.restrictVitalsTime -= time;
         }
 
     public static void BHSetBounty(byte playerId) {
@@ -1802,7 +1803,7 @@ namespace TheOtherRoles
         public static void setFirstKill(byte playerId) {
             PlayerControl target = Helpers.playerById(playerId);
             if (target == null) return;
-            MapOptions.firstKillPlayer = target;
+            MapOptionsTor.firstKillPlayer = target;
         }
 
         public static void setTiebreak() {
@@ -1822,7 +1823,6 @@ namespace TheOtherRoles
                 Sidekick.sidekick = thief;
                 Jackal.formerJackals.Add(target);
             }
-            if (target == Guesser.evilGuesser) Guesser.evilGuesser = thief;
             if (target == Godfather.godfather) Godfather.godfather = thief;
             if (target == Mafioso.mafioso) Mafioso.mafioso = thief;
             if (target == Janitor.janitor) Janitor.janitor = thief;
@@ -1840,6 +1840,20 @@ namespace TheOtherRoles
                 RoleManager.Instance.SetRole(Thief.thief, RoleTypes.Impostor);
                 FastDestroyableSingleton<HudManager>.Instance.KillButton.SetCoolDown(Thief.thief.killTimer, GameOptionsManager.Instance.currentNormalGameOptions.KillCooldown);
             }
+			
+			// START ADD CUSTOM BAD ROLES 
+            if (target == Swooper.swooper) Swooper.swooper = thief;
+            if (target == Werewolf.werewolf) Werewolf.werewolf = thief;
+            if (target == BodyGuard.bodyguard) BodyGuard.bodyguard = thief;
+            if (target == Bomber.bomber) Bomber.bomber = thief;
+            if (target == Miner.miner) Miner.miner = thief;
+            if (target == Undertaker.undertaker) Undertaker.undertaker = thief;
+            if (target == Veteren.veteren) Veteren.veteren = thief;
+            if (target == Blackmailer.blackmailer) Blackmailer.blackmailer = thief;
+
+
+
+			
             if (Lawyer.lawyer != null && target == Lawyer.target)
                 Lawyer.target = thief;
             if (Thief.thief == PlayerControl.LocalPlayer) CustomButton.ResetAllCooldowns();

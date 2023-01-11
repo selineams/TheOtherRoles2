@@ -1687,8 +1687,8 @@ namespace TheOtherRoles
                     arsonistButton.Timer = Arsonist.dousedEveryoneAlive() ? 0 : arsonistButton.MaxTimer;
 
                     foreach (PlayerControl p in Arsonist.dousedPlayers) {
-                        if (MapOptions.playerIcons.ContainsKey(p.PlayerId)) {
-                            MapOptions.playerIcons[p.PlayerId].setSemiTransparent(false);
+                        if (MapOptionsTor.playerIcons.ContainsKey(p.PlayerId)) {
+                            MapOptionsTor.playerIcons[p.PlayerId].setSemiTransparent(false);
                         }
                     }
                 }
@@ -2145,6 +2145,7 @@ namespace TheOtherRoles
 
             thiefKillButton = new CustomButton(
                 () => {
+					if (Helpers.checkAndDoVetKill(Thief.currentTarget)) return;
                     PlayerControl thief = Thief.thief;
                     PlayerControl target = Thief.currentTarget;
                     var result = Helpers.checkMuderAttempt(thief, target);

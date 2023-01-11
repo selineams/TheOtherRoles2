@@ -37,7 +37,7 @@ namespace TheOtherRoles.Patches {
                    // PlayerControl.SetPetImage(data.DefaultOutfit.PetId, data.DefaultOutfit.ColorId, player.PetSlot);
                     player.cosmetics.nameText.text = data.PlayerName;
                     player.SetFlipX(true);
-                    MapOptions.playerIcons[p.PlayerId] = player;
+                    MapOptionsTor.playerIcons[p.PlayerId] = player;
                     player.gameObject.SetActive(false);
 
                     if (CachedPlayer.LocalPlayer.PlayerControl == Arsonist.arsonist && p != Arsonist.arsonist) {
@@ -253,8 +253,8 @@ namespace TheOtherRoles.Patches {
             }
 
             // First kill
-            if (AmongUsClient.Instance.AmHost && MapOptions.shieldFirstKill && MapOptions.firstKillName != "" && !HideNSeek.isHideNSeekGM) {
-                PlayerControl target = PlayerControl.AllPlayerControls.ToArray().ToList().FirstOrDefault(x => x.Data.PlayerName.Equals(MapOptions.firstKillName));
+            if (AmongUsClient.Instance.AmHost && MapOptionsTor.shieldFirstKill && MapOptionsTor.firstKillName != "" && !HideNSeek.isHideNSeekGM) {
+                PlayerControl target = PlayerControl.AllPlayerControls.ToArray().ToList().FirstOrDefault(x => x.Data.PlayerName.Equals(MapOptionsTor.firstKillName));
                 if (target != null) {
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SetFirstKill, Hazel.SendOption.Reliable, -1);
                     writer.Write(target.PlayerId);
@@ -262,7 +262,7 @@ namespace TheOtherRoles.Patches {
                     RPCProcedure.setFirstKill(target.PlayerId);
                 }
             }
-            MapOptions.firstKillName = "";
+            MapOptionsTor.firstKillName = "";
 
             if (HideNSeek.isHideNSeekGM) {
                 foreach (PlayerControl player in HideNSeek.getHunters()) {
@@ -463,10 +463,10 @@ namespace TheOtherRoles.Patches {
     public static class ShouldAlwaysHorseAround {
         public static bool isHorseMode;
         public static bool Prefix(ref bool __result) {
-            if (isHorseMode != MapOptions.enableHorseMode && LobbyBehaviour.Instance != null) __result = isHorseMode;
+            if (isHorseMode != MapOptionsTor.enableHorseMode && LobbyBehaviour.Instance != null) __result = isHorseMode;
             else {
-                __result = MapOptions.enableHorseMode;
-                isHorseMode = MapOptions.enableHorseMode;
+                __result = MapOptionsTor.enableHorseMode;
+                isHorseMode = MapOptionsTor.enableHorseMode;
             }
             return false;
         }

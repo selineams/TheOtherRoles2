@@ -14,7 +14,7 @@ namespace TheOtherRoles.Patches {
         [HarmonyPatch(typeof(CreateOptionsPicker), nameof(CreateOptionsPicker.SetGameMode))]
         public static bool Prefix(CreateOptionsPicker __instance, ref GameModes mode) {
             if (mode <= GameModes.HideNSeek) {
-                MapOptions.gameMode = CustomGamemodes.Classic;
+                MapOptionsTor.gameMode = CustomGamemodes.Classic;
                 return true;
             }
 
@@ -22,10 +22,10 @@ namespace TheOtherRoles.Patches {
 
             if ((int)mode == 3) {
                 __instance.GameModeText.text = "TOR Guesser";
-                MapOptions.gameMode = CustomGamemodes.Guesser;
+                MapOptionsTor.gameMode = CustomGamemodes.Guesser;
             } else {
                 __instance.GameModeText.text = "TOR Hide N Seek";
-                MapOptions.gameMode = CustomGamemodes.HideNSeek;
+                MapOptionsTor.gameMode = CustomGamemodes.HideNSeek;
             }
             return false;
         }
@@ -33,10 +33,10 @@ namespace TheOtherRoles.Patches {
 
         [HarmonyPatch(typeof(CreateOptionsPicker), nameof(CreateOptionsPicker.Refresh))]
         public static void Postfix(CreateOptionsPicker __instance) {
-            if (MapOptions.gameMode == CustomGamemodes.Guesser) {
+            if (MapOptionsTor.gameMode == CustomGamemodes.Guesser) {
                 __instance.GameModeText.text = "TOR Guesser";
             }
-            else if (MapOptions.gameMode == CustomGamemodes.HideNSeek) {
+            else if (MapOptionsTor.gameMode == CustomGamemodes.HideNSeek) {
                 __instance.GameModeText.text = "TOR Hide N Seek";
             }
         }
@@ -66,7 +66,7 @@ namespace TheOtherRoles.Patches {
                         __instance.ChooseOption(entry);
                     });
 
-                    bool isCurrentMode = i <= 2 && MapOptions.gameMode == CustomGamemodes.Classic ? (long)entry == (long)((ulong)gameMode) : (i == 3 && MapOptions.gameMode == CustomGamemodes.Guesser || i == 4 && MapOptions.gameMode == CustomGamemodes.HideNSeek);
+                    bool isCurrentMode = i <= 2 && MapOptionsTor.gameMode == CustomGamemodes.Classic ? (long)entry == (long)((ulong)gameMode) : (i == 3 && MapOptionsTor.gameMode == CustomGamemodes.Guesser || i == 4 && MapOptionsTor.gameMode == CustomGamemodes.HideNSeek);
                     chatLanguageButton.SetSelected(isCurrentMode);
                     __instance.controllerSelectable.Add(chatLanguageButton.Button);
                     if (isCurrentMode) {

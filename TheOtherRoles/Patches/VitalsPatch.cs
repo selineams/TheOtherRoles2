@@ -33,7 +33,7 @@ namespace TheOtherRoles.Patches
         static void UseVitalsTime()
         {
             // Don't waste network traffic if we're out of time.
-            if (MapOptions.restrictDevices > 0 && MapOptions.restrictVitalsTime > 0f && CachedPlayer.LocalPlayer.PlayerControl.isAlive() && CachedPlayer.LocalPlayer.PlayerControl != Hacker.hacker)
+            if (MapOptionsTor.restrictDevices > 0 && MapOptionsTor.restrictVitalsTime > 0f && CachedPlayer.LocalPlayer.PlayerControl.isAlive() && CachedPlayer.LocalPlayer.PlayerControl != Hacker.hacker)
             {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.UseVitalsTime, Hazel.SendOption.Reliable, -1);
                 writer.Write(vitalsTimer);
@@ -76,7 +76,7 @@ namespace TheOtherRoles.Patches
                 if (vitalsTimer > 0.1f)
                     UseVitalsTime();
 
-                if (MapOptions.restrictDevices > 0)
+                if (MapOptionsTor.restrictDevices > 0)
                 {
                     if (TimeRemaining == null)
                     {
@@ -88,13 +88,13 @@ namespace TheOtherRoles.Patches
                         TimeRemaining.color = Palette.White;
                     }
 
-                    if (MapOptions.restrictVitalsTime <= 0f && CachedPlayer.LocalPlayer.PlayerControl != Hacker.hacker && !CachedPlayer.LocalPlayer.Data.IsDead)
+                    if (MapOptionsTor.restrictVitalsTime <= 0f && CachedPlayer.LocalPlayer.PlayerControl != Hacker.hacker && !CachedPlayer.LocalPlayer.Data.IsDead)
                     {
                         __instance.Close();
                         return false;
                     }
 
-                    string timeString = TimeSpan.FromSeconds(MapOptions.restrictVitalsTime).ToString(@"mm\:ss\.ff");
+                    string timeString = TimeSpan.FromSeconds(MapOptionsTor.restrictVitalsTime).ToString(@"mm\:ss\.ff");
                     TimeRemaining.text = String.Format("Remaining: {0}", timeString);
                     TimeRemaining.gameObject.SetActive(true);
                 }

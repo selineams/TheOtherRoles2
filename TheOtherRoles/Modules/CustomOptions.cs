@@ -182,7 +182,7 @@ namespace TheOtherRoles {
     class GameOptionsMenuStartPatch {
         public static void Postfix(GameOptionsMenu __instance) {
 
-            switch (MapOptions.gameMode) {
+            switch (MapOptionsTor.gameMode) {
                 case CustomGamemodes.Classic:
                     createClassicTabs(__instance);
                     break;
@@ -747,14 +747,14 @@ namespace TheOtherRoles {
         private static string buildOptionsOfType(CustomOption.CustomOptionType type, bool headerOnly) {
             StringBuilder sb = new StringBuilder("\n");
             var options = CustomOption.options.Where(o => o.type == type);
-            if (MapOptions.gameMode == CustomGamemodes.Guesser) {
+            if (MapOptionsTor.gameMode == CustomGamemodes.Guesser) {
                 if (type == CustomOption.CustomOptionType.General)
                     options = CustomOption.options.Where(o => o.type == type || o.type == CustomOption.CustomOptionType.Guesser);
                 List<int> remove = new List<int>{ 310, 311, 312, 313, 314, 315, 316, 317, 318 };
                 options = options.Where(x => !remove.Contains(x.id));
-            } else if (MapOptions.gameMode == CustomGamemodes.Classic) 
+            } else if (MapOptionsTor.gameMode == CustomGamemodes.Classic) 
                 options = options.Where(x => !(x.type == CustomOption.CustomOptionType.Guesser));
-            else if (MapOptions.gameMode == CustomGamemodes.HideNSeek)
+            else if (MapOptionsTor.gameMode == CustomGamemodes.HideNSeek)
                 options = options.Where(x => (x.type == CustomOption.CustomOptionType.HideNSeekMain || x.type == CustomOption.CustomOptionType.HideNSeekRoles));
 
             foreach (var option in options) {
@@ -776,7 +776,7 @@ namespace TheOtherRoles {
             else sb = new StringBuilder();
 
             foreach (CustomOption option in options) {
-                if (MapOptions.gameMode == CustomGamemodes.HideNSeek && option.type != CustomOptionType.HideNSeekMain && option.type != CustomOptionType.HideNSeekRoles) continue;
+                if (MapOptionsTor.gameMode == CustomGamemodes.HideNSeek && option.type != CustomOptionType.HideNSeekMain && option.type != CustomOptionType.HideNSeekRoles) continue;
                 if (option.parent != null) {
                     bool isIrrelevant = option.parent.getSelection() == 0 || (option.parent.parent != null && option.parent.parent.getSelection() == 0);
 
@@ -829,7 +829,7 @@ namespace TheOtherRoles {
             int counter = TheOtherRolesPlugin.optionsPage;
             string hudString = counter != 0 ? Helpers.cs(DateTime.Now.Second % 2 == 0 ? Color.white : Color.red, "(Use scroll wheel if necessary)\n\n") : "";
             int maxPage = 7;
-            if (MapOptions.gameMode == CustomGamemodes.HideNSeek) {
+            if (MapOptionsTor.gameMode == CustomGamemodes.HideNSeek) {
                 if (TheOtherRolesPlugin.optionsPage > 1) TheOtherRolesPlugin.optionsPage = 0;
                 maxPage = 2;
                 switch (counter) {

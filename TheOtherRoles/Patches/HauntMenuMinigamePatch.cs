@@ -14,7 +14,7 @@ namespace TheOtherRoles.Patches {
             if (GameOptionsManager.Instance.currentGameOptions.GameMode != GameModes.Normal) return;
             var target = __instance.HauntTarget;
             var roleInfo = RoleInfo.getRoleInfoForPlayer(target, false);
-            string roleString = (roleInfo.Count > 0 && MapOptions.ghostsSeeRoles) ? roleInfo[0].name : "";
+            string roleString = (roleInfo.Count > 0 && MapOptionsTor.ghostsSeeRoles) ? roleInfo[0].name : "";
             if (__instance.HauntTarget.Data.IsDead) {
                 __instance.FilterText.text = roleString + " Ghost";
                 return;
@@ -40,7 +40,7 @@ namespace TheOtherRoles.Patches {
         [HarmonyPrefix]
         [HarmonyPatch(typeof(HauntMenuMinigame), nameof(HauntMenuMinigame.Start))]
         public static bool StartPrefix(HauntMenuMinigame __instance) {
-            if (GameOptionsManager.Instance.currentGameOptions.GameMode != GameModes.Normal || !MapOptions.ghostsSeeRoles) return true;
+            if (GameOptionsManager.Instance.currentGameOptions.GameMode != GameModes.Normal || !MapOptionsTor.ghostsSeeRoles) return true;
             __instance.FilterButtons[0].gameObject.SetActive(true);
             int numActive = 0;
             int numButtons = __instance.FilterButtons.Count((PassiveButton s) => s.isActiveAndEnabled);

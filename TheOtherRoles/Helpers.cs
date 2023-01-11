@@ -244,7 +244,7 @@ public static bool isPlayerLover(PlayerControl player) {
 
 
 		public static bool isCamoComms() {
-			return (isCommsActive() && MapOptions.camoComms);
+			return (isCommsActive() && MapOptionsTor.camoComms);
 		}
 
 
@@ -611,7 +611,7 @@ public static bool isPlayerLover(PlayerControl player) {
 			else if (isActiveCamoComms()) return true;
             else if (Ninja.isInvisble && Ninja.ninja == target) return true; 
             else if (Swooper.isInvisable && Swooper.swooper == target) return true; 
-            else if (!MapOptions.hidePlayerNames || source.Data.IsDead) return false; // All names are visible
+            else if (!MapOptionsTor.hidePlayerNames || source.Data.IsDead) return false; // All names are visible
             else if (source == null || target == null) return true;
             else if (source == target) return false; // Player sees his own name
             else if (source.Data.Role.IsImpostor && (target.Data.Role.IsImpostor || target == Spy.spy || target == Sidekick.sidekick && Sidekick.wasTeamRed || target == Jackal.jackal && Jackal.wasTeamRed)) return false; // Members of team Impostors see the names of Impostors/Spies
@@ -733,7 +733,7 @@ public static bool isPlayerLover(PlayerControl player) {
             if (target == null || target.Data == null || target.Data.IsDead || target.Data.Disconnected) return MurderAttemptResult.SuppressKill; // Allow killing players in vents compared to vanilla code
 
             // Handle first kill attempt
-            if (MapOptions.shieldFirstKill && MapOptions.firstKillPlayer == target) return MurderAttemptResult.SuppressKill;
+            if (MapOptionsTor.shieldFirstKill && MapOptionsTor.firstKillPlayer == target) return MurderAttemptResult.SuppressKill;
 
             // Handle blank shot
             if (Pursuer.blankedList.Any(x => x.PlayerId == killer.PlayerId)) {
@@ -819,7 +819,7 @@ public static bool isPlayerLover(PlayerControl player) {
 			
 
             // Thief if hit crew only kill if setting says so, but also kill the thief.
-            else if (killer == Thief.thief && !target.Data.Role.IsImpostor && !new List<RoleInfo> {RoleInfo.jackal, Thief.canKillSheriff ? RoleInfo.sheriff : null, RoleInfo.sidekick }.Contains(targetRole)) {
+            else if (killer == Thief.thief && !target.Data.Role.IsImpostor && !new List<RoleInfo> {RoleInfo.jackal, Thief.canKillSheriff ? RoleInfo.sheriff : null, RoleInfo.sidekick, RoleInfo.Swooper, RoleInfo.Werewolf, RoleInfo.BodyGuard, RoleInfo.Veteren }.Contains(targetRole)) {
                 Thief.suicideFlag = true;
                 return MurderAttemptResult.SuppressKill;
             }

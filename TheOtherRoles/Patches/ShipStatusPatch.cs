@@ -102,7 +102,7 @@ namespace TheOtherRoles.Patches {
             originalNumShortTasksOption = GameOptionsManager.Instance.currentNormalGameOptions.NumShortTasks;
             originalNumLongTasksOption = GameOptionsManager.Instance.currentNormalGameOptions.NumLongTasks;
 
-            if (MapOptions.gameMode != CustomGamemodes.HideNSeek) {
+            if (MapOptionsTor.gameMode != CustomGamemodes.HideNSeek) {
                 var commonTaskCount = __instance.CommonTasks.Count;
                 var normalTaskCount = __instance.NormalTasks.Count;
                 var longTaskCount = __instance.LongTasks.Count;

@@ -81,15 +81,15 @@ namespace TheOtherRoles.Patches {
 
             // SecurityGuard vents and cameras
             var allCameras = MapUtilities.CachedShipStatus.AllCameras.ToList();
-            MapOptions.camerasToAdd.ForEach(camera => {
+            MapOptionsTor.camerasToAdd.ForEach(camera => {
                 camera.gameObject.SetActive(true);
                 camera.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
                 allCameras.Add(camera);
             });
             MapUtilities.CachedShipStatus.AllCameras = allCameras.ToArray();
-            MapOptions.camerasToAdd = new List<SurvCamera>();
+            MapOptionsTor.camerasToAdd = new List<SurvCamera>();
 
-            foreach (Vent vent in MapOptions.ventsToSeal) {
+            foreach (Vent vent in MapOptionsTor.ventsToSeal) {
                 PowerTools.SpriteAnim animator = vent.GetComponent<PowerTools.SpriteAnim>(); 
                 animator?.Stop();
                 vent.EnterVentAnim = vent.ExitVentAnim = null;
@@ -99,11 +99,11 @@ namespace TheOtherRoles.Patches {
                 vent.myRend.color = Color.white;
                 vent.name = "SealedVent_" + vent.name;
             }
-            MapOptions.ventsToSeal = new List<Vent>();
+            MapOptionsTor.ventsToSeal = new List<Vent>();
 
             // 1 = reset per turn
-            if (MapOptions.restrictDevices == 1)
-                MapOptions.resetDeviceTimes();
+            if (MapOptionsTor.restrictDevices == 1)
+                MapOptionsTor.resetDeviceTimes();
 
         }
     }
@@ -202,11 +202,11 @@ namespace TheOtherRoles.Patches {
                 Vector3 newBottomLeft = IntroCutsceneOnDestroyPatch.bottomLeft;
                 var BottomLeft = newBottomLeft + new Vector3(-0.25f, -0.25f, 0);
                 foreach (PlayerControl p in CachedPlayer.AllPlayers) {
-                    if (!MapOptions.playerIcons.ContainsKey(p.PlayerId)) continue;
+                    if (!MapOptionsTor.playerIcons.ContainsKey(p.PlayerId)) continue;
                     if (p.Data.IsDead || p.Data.Disconnected) {
-                        MapOptions.playerIcons[p.PlayerId].gameObject.SetActive(false);
+                        MapOptionsTor.playerIcons[p.PlayerId].gameObject.SetActive(false);
                     } else {
-                        MapOptions.playerIcons[p.PlayerId].transform.localPosition = newBottomLeft + Vector3.right * visibleCounter * 0.35f;
+                        MapOptionsTor.playerIcons[p.PlayerId].transform.localPosition = newBottomLeft + Vector3.right * visibleCounter * 0.35f;
                         visibleCounter++;
                     }
                 }

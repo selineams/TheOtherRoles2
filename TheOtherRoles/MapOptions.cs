@@ -3,7 +3,7 @@ using UnityEngine;
 using TheOtherRoles.Players;
 
 namespace TheOtherRoles{
-    static class MapOptions {
+    static class MapOptionsTor {
         // Set values
         public static int maxNumberOfMeetings = 10;
         public static bool blockSkippingInEmergencyMeetings = false;

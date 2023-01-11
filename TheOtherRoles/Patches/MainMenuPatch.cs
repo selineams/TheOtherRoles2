@@ -12,7 +12,7 @@ namespace TheOtherRoles.Modules {
     
     [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
     public class MainMenuPatch {
-        private static bool horseButtonState = MapOptions.enableHorseMode;
+        private static bool horseButtonState = MapOptionsTor.enableHorseMode;
         //private static Sprite horseModeOffSprite = null;
         //private static Sprite horseModeOnSprite = null;
         private static GameObject bottomTemplate;
@@ -47,7 +47,7 @@ namespace TheOtherRoles.Modules {
             bottomTemplate = GameObject.Find("InventoryButton");
             /*
             // Horse mode stuff
-            var horseModeSelectionBehavior = new ClientOptionsPatch.SelectionBehaviour("Enable Horse Mode", () => MapOptions.enableHorseMode = TheOtherRolesPlugin.EnableHorseMode.Value = !TheOtherRolesPlugin.EnableHorseMode.Value, TheOtherRolesPlugin.EnableHorseMode.Value);
+            var horseModeSelectionBehavior = new ClientOptionsPatch.SelectionBehaviour("Enable Horse Mode", () => MapOptionsTor.enableHorseMode = TheOtherRolesPlugin.EnableHorseMode.Value = !TheOtherRolesPlugin.EnableHorseMode.Value, TheOtherRolesPlugin.EnableHorseMode.Value);
 
             
             if (bottomTemplate == null) return;
@@ -153,7 +153,7 @@ Goose-Goose-Duck - Idea for the Vulture role came from Slushiegoose</size>";
         public static void addSceneChangeCallbacks() {
             SceneManager.add_sceneLoaded((Action<Scene, LoadSceneMode>)((scene, _) => {
                 if (!scene.name.Equals("MatchMaking", StringComparison.Ordinal)) return;
-                MapOptions.gameMode = CustomGamemodes.Classic;
+                MapOptionsTor.gameMode = CustomGamemodes.Classic;
                 // Add buttons For Guesser Mode, Hide N Seek in this scene.
                 // find "HostLocalGameButton"
                 var template = GameObject.FindObjectOfType<HostLocalGameButton>();
@@ -167,7 +167,7 @@ Goose-Goose-Duck - Idea for the Vulture role came from Slushiegoose</size>";
                 
                 guesserButtonPassiveButton.OnClick = new Button.ButtonClickedEvent();
                 guesserButtonPassiveButton.OnClick.AddListener((System.Action)(() => {
-                    MapOptions.gameMode = CustomGamemodes.Guesser;
+                    MapOptionsTor.gameMode = CustomGamemodes.Guesser;
                     template.OnClick();
                 }));
 
@@ -178,7 +178,7 @@ Goose-Goose-Duck - Idea for the Vulture role came from Slushiegoose</size>";
                 
                 HideNSeekButtonPassiveButton.OnClick = new Button.ButtonClickedEvent();
                 HideNSeekButtonPassiveButton.OnClick.AddListener((System.Action)(() => {
-                    MapOptions.gameMode = CustomGamemodes.HideNSeek;
+                    MapOptionsTor.gameMode = CustomGamemodes.HideNSeek;
                     template.OnClick();
                 }));
 

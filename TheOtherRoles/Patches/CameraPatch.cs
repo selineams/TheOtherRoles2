@@ -25,7 +25,7 @@ namespace TheOtherRoles.Patches {
         static void UseCameraTime()
         {
             // Don't waste network traffic if we're out of time.
-            if (MapOptions.restrictDevices > 0 && MapOptions.restrictCamerasTime > 0f && CachedPlayer.LocalPlayer.PlayerControl.isAlive()  && CachedPlayer.LocalPlayer.PlayerControl != Hacker.hacker && CachedPlayer.LocalPlayer.PlayerControl != SecurityGuard.securityGuard)
+            if (MapOptionsTor.restrictDevices > 0 && MapOptionsTor.restrictCamerasTime > 0f && CachedPlayer.LocalPlayer.PlayerControl.isAlive()  && CachedPlayer.LocalPlayer.PlayerControl != Hacker.hacker && CachedPlayer.LocalPlayer.PlayerControl != SecurityGuard.securityGuard)
             {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.UseCameraTime, Hazel.SendOption.Reliable, -1);
                 writer.Write(cameraTimer);
@@ -91,7 +91,7 @@ namespace TheOtherRoles.Patches {
                     if (cameraTimer > 0.1f)
                         UseCameraTime();
 
-                    if (MapOptions.restrictDevices > 0)
+                    if (MapOptionsTor.restrictDevices > 0)
                     {
                         if (TimeRemaining == null)
                         {
@@ -103,13 +103,13 @@ namespace TheOtherRoles.Patches {
                             TimeRemaining.color = Palette.White;
                         }
 
-                        if (MapOptions.restrictCamerasTime <= 0f  && CachedPlayer.LocalPlayer.PlayerControl != Hacker.hacker && CachedPlayer.LocalPlayer.PlayerControl != SecurityGuard.securityGuard && !CachedPlayer.LocalPlayer.Data.IsDead)
+                        if (MapOptionsTor.restrictCamerasTime <= 0f  && CachedPlayer.LocalPlayer.PlayerControl != Hacker.hacker && CachedPlayer.LocalPlayer.PlayerControl != SecurityGuard.securityGuard && !CachedPlayer.LocalPlayer.Data.IsDead)
                         {
                             __instance.Close();
                             return false;
                         }
 
-                        string timeString = TimeSpan.FromSeconds(MapOptions.restrictCamerasTime).ToString(@"mm\:ss\.ff");
+                        string timeString = TimeSpan.FromSeconds(MapOptionsTor.restrictCamerasTime).ToString(@"mm\:ss\.ff");
                         TimeRemaining.text = String.Format("Remaining: {0}", timeString);
                         TimeRemaining.gameObject.SetActive(true);
 
@@ -202,7 +202,7 @@ namespace TheOtherRoles.Patches {
                     if (cameraTimer > 0.1f)
                         UseCameraTime();
 
-                    if (MapOptions.restrictDevices > 0)
+                    if (MapOptionsTor.restrictDevices > 0)
                     {
                         if (TimeRemaining == null)
                         {
@@ -214,13 +214,13 @@ namespace TheOtherRoles.Patches {
                             TimeRemaining.color = Palette.White;
                         }
 
-                        if (MapOptions.restrictCamerasTime <= 0f   && CachedPlayer.LocalPlayer.PlayerControl != Hacker.hacker && CachedPlayer.LocalPlayer.PlayerControl != SecurityGuard.securityGuard && !CachedPlayer.LocalPlayer.Data.IsDead)
+                        if (MapOptionsTor.restrictCamerasTime <= 0f   && CachedPlayer.LocalPlayer.PlayerControl != Hacker.hacker && CachedPlayer.LocalPlayer.PlayerControl != SecurityGuard.securityGuard && !CachedPlayer.LocalPlayer.Data.IsDead)
                         {
                             __instance.Close();
                             return false;
                         }
 
-                        string timeString = TimeSpan.FromSeconds(MapOptions.restrictCamerasTime).ToString(@"mm\:ss\.ff");
+                        string timeString = TimeSpan.FromSeconds(MapOptionsTor.restrictCamerasTime).ToString(@"mm\:ss\.ff");
                         TimeRemaining.text = String.Format("Remaining: {0}", timeString);
                         TimeRemaining.gameObject.SetActive(true);
                     }
@@ -273,7 +273,7 @@ namespace TheOtherRoles.Patches {
                     if (cameraTimer > 0.1f)
                         UseCameraTime();
 
-                    if (MapOptions.restrictDevices > 0)
+                    if (MapOptionsTor.restrictDevices > 0)
                     {
                         if (TimeRemaining == null)
                         {
@@ -285,13 +285,13 @@ namespace TheOtherRoles.Patches {
                             TimeRemaining.color = Palette.White;
                         }
 
-                        if (MapOptions.restrictCamerasTime <= 0f  && CachedPlayer.LocalPlayer.PlayerControl != Hacker.hacker && CachedPlayer.LocalPlayer.PlayerControl != SecurityGuard.securityGuard && !CachedPlayer.LocalPlayer.Data.IsDead)
+                        if (MapOptionsTor.restrictCamerasTime <= 0f  && CachedPlayer.LocalPlayer.PlayerControl != Hacker.hacker && CachedPlayer.LocalPlayer.PlayerControl != SecurityGuard.securityGuard && !CachedPlayer.LocalPlayer.Data.IsDead)
                         {
                             __instance.Close();
                             return false;
                         }
 
-                        string timeString = TimeSpan.FromSeconds(MapOptions.restrictCamerasTime).ToString(@"mm\:ss\.ff");
+                        string timeString = TimeSpan.FromSeconds(MapOptionsTor.restrictCamerasTime).ToString(@"mm\:ss\.ff");
                         TimeRemaining.text = String.Format("Remaining: {0}", timeString);
                         TimeRemaining.gameObject.SetActive(true);
                     }
