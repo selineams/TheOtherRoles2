@@ -73,13 +73,14 @@ namespace TheOtherRoles
         Ninja,
         Blackmailer,
         Thief,
-		Swooper,
+/*		Swooper,
 		Werewolf,
 		BodyGuard,
-		Veteren,
+		Veteren, */
         Crewmate,
         Impostor,
         // Modifier ---
+		Paranoid,
         Lover,
         Bait,
         Bloody,
@@ -482,6 +483,9 @@ namespace TheOtherRoles
                     break;
                 case RoleId.Tunneler:
                     Tunneler.tunneler = player;
+                    break;
+                case RoleId.Paranoid:
+                    Paranoid.paranoid = player;
                     break;
                 case RoleId.Invert:
                     Invert.invert.Add(player);

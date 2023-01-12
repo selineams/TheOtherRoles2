@@ -819,7 +819,7 @@ public static bool isPlayerLover(PlayerControl player) {
 			
 
             // Thief if hit crew only kill if setting says so, but also kill the thief.
-            else if (killer == Thief.thief && !target.Data.Role.IsImpostor && !new List<RoleInfo> {RoleInfo.jackal, Thief.canKillSheriff ? RoleInfo.sheriff : null, RoleInfo.sidekick, RoleInfo.Swooper, RoleInfo.Werewolf, RoleInfo.BodyGuard, RoleInfo.Veteren }.Contains(targetRole)) {
+            else if (killer == Thief.thief && !target.Data.Role.IsImpostor && !new List<RoleInfo> {RoleInfo.jackal, Thief.canKillSheriff ? RoleInfo.sheriff : null, RoleInfo.sidekick, RoleInfo.swooper, RoleInfo.werewolf, RoleInfo.bodyguard, RoleInfo.veteren }.Contains(targetRole)) {
                 Thief.suicideFlag = true;
                 return MurderAttemptResult.SuppressKill;
             }

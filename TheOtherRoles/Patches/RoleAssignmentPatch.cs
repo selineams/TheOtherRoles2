@@ -446,6 +446,7 @@ namespace TheOtherRoles.Patches {
                 RoleId.NiceGuesser,
 				RoleId.Cursed,
                 RoleId.Chameleon,
+				RoleId.Paranoid,
                 RoleId.Shifter
             });
 
@@ -613,6 +614,14 @@ namespace TheOtherRoles.Patches {
                 playerList.RemoveAll(x => x.PlayerId == playerId);
                 modifiers.RemoveAll(x => x == RoleId.Tunneler);
             }
+			
+            if (modifiers.Contains(RoleId.Paranoid)) {
+                List<PlayerControl> crewPlayerP = new List<PlayerControl>(playerList);
+                crewPlayerP.RemoveAll(x => x.Data.Role.IsImpostor || RoleInfo.getRoleInfoForPlayer(x).Any(r => r.isNeutral));
+                playerId = setModifierToRandomPlayer((byte)RoleId.Paranoid, crewPlayerP);
+                playerList.RemoveAll(x => x.PlayerId == playerId);
+                modifiers.RemoveAll(x => x == RoleId.Paranoid);
+            }
 
 
             modifiers.RemoveAll(x => x == RoleId.NiceGuesser);
@@ -690,6 +699,8 @@ namespace TheOtherRoles.Patches {
                     break;
                 case RoleId.Tunneler:
                     selection = CustomOptionHolder.modifierTunneler.getSelection(); break;
+                case RoleId.Paranoid:
+                    selection = CustomOptionHolder.modifierParanoid.getSelection(); break;
                 case RoleId.Sunglasses:
                     selection = CustomOptionHolder.modifierSunglasses.getSelection();
                     if (multiplyQuantity) selection *= CustomOptionHolder.modifierSunglassesQuantity.getQuantity();

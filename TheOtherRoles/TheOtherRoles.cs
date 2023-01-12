@@ -82,6 +82,7 @@ namespace TheOtherRoles
             Indomitable.clearAndReload();
             Blind.clearAndReload();
             Tunneler.clearAndReload();
+            Paranoid.clearAndReload();
             Slueth.clearAndReload();
             Vip.clearAndReload();
             Invert.clearAndReload();
@@ -2040,6 +2041,16 @@ namespace TheOtherRoles
 
         public static void clearAndReload() {
             tunneler = null;
+        }
+    }
+	
+    public static class Paranoid {
+        public static PlayerControl paranoid;
+        public static Color color = new Color32(48, 21, 89, byte.MaxValue);
+
+
+        public static void clearAndReload() {
+            paranoid = null;
         }
     }
 

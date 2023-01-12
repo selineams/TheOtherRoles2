@@ -38,6 +38,8 @@ namespace TheOtherRoles {
         public static CustomOption morphlingCooldown;
         public static CustomOption morphlingDuration;
         
+        public static CustomOption modifierParanoid;
+		
         public static CustomOption bomberSpawnRate;
         public static CustomOption bomberBombCooldown;
         public static CustomOption bomberDelay;
@@ -457,6 +459,7 @@ namespace TheOtherRoles {
             morphlingCooldown = CustomOption.Create(21, Types.Impostor, "Morphling Cooldown", 30f, 10f, 60f, 2.5f, morphlingSpawnRate);
             morphlingDuration = CustomOption.Create(22, Types.Impostor, "Morph Duration", 10f, 1f, 20f, 0.5f, morphlingSpawnRate);
 
+            modifierParanoid = CustomOption.Create(8831, Types.Modifier, cs(Color.yellow, "Paranoid"), rates, null, true);
         // public static CustomOption bomberSpawnRate;
         // public static CustomOption bomberBombCooldown;
         // public static CustomOption bomberDelay;

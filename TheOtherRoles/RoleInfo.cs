@@ -105,6 +105,7 @@ namespace TheOtherRoles
         public static RoleInfo blind  = new RoleInfo("Blind", Color.yellow, "You cannot see your report button!", "Was that a dead body?", RoleId.Blind, false, true);
         public static RoleInfo tunneler  = new RoleInfo("Tunneler", Color.yellow, "Complete your tasks to gain the ability to vent", "Finish work so you can play", RoleId.Tunneler, false, true);
         public static RoleInfo goodGuesser = new RoleInfo("Guesser", Color.yellow, "Guess and shoot", "Guess and shoot", RoleId.NiceGuesser, false, true);
+        public static RoleInfo paranoid  = new RoleInfo("Paranoid", Color.yellow, "Watch your six!", "Use your paranoia to your advantage and see through tasks!", RoleId.Paranoid, false, true);
         public static RoleInfo badGuesser = new RoleInfo("Guesser", Color.yellow, "Guess and shoot", "Guess and shoot", RoleId.EvilGuesser, false, true);
 
         public static RoleInfo chameleon = new RoleInfo("Chameleon", Color.yellow, "You're hard to see when not moving", "You're hard to see when not moving", RoleId.Chameleon, false, true);
@@ -178,6 +179,7 @@ namespace TheOtherRoles
             slueth,
             blind,
             tunneler,
+			paranoid,
             invert,
             chameleon,
             shifter
@@ -207,6 +209,7 @@ namespace TheOtherRoles
                 if (p == Mini.mini) infos.Add(mini);
                 if (p == Blind.blind) infos.Add(blind);
                 if (p == Tunneler.tunneler) infos.Add(tunneler);
+                if (p == Paranoid.paranoid) infos.Add(paranoid);
                 if (p == Slueth.slueth) infos.Add(slueth);
                 if (Invert.invert.Any(x => x.PlayerId == p.PlayerId)) infos.Add(invert);
                 if (p == Guesser.niceGuesser) infos.Add(goodGuesser);
