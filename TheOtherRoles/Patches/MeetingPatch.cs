@@ -616,7 +616,7 @@ namespace TheOtherRoles.Patches {
                 if (meetingTarget == null) meetingsCount++;
                 // Save the meeting target
                 target = meetingTarget;
-
+				MapOptionsTor.isRoundOne = false;
                 
                 if (Blackmailer.blackmailed == CachedPlayer.LocalPlayer.PlayerControl) { Helpers.BlackmailShhh(); }
 

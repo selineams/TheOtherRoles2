@@ -28,6 +28,9 @@ namespace TheOtherRoles{
         public static float restrictVitalsTime = 600f;
         public static float restrictVitalsTimeMax = 600f;
         public static bool enableSoundEffects = true;
+        public static bool disableCamsRoundOne = false;
+        public static bool isRoundOne = true;
+
 
         public static bool enableHorseMode = false;
         public static bool shieldFirstKill = false;
@@ -53,6 +56,8 @@ namespace TheOtherRoles{
             hidePlayerNames = CustomOptionHolder.hidePlayerNames.getBool();
             allowParallelMedBayScans = CustomOptionHolder.allowParallelMedBayScans.getBool();
             shieldFirstKill = CustomOptionHolder.shieldFirstKill.getBool();
+            disableCamsRoundOne = CustomOptionHolder.disableCamsRound1.getBool();
+			isRoundOne = true; 
             firstKillPlayer = null;
             restrictDevices = CustomOptionHolder.restrictDevices.getSelection();
             restrictAdminTime = restrictAdminTimeMax = CustomOptionHolder.restrictAdmin.getFloat();

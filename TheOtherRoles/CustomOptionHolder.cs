@@ -378,6 +378,7 @@ namespace TheOtherRoles {
 		public static CustomOption enableCamoComms;
 		
         public static CustomOption restrictDevices;
+        public static CustomOption disableCamsRound1;
         public static CustomOption restrictAdmin;
         public static CustomOption restrictCameras;
         public static CustomOption restrictVents;
@@ -862,7 +863,7 @@ namespace TheOtherRoles {
             restrictAdmin = CustomOption.Create(1102, Types.General, "Restrict Admin Table", 30f, 0f, 600f, 5f, restrictDevices);
             restrictCameras = CustomOption.Create(1103, Types.General, "Restrict Cameras", 30f, 0f, 600f, 5f, restrictDevices);
             restrictVents = CustomOption.Create(1104, Types.General, "Restrict Vitals", 30f, 0f, 600f, 5f, restrictDevices);
-
+			disableCamsRound1 = CustomOption.Create(8834, Types.General, "Disable Cameras round 1", false, null, false);
 
             showButtonTarget = CustomOption.Create(9994, Types.General, "Show Button Target", true);
             blockGameEnd = CustomOption.Create(9995, Types.General, "Block Game End if Power Crew is Alive", false);

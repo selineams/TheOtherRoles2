@@ -102,7 +102,10 @@ namespace TheOtherRoles.Patches {
                             TimeRemaining.transform.localScale *= 1.8f;
                             TimeRemaining.color = Palette.White;
                         }
-
+						if (MapOptionsTor.disableCamsRoundOne && MapOptionsTor.isRoundOne) {
+                            __instance.Close();
+                            return false;
+						}
                         if (MapOptionsTor.restrictCamerasTime <= 0f  && CachedPlayer.LocalPlayer.PlayerControl != Hacker.hacker && CachedPlayer.LocalPlayer.PlayerControl != SecurityGuard.securityGuard && !CachedPlayer.LocalPlayer.Data.IsDead)
                         {
                             __instance.Close();
@@ -201,7 +204,7 @@ namespace TheOtherRoles.Patches {
                     cameraTimer += Time.deltaTime;
                     if (cameraTimer > 0.1f)
                         UseCameraTime();
-
+					
                     if (MapOptionsTor.restrictDevices > 0)
                     {
                         if (TimeRemaining == null)
@@ -213,8 +216,11 @@ namespace TheOtherRoles.Patches {
                             TimeRemaining.transform.localScale *= 1.8f;
                             TimeRemaining.color = Palette.White;
                         }
-
-                        if (MapOptionsTor.restrictCamerasTime <= 0f   && CachedPlayer.LocalPlayer.PlayerControl != Hacker.hacker && CachedPlayer.LocalPlayer.PlayerControl != SecurityGuard.securityGuard && !CachedPlayer.LocalPlayer.Data.IsDead)
+						if (MapOptionsTor.disableCamsRoundOne && MapOptionsTor.isRoundOne) {
+                            __instance.Close();
+                            return false;
+						}
+						if (MapOptionsTor.restrictCamerasTime <= 0f   && CachedPlayer.LocalPlayer.PlayerControl != Hacker.hacker && CachedPlayer.LocalPlayer.PlayerControl != SecurityGuard.securityGuard && !CachedPlayer.LocalPlayer.Data.IsDead)
                         {
                             __instance.Close();
                             return false;
