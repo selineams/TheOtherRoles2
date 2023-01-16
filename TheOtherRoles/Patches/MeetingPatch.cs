@@ -674,7 +674,8 @@ namespace TheOtherRoles.Patches {
                     // Remove first kill shield
                     MapOptionsTor.firstKillPlayer = null;
                 }
-                if (Blackmailer.blackmailer != null ) {
+                
+				if (Blackmailer.blackmailer != null && Blackmailer.blackmailed != null) {
                     // Blackmailer show overlay
                     var playerState = __instance.playerStates.FirstOrDefault(x => x.TargetPlayerId == Blackmailer.blackmailed.PlayerId);
                     playerState.Overlay.gameObject.SetActive(true);
@@ -684,6 +685,7 @@ namespace TheOtherRoles.Patches {
                         (__instance as MonoBehaviour).StartCoroutine(Effects.SwayX(playerState.transform));
                     }
                 }
+				
             }
         }
 
@@ -711,6 +713,7 @@ namespace TheOtherRoles.Patches {
 
 	public static void Postfix(MeetingHud __instance) {
 		shookAlready = false;
+		if (Blackmailer.blackmailed == null) return;
 		if (Blackmailer.blackmailed.Data.PlayerId == CachedPlayer.LocalPlayer.PlayerId && !Blackmailer.blackmailed.Data.IsDead) {
 			  // Nothing here for now. What to do when local player who is blackmailed starts meeting
 			  //Coroutines.Start(BlackmailShhh());
