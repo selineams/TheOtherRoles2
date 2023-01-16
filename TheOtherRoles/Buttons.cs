@@ -497,7 +497,7 @@ namespace TheOtherRoles
                     veterenAlertButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
                 },
                 Veteren.getButtonSprite(),
-                new Vector3(-1.8f, -0.06f, 0),
+                CustomButton.ButtonPositions.lowerRowRight,
                 __instance,
                 KeyCode.F, 
                 true,
@@ -552,7 +552,7 @@ namespace TheOtherRoles
                 },
                 () => { },
                 Shifter.getButtonSprite(),
-                new Vector3(0, 1f, 0),
+                CustomButton.ButtonPositions.lowerRowRight,
                 __instance,
                 null,
                 true
@@ -850,7 +850,7 @@ namespace TheOtherRoles
                 },
                 () => { if(BodyGuard.reset) BodyGuard.resetGuarded(); },
                 BodyGuard.getGuardButtonSprite(),
-                new Vector3(-1.8f, -0.06f, 0),
+                CustomButton.ButtonPositions.lowerRowRight,
                 __instance,
                 KeyCode.F
             );
@@ -1042,7 +1042,6 @@ namespace TheOtherRoles
                 __instance,
                 KeyCode.F
             );
-
             // Jackal Kill
             jackalKillButton = new CustomButton(
                 () => {
@@ -1059,7 +1058,7 @@ namespace TheOtherRoles
                 },
                 () => { jackalKillButton.Timer = jackalKillButton.MaxTimer;},
                 __instance.KillButton.graphic.sprite,
-                CustomButton.ButtonPositions.upperRowRight,
+                CustomButton.ButtonPositions.upperRowCenter,
                 __instance,
                 KeyCode.Q
             );
@@ -1119,7 +1118,7 @@ namespace TheOtherRoles
                     minerMineButton.Timer = minerMineButton.MaxTimer;
                 },
                 Miner.getMineButtonSprite(),
-                new Vector3(-1.8f, -0.06f, 0),
+                CustomButton.ButtonPositions.lowerRowRight,
                 __instance,
                 KeyCode.V
             );
@@ -1161,7 +1160,7 @@ namespace TheOtherRoles
                     Swooper.isInvisable = false;
                 },
                 Swooper.getSwoopButtonSprite(),
-                Swooper.getSwooperSwoopVector(),
+                CustomButton.ButtonPositions.upperRowLeft,
                 __instance,
                 KeyCode.V,
                 true,
@@ -1187,7 +1186,7 @@ namespace TheOtherRoles
                     Bomber.hasBomb = null;
                 },
                 Bomber.getButtonSprite(),
-                new Vector3(-1.8f, -0.06f, 0),
+                CustomButton.ButtonPositions.upperRowLeft,
                 __instance,
                 KeyCode.V
             );
@@ -1221,7 +1220,7 @@ namespace TheOtherRoles
                 () => {  /* On Meeting End */ },
                 Bomber.getButtonSprite(),
                 //          0, -0.06f, 0
-                new Vector3(-4.5f, 1.5f, 0),
+                CustomButton.ButtonPositions.upperRowFarLeft,
                 __instance,
                 KeyCode.B
             );
@@ -1256,7 +1255,7 @@ namespace TheOtherRoles
                     Werewolf.canKill = false;
                 },
                 Werewolf.getRampageButtonSprite(),
-                new Vector3(-1.8f, -0.06f, 0),
+                CustomButton.ButtonPositions.upperRowCenter,
                 __instance,
                 KeyCode.G,
                 true,
@@ -1459,7 +1458,7 @@ namespace TheOtherRoles
                 //() => { return ((__instance.ReportButton.renderer.color == Palette.EnabledColor && CachedPlayer.LocalPlayer.PlayerControl.CanMove) || Undertaker.deadBodyDraged != null); },
                 () => { },
                 Undertaker.getButtonSprite(),
-                new Vector3(-1.8f, -0.06f, 0),
+                CustomButton.ButtonPositions.lowerRowRight,
                 __instance,
                 KeyCode.F,
                 true,
@@ -1761,7 +1760,7 @@ namespace TheOtherRoles
                 () => { return __instance.ReportButton.graphic.color == Palette.EnabledColor && CachedPlayer.LocalPlayer.PlayerControl.CanMove; },
                 () => { amnisiacRememberButton.Timer = 0f; },
                 Amnisiac.getButtonSprite(),
-                new Vector3(-1.8f, -0.06f, 0),
+                CustomButton.ButtonPositions.lowerRowRight,
                 __instance,
                 KeyCode.F
             );
@@ -2051,7 +2050,7 @@ namespace TheOtherRoles
                },
                () => { blackmailerButton.Timer = blackmailerButton.MaxTimer; },
                Blackmailer.getBlackmailButtonSprite(),
-               new Vector3(-1.8f, -0.06f, 0),
+               CustomButton.ButtonPositions.lowerRowRight,
                __instance,
                KeyCode.F,
                true,
