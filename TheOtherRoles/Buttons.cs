@@ -2052,7 +2052,7 @@ namespace TheOtherRoles
                },
                () => { blackmailerButton.Timer = blackmailerButton.MaxTimer; },
                Blackmailer.getBlackmailButtonSprite(),
-               CustomButton.ButtonPositions.lowerRowRight,
+               CustomButton.ButtonPositions.upperRowLeft,
                __instance,
                KeyCode.F,
                true,
