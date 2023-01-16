@@ -1295,8 +1295,6 @@ namespace TheOtherRoles.Patches {
                     }
                 }
             }
-            Helpers.Log("I think this is the reporter: "+ __instance.Data.PlayerName);
-            Helpers.Log("I think this is the Body: "+ target.PlayerName);
             if (isSluethReport) {
                 PlayerControl reported = Helpers.playerById(target.PlayerId);
                 Slueth.reported.Add(reported);
