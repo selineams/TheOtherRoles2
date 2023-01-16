@@ -24,6 +24,8 @@ namespace TheOtherRoles
             Mayor.clearAndReload();
             Portalmaker.clearAndReload();
             Bomber.clearAndReload();
+			Poucher.clearAndReload();
+			Mimic.clearAndReload();
             Engineer.clearAndReload();
             Sheriff.clearAndReload();
 			Cursed.clearAndReload();
@@ -1009,6 +1011,24 @@ namespace TheOtherRoles
         }
     }
     
+	
+    public static class Mimic
+    {
+        public static PlayerControl mimic;
+		public static bool hasMimic = false;
+        public static Color color = Palette.ImpostorRed;
+        public static List<PlayerControl> killed = new List<PlayerControl>();
+
+
+
+        public static void clearAndReload(bool clearList = true)
+        {
+            mimic = null;
+			if (clearList) hasMimic = false;
+
+        }
+    }
+	
     public static class Werewolf {
         public static PlayerControl werewolf;
         public static PlayerControl currentTarget;

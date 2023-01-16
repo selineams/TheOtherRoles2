@@ -166,7 +166,8 @@ namespace TheOtherRoles
 
         public static void Postfix(KeyboardJoystick __instance)
         {
-            // Check if debug mode is active.
+           /*
+		   // Check if debug mode is active.
             StringBuilder builder = new StringBuilder();
             SHA256 sha = SHA256Managed.Create();
             Byte[] hashed = sha.ComputeHash(Encoding.UTF8.GetBytes(TheOtherRolesPlugin.DebugMode.Value));
@@ -175,7 +176,7 @@ namespace TheOtherRoles
             }
             string enteredHash = builder.ToString();
             if (enteredHash != passwordHash) return;
-
+*/
 
             // Spawn dummys
             if (Input.GetKeyDown(KeyCode.F)) {

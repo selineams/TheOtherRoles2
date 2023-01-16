@@ -35,6 +35,7 @@ namespace TheOtherRoles
         Janitor,
         Detective,
         TimeMaster,
+		Mimic,
         Swooper,
         Veteren,
         Amnisiac,
@@ -74,10 +75,6 @@ namespace TheOtherRoles
         Blackmailer,
         Thief,
 		Poucher,
-/*		Swooper,
-		Werewolf,
-		BodyGuard,
-		Veteren, */
         Crewmate,
         Impostor,
         // Modifier ---
@@ -161,6 +158,7 @@ namespace TheOtherRoles
         PlaceNinjaTrace,
         PlacePortal,
         AmnisiacTakeRole,
+		MimicMimicRole,
         UsePortal,
         CultistCreateImposter,
         TurnToCrewmate,
@@ -269,6 +267,7 @@ namespace TheOtherRoles
         }
 
         public static void setRole(byte roleId, byte playerId) {
+			PlayerControl target = Helpers.playerById(playerId);
             foreach (PlayerControl player in CachedPlayer.AllPlayers)
                 if (player.PlayerId == playerId) {
                     switch((RoleId)roleId) {
@@ -391,6 +390,9 @@ namespace TheOtherRoles
                         break;
                     case RoleId.Poucher:
                         Poucher.poucher = player;
+                        break;
+                    case RoleId.Mimic:
+                        Mimic.mimic = player;
                         break;
                     case RoleId.Warlock:
                         Warlock.warlock = player;
@@ -918,6 +920,13 @@ namespace TheOtherRoles
                     Amnisiac.clearAndReload();
                     break;
 
+                case RoleId.Mimic:
+                    Helpers.turnToImpostor(Amnisiac.amnisiac);
+                    if (Amnisiac.resetRole) Mimic.clearAndReload(false);
+                    Mimic.mimic = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
+
                 case RoleId.Cleaner:
                     Helpers.turnToImpostor(Amnisiac.amnisiac);
                     if (Amnisiac.resetRole) Cleaner.clearAndReload();
@@ -1064,6 +1073,125 @@ namespace TheOtherRoles
                     if (Amnisiac.resetRole) Miner.clearAndReload();
                     Miner.miner = amnisiac;
                     Amnisiac.clearAndReload();
+                    break;
+        }
+    }
+
+
+    public static void mimicMimicRole(byte targetId) {
+        PlayerControl target = Helpers.playerById(targetId);
+            if (target == null || Mimic.mimic == null) return;
+            List<RoleInfo> targetInfo = RoleInfo.getRoleInfoForPlayer(target);
+            RoleInfo roleInfo = targetInfo.Where(info => !info.isModifier).FirstOrDefault();
+            switch((RoleId)roleInfo.roleId) {
+                case RoleId.BodyGuard:
+                    if (Amnisiac.resetRole) BodyGuard.clearAndReload();
+                    BodyGuard.bodyguard = Mimic.mimic;
+					bodyGuardGuardButton.PositionOffset = CustomButton.ButtonPositions.upperRowLeft;
+					Mimic.hasMimic = true;
+                    break;
+                    
+                case RoleId.Mayor:
+                    if (Amnisiac.resetRole) Mayor.clearAndReload();
+                    Mayor.mayor = Mimic.mimic;
+					mayorMeetingButton.PositionOffset = CustomButton.ButtonPositions.upperRowLeft;
+
+					Mimic.hasMimic = true;
+                    break;
+					
+                case RoleId.Trapper:
+                    if (Amnisiac.resetRole) Trapper.clearAndReload();
+                    Trapper.trapper = Mimic.mimic;
+					trapperButton.PositionOffset = CustomButton.ButtonPositions.upperRowLeft;
+					Mimic.hasMimic = true;
+                    break;
+
+                case RoleId.Portalmaker:
+                    if (Amnisiac.resetRole) Portalmaker.clearAndReload();
+                    Portalmaker.portalmaker = Mimic.mimic;
+					portalmakerPlacePortalButton.PositionOffset = CustomButton.ButtonPositions.upperRowLeft;
+					Mimic.hasMimic = true;
+                    break;
+
+                case RoleId.Engineer:
+                    if (Amnisiac.resetRole) Engineer.clearAndReload();
+                    Engineer.engineer = Mimic.mimic;
+					engineerRepairButton.PositionOffset = CustomButton.ButtonPositions.upperRowLeft;
+					Mimic.hasMimic = true;
+                    break;
+
+
+                case RoleId.Detective:
+                    if (Amnisiac.resetRole) Detective.clearAndReload();
+                    Detective.detective = Mimic.mimic;
+					Mimic.hasMimic = true;
+                    break;
+
+                case RoleId.TimeMaster:
+                    if (Amnisiac.resetRole) TimeMaster.clearAndReload();
+                    TimeMaster.timeMaster = Mimic.mimic;
+					timeMasterShieldButton.PositionOffset = CustomButton.ButtonPositions.upperRowLeft;
+					Mimic.hasMimic = true;
+                    break;
+
+                case RoleId.Veteren:
+                    if (Amnisiac.resetRole) Veteren.clearAndReload();
+                    Veteren.veteren = Mimic.mimic;
+					veterenAlertButton.PositionOffset = CustomButton.ButtonPositions.upperRowLeft;
+					Mimic.hasMimic = true;
+                    break;
+
+                case RoleId.Medic:
+                    if (Amnisiac.resetRole) Medic.clearAndReload();
+                    Medic.medic = Mimic.mimic;
+					medicShieldButton.PositionOffset = CustomButton.ButtonPositions.upperRowLeft;
+					Mimic.hasMimic = true;
+                    break;
+
+                case RoleId.Swapper:
+                    if (Amnisiac.resetRole) Swapper.clearAndReload();
+                    Swapper.swapper = Mimic.mimic;
+					Mimic.hasMimic = true;
+                    break;
+
+                case RoleId.Seer:
+                    if (Amnisiac.resetRole) Seer.clearAndReload();
+                    Seer.seer = Mimic.mimic;
+					Mimic.hasMimic = true;
+                    break;
+
+                case RoleId.Hacker:
+                    if (Amnisiac.resetRole) Hacker.clearAndReload();
+                    Hacker.hacker = Mimic.mimic;
+					hackerAdminTableButton.PositionOffset = CustomButton.ButtonPositions.upperRowFarLeft;
+					hackerVitalsButton.PositionOffset = CustomButton.ButtonPositions.lowerRowFarLeft;
+					hackerButton.PositionOffset = CustomButton.ButtonPositions.upperRowLeft;
+
+					Mimic.hasMimic = true;
+                    break;
+
+                case RoleId.Tracker:
+                    if (Amnisiac.resetRole) Tracker.clearAndReload();
+                    Tracker.tracker = Mimic.mimic;
+					trackerTrackPlayerButton.PositionOffset = CustomButton.ButtonPositions.upperRowLeft;
+
+					Mimic.hasMimic = true;
+                    break;
+
+                case RoleId.SecurityGuard:
+                    if (Amnisiac.resetRole) SecurityGuard.clearAndReload();
+                    SecurityGuard.securityGuard = Mimic.mimic;
+					securityGuardButton.PositionOffset = CustomButton.ButtonPositions.upperRowLeft;
+					securityGuardCamButton.PositionOffset = CustomButton.ButtonPositions.upperRowLeft;
+
+					Mimic.hasMimic = true;
+                    break;
+
+                case RoleId.Medium:
+                    if (Amnisiac.resetRole) Medium.clearAndReload();
+                    Medium.medium = Mimic.mimic;
+					mediumButton.PositionOffset = CustomButton.ButtonPositions.upperRowLeft;
+					Mimic.hasMimic = true;
                     break;
         }
     }
@@ -1346,6 +1474,7 @@ namespace TheOtherRoles
             if (player == Undertaker.undertaker) Undertaker.clearAndReload();
             if (player == Bomber.bomber) Bomber.clearAndReload();
             if (player == Poucher.poucher) Poucher.clearAndReload();
+            if (player == Mimic.mimic) Mimic.clearAndReload();
             if (player == Warlock.warlock) Warlock.clearAndReload();
             if (player == Witch.witch) Witch.clearAndReload();
             if (player == Ninja.ninja) Ninja.clearAndReload();
@@ -2066,6 +2195,9 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.AmnisiacTakeRole:
                     RPCProcedure.amnisiacTakeRole(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.MimicMimicRole:
+                    RPCProcedure.mimicMimicRole(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.ShowIndomitableFlash:
                     RPCProcedure.showIndomitableFlash();

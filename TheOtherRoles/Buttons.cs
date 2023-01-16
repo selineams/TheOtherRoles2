@@ -17,28 +17,28 @@ namespace TheOtherRoles
     {
         private static bool initialized = false;
 
-        private static CustomButton engineerRepairButton;
+        public static CustomButton engineerRepairButton;
         private static CustomButton janitorCleanButton;
         public static CustomButton sheriffKillButton;
         private static CustomButton deputyHandcuffButton;
-        private static CustomButton timeMasterShieldButton;
+        public static CustomButton timeMasterShieldButton;
         private static CustomButton amnisiacRememberButton;
-        private static CustomButton veterenAlertButton;
-        private static CustomButton medicShieldButton;
+        public static CustomButton veterenAlertButton;
+        public static CustomButton medicShieldButton;
         private static CustomButton bomberBombButton;
         private static CustomButton bomberKillButton;
         private static CustomButton cultistTurnButton;
         private static CustomButton shifterShiftButton;
         private static CustomButton morphlingButton;
         private static CustomButton camouflagerButton;
-        private static CustomButton portalmakerPlacePortalButton;
+        public static CustomButton portalmakerPlacePortalButton;
         private static CustomButton usePortalButton;
-        private static CustomButton hackerButton;
+        public static CustomButton hackerButton;
         private static CustomButton changeChatButton;
         public static CustomButton hackerVitalsButton;
         public static CustomButton hackerAdminTableButton;
-        private static CustomButton trackerTrackPlayerButton;
-        private static CustomButton bodyGuardGuardButton;
+        public static CustomButton trackerTrackPlayerButton;
+        public static CustomButton bodyGuardGuardButton;
         private static CustomButton trackerTrackCorpsesButton;
         public static CustomButton vampireKillButton;
         public static CustomButton garlicButton;
@@ -116,14 +116,16 @@ namespace TheOtherRoles
             hackerButton.MaxTimer = Hacker.cooldown;
             hackerVitalsButton.MaxTimer = Hacker.cooldown;
             hackerAdminTableButton.MaxTimer = Hacker.cooldown;
+			
             vampireKillButton.MaxTimer = Vampire.cooldown;
             trackerTrackPlayerButton.MaxTimer = 0f;
             bodyGuardGuardButton.MaxTimer = 0f;
             garlicButton.MaxTimer = 0f;
             jackalKillButton.MaxTimer = Jackal.cooldown;
-            swooperKillButton.MaxTimer = Jackal.cooldown;
+			if (!CustomOptionHolder.swooperAsWell.getBool())
+              swooperKillButton.MaxTimer = Jackal.cooldown;
             werewolfKillButton.MaxTimer = Werewolf.killCooldown;
-            
+			
             sidekickKillButton.MaxTimer = Sidekick.cooldown;
             jackalSidekickButton.MaxTimer = Jackal.createSidekickCooldown;
             lighterButton.MaxTimer = Lighter.cooldown;
@@ -155,7 +157,6 @@ namespace TheOtherRoles
             hunterAdminTableButton.MaxTimer = Hunter.AdminCooldown;
             hunterArrowButton.MaxTimer = Hunter.ArrowCooldown;
             huntedShieldButton.MaxTimer = Hunted.shieldCooldown;
-
             timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
             veterenAlertButton.EffectDuration = Veteren.alertDuration;
             hackerButton.EffectDuration = Hacker.duration;
@@ -164,7 +165,6 @@ namespace TheOtherRoles
             vampireKillButton.EffectDuration = Vampire.delay;
             lighterButton.EffectDuration = Lighter.duration; 
             swooperSwoopButton.EffectDuration = Swooper.duration;
-            
             werewolfRampageButton.MaxTimer = Werewolf.rampageCooldown;
             werewolfRampageButton.EffectDuration = Werewolf.rampageDuration;
 

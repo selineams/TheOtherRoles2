@@ -97,6 +97,9 @@ namespace TheOtherRoles {
         }
 
         public static bool isRoleAlive(PlayerControl role) {
+			if (Mimic.mimic != null) {
+				if (role == Mimic.mimic) return false;
+			}
             return (role != null && isAlive(role));
         }
 
@@ -849,6 +852,13 @@ public static bool isPlayerLover(PlayerControl player) {
 
             if (murder == MurderAttemptResult.PerformKill) {
 				if (killer == Poucher.poucher) Poucher.killed.Add(target);
+				
+				if (Mimic.mimic != null && killer == Mimic.mimic && !Mimic.hasMimic) {
+					MessageWriter writerMimic = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.MimicMimicRole, Hazel.SendOption.Reliable, -1);
+					writerMimic.Write(target.PlayerId);
+					AmongUsClient.Instance.FinishRpcImmediately(writerMimic);
+					RPCProcedure.mimicMimicRole(target.PlayerId);
+				}
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
                 writer.Write(killer.PlayerId);
                 writer.Write(target.PlayerId);
