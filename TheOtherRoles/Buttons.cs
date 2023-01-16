@@ -1118,7 +1118,7 @@ namespace TheOtherRoles
                     minerMineButton.Timer = minerMineButton.MaxTimer;
                 },
                 Miner.getMineButtonSprite(),
-                CustomButton.ButtonPositions.lowerRowRight,
+                CustomButton.ButtonPositions.upperRowLeft,
                 __instance,
                 KeyCode.V
             );
@@ -1458,7 +1458,7 @@ namespace TheOtherRoles
                 //() => { return ((__instance.ReportButton.renderer.color == Palette.EnabledColor && CachedPlayer.LocalPlayer.PlayerControl.CanMove) || Undertaker.deadBodyDraged != null); },
                 () => { },
                 Undertaker.getButtonSprite(),
-                CustomButton.ButtonPositions.lowerRowRight,
+                CustomButton.ButtonPositions.upperRowLeft,
                 __instance,
                 KeyCode.F,
                 true,
