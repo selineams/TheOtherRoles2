@@ -848,6 +848,7 @@ public static bool isPlayerLover(PlayerControl player) {
             MurderAttemptResult murder = checkMuderAttempt(killer, target, isMeetingStart);
 
             if (murder == MurderAttemptResult.PerformKill) {
+				if (killer == Poucher.poucher) Poucher.killed.Add(target);
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
                 writer.Write(killer.PlayerId);
                 writer.Write(target.PlayerId);

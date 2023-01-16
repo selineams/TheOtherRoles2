@@ -73,6 +73,7 @@ namespace TheOtherRoles
         Ninja,
         Blackmailer,
         Thief,
+		Poucher,
 /*		Swooper,
 		Werewolf,
 		BodyGuard,
@@ -387,6 +388,9 @@ namespace TheOtherRoles
                         break;
                     case RoleId.Bomber:
                         Bomber.bomber = player;
+                        break;
+                    case RoleId.Poucher:
+                        Poucher.poucher = player;
                         break;
                     case RoleId.Warlock:
                         Warlock.warlock = player;
@@ -906,6 +910,13 @@ namespace TheOtherRoles
                     Trickster.trickster = amnisiac;
                     Amnisiac.clearAndReload();
                     break;
+					
+                case RoleId.Poucher:
+                    Helpers.turnToImpostor(Amnisiac.amnisiac);
+                    if (Amnisiac.resetRole) Poucher.clearAndReload(false);
+                    Poucher.poucher = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
 
                 case RoleId.Cleaner:
                     Helpers.turnToImpostor(Amnisiac.amnisiac);
@@ -1334,6 +1345,7 @@ namespace TheOtherRoles
             if (player == Cleaner.cleaner) Cleaner.clearAndReload();
             if (player == Undertaker.undertaker) Undertaker.clearAndReload();
             if (player == Bomber.bomber) Bomber.clearAndReload();
+            if (player == Poucher.poucher) Poucher.clearAndReload();
             if (player == Warlock.warlock) Warlock.clearAndReload();
             if (player == Witch.witch) Witch.clearAndReload();
             if (player == Ninja.ninja) Ninja.clearAndReload();

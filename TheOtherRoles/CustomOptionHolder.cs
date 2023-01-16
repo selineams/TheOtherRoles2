@@ -61,6 +61,9 @@ namespace TheOtherRoles {
 
         public static CustomOption guesserShowInfoInGhostChat;
 
+        public static CustomOption poucherSpawnRate;
+
+
         public static CustomOption eraserSpawnRate;
         public static CustomOption eraserCooldown;
         public static CustomOption eraserCanEraseAnyone;
@@ -490,6 +493,9 @@ namespace TheOtherRoles {
             eraserSpawnRate = CustomOption.Create(230, Types.Impostor, cs(Eraser.color, "Eraser"), rates, null, true);
             eraserCooldown = CustomOption.Create(231, Types.Impostor, "Eraser Cooldown", 30f, 10f, 120f, 5f, eraserSpawnRate);
             eraserCanEraseAnyone = CustomOption.Create(232, Types.Impostor, "Eraser Can Erase Anyone", false, eraserSpawnRate);
+			
+			poucherSpawnRate = CustomOption.Create(8833, Types.Impostor, cs(Poucher.color, "Poucher"), rates, null, true);
+
             
             //cultistSpawnRate =  CustomOption.Create(3801, Types.Impostor, cs(Cultist.color, "Cultist"), rates, null, true);
 
