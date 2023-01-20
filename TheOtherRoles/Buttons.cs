@@ -1078,7 +1078,7 @@ namespace TheOtherRoles
                 },
                 () => { sidekickKillButton.Timer = sidekickKillButton.MaxTimer;},
                 __instance.KillButton.graphic.sprite,
-                CustomButton.ButtonPositions.upperRowRight,
+                CustomButton.ButtonPositions.upperRowCenter,
                 __instance,
                 KeyCode.Q
             );
