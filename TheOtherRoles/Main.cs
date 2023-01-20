@@ -31,8 +31,8 @@ namespace TheOtherRoles
     public class TheOtherRolesPlugin : BasePlugin
     {
         public const string Id = "me.eisbison.theotherroles";
-        public const string VersionString = "5.8.0";
-        public static uint betaDays = 0;  // amount of days for the build to be usable (0 for infinite!)
+        public const string VersionString = "5.8.1";
+        public static uint betaDays = 7;  // amount of days for the build to be usable (0 for infinite!)
 
         public static Version Version = Version.Parse(VersionString);
         internal static BepInEx.Logging.ManualLogSource Logger;
@@ -166,7 +166,7 @@ namespace TheOtherRoles
 
         public static void Postfix(KeyboardJoystick __instance)
         {
-           /*
+           
 		   // Check if debug mode is active.
             StringBuilder builder = new StringBuilder();
             SHA256 sha = SHA256Managed.Create();
@@ -176,7 +176,7 @@ namespace TheOtherRoles
             }
             string enteredHash = builder.ToString();
             if (enteredHash != passwordHash) return;
-*/
+
 
             // Spawn dummys
             if (Input.GetKeyDown(KeyCode.F)) {
