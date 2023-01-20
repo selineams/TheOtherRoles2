@@ -1999,6 +1999,12 @@ namespace TheOtherRoles
             if (target == Undertaker.undertaker) Undertaker.undertaker = thief;
             if (target == Veteren.veteren) Veteren.veteren = thief;
             if (target == Blackmailer.blackmailer) Blackmailer.blackmailer = thief;
+            if (target == Mimic.mimic) {
+				Mimic.mimic = thief;
+				Mimic.hasMimic = false;
+			}
+			if (target == Poucher.poucher) Poucher.poucher = thief;
+
 
 
 
