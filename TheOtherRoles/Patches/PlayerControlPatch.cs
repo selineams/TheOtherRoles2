@@ -696,6 +696,7 @@ namespace TheOtherRoles.Patches {
                 foreach (PlayerControl p in CachedPlayer.AllPlayers)
                 {
                     bool arrowForImp = p.Data.Role.IsImpostor;
+					if (Mimic.mimic == p) arrowForImp = true;
                     bool arrowForTeamJackal = Snitch.includeTeamJackal && (p == Jackal.jackal || p == Sidekick.sidekick);
 		    bool arrowForTeamSwoop = Snitch.includeTeamJackal && (p == Swooper.swooper);
 
