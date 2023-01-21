@@ -194,6 +194,12 @@ namespace TheOtherRoles.Patches {
             Morphling.currentTarget = setTarget();
             setPlayerOutline(Morphling.currentTarget, Morphling.color);
         }
+		
+        static void privateInvestigatorSetTarget() {
+            if (PrivateInvestigator.privateInvestigator == null || PrivateInvestigator.privateInvestigator != CachedPlayer.LocalPlayer.PlayerControl) return;
+            PrivateInvestigator.currentTarget = setTarget();
+            setPlayerOutline(PrivateInvestigator.currentTarget, PrivateInvestigator.color);
+        }
 
         static void sheriffSetTarget() {
             if (Sheriff.sheriff == null || Sheriff.sheriff != CachedPlayer.LocalPlayer.PlayerControl) return;
@@ -563,10 +569,13 @@ namespace TheOtherRoles.Patches {
                 if (p.cosmetics.colorBlindText != null && p.cosmetics.showColorBlindText && p.cosmetics.colorBlindText.gameObject.active) {
                     p.cosmetics.colorBlindText.transform.localPosition = new Vector3(0, -1f, -0.001f);
                 }
-				var (playerCompleted, playerTotal) = TasksHandler.taskInfo(Snitch.snitch.Data);
-                int numberOfTasks = playerTotal - playerCompleted;
-				bool completedSnitch = (Snitch.seeInMeeting && CachedPlayer.LocalPlayer.PlayerControl == Snitch.snitch && numberOfTasks == 0);
-				bool snitchFlag = (completedSnitch && (Helpers.isNeutral(p) || p.Data.Role.IsImpostor));
+				bool snitchFlag = false;
+				if (Snitch.snitch != null) {
+					var (playerCompleted, playerTotal) = TasksHandler.taskInfo(Snitch.snitch.Data);
+					int numberOfTasks = playerTotal - playerCompleted;
+					bool completedSnitch = (Snitch.seeInMeeting && CachedPlayer.LocalPlayer.PlayerControl == Snitch.snitch && numberOfTasks == 0);
+					snitchFlag = (completedSnitch && (Helpers.isNeutral(p) || p.Data.Role.IsImpostor));
+				}
                 if (snitchFlag || (Lawyer.lawyerKnowsRole && CachedPlayer.LocalPlayer.PlayerControl == Lawyer.lawyer && p == Lawyer.target) || p == CachedPlayer.LocalPlayer.PlayerControl || CachedPlayer.LocalPlayer.Data.IsDead || ((CachedPlayer.LocalPlayer.PlayerControl == Slueth.slueth && Slueth.reported.Any(x => x.PlayerId == p.PlayerId))) || ((CachedPlayer.LocalPlayer.PlayerControl == Poucher.poucher && Poucher.killed.Any(x => x.PlayerId == p.PlayerId)))) {
                     Transform playerInfoTransform = p.cosmetics.nameText.transform.parent.FindChild("Info");
                     TMPro.TextMeshPro playerInfo = playerInfoTransform != null ? playerInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
@@ -1124,6 +1133,8 @@ namespace TheOtherRoles.Patches {
                 bendTimeUpdate();
                 // Morphling
                 morphlingSetTarget();
+				// PrivateInvestigator
+				privateInvestigatorSetTarget();
                 // Medic
                 medicSetTarget();
                 

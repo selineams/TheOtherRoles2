@@ -687,6 +687,15 @@ public static bool isPlayerLover(PlayerControl player) {
             })));
         }
 
+		public static void checkWatchFlash(PlayerControl target) {
+			if (CachedPlayer.LocalPlayer.PlayerControl == PrivateInvestigator.watching) {
+				MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.PrivateInvestigatorWatchFlash, Hazel.SendOption.Reliable, -1);
+                writer.Write(target.PlayerId);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.privateInvestigatorWatchFlash(target.PlayerId);
+			}
+		}
+
         public static bool roleCanUseVents(this PlayerControl player) {
             bool roleCouldUse = false;
             if (Engineer.engineer != null && Engineer.engineer == player)

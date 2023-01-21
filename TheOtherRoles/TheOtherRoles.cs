@@ -41,6 +41,7 @@ namespace TheOtherRoles
             BodyGuard.clearAndReload();
             Veteren.clearAndReload();
             Medic.clearAndReload();
+			PrivateInvestigator.clearAndReload();
             Shifter.clearAndReload();
             Swapper.clearAndReload();
             Lovers.clearAndReload();
@@ -285,6 +286,34 @@ namespace TheOtherRoles
                 highlightForTeamJackal = CustomOptionHolder.engineerHighlightForTeamJackal.getBool();
             }
         }
+		
+		
+    public static class PrivateInvestigator
+    {
+        public static PlayerControl privateInvestigator;
+		public static Color color = new Color32(23, 86, 92, byte.MaxValue);
+		private static Sprite buttonSprite;
+		public static PlayerControl watching = null;
+		public static PlayerControl currentTarget;            
+
+
+		public static bool seeFlashColor = false; 
+
+		public static Sprite getButtonSprite() {
+			if (buttonSprite) return buttonSprite;
+			buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Watch.png", 115f);
+			return buttonSprite;
+		}
+
+
+
+        public static void clearAndReload(bool clearList = true)
+        {
+            privateInvestigator = null;
+			watching = null;
+			seeFlashColor = CustomOptionHolder.privateInvestigatorSeeColor.getBool();
+        }
+    }
 
         public static class Godfather {
             public static PlayerControl godfather;

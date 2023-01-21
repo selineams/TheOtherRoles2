@@ -37,6 +37,7 @@ namespace TheOtherRoles
         public static RoleInfo mayor = new RoleInfo("Mayor", Mayor.color, "Your vote counts twice", "Your vote counts twice", RoleId.Mayor);
         public static RoleInfo portalmaker = new RoleInfo("Portalmaker", Portalmaker.color, "You can create portals", "You can create portals", RoleId.Portalmaker);
         public static RoleInfo engineer = new RoleInfo("Engineer",  Engineer.color, "Maintain important systems on the ship", "Repair the ship", RoleId.Engineer);
+        public static RoleInfo privateInvestigator = new RoleInfo("Private Investigator",  PrivateInvestigator.color, "See who is interacting with others", "Spy on the ship.", RoleId.PrivateInvestigator);
         public static RoleInfo sheriff = new RoleInfo("Sheriff", Sheriff.color, "Shoot the <color=#FF1919FF>Impostors</color>", "Shoot the Impostors", RoleId.Sheriff);
         public static RoleInfo bodyguard  = new RoleInfo("Body Guard", BodyGuard.color, "Protect someone with your own life", "You are the shield that guards the realms of men!", RoleId.BodyGuard, false);
         public static RoleInfo deputy = new RoleInfo("Deputy", Sheriff.color, "Handcuff the <color=#FF1919FF>Impostors</color>", "Handcuff the Impostors", RoleId.Deputy);
@@ -138,6 +139,7 @@ namespace TheOtherRoles
             miner,
 			swooper,
             goodGuesser,
+			privateInvestigator,
 			mimic,
 			poucher,
             badGuesser,
@@ -250,6 +252,7 @@ namespace TheOtherRoles
             if (p == Bomber.bomber) infos.Add(bomber);
             if (p == Mimic.mimic) infos.Add(mimic);
             if (p == Poucher.poucher) infos.Add(poucher);
+            if (p == PrivateInvestigator.privateInvestigator) infos.Add(privateInvestigator);
             if (p == Warlock.warlock) infos.Add(warlock);
             if (p == Witch.witch) infos.Add(witch);
             if (p == Ninja.ninja) infos.Add(ninja);

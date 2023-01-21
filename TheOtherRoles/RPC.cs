@@ -24,6 +24,7 @@ namespace TheOtherRoles
         Mayor,
         Portalmaker,
         Engineer,
+		PrivateInvestigator,
         Sheriff,
         Deputy,
         Cultist,
@@ -134,6 +135,8 @@ namespace TheOtherRoles
         TimeMasterRewindTime,
 		TurnToImpostor,
         BodyGuardGuardPlayer,
+		PrivateInvestigatorWatchPlayer,
+		PrivateInvestigatorWatchFlash,
         VeterenAlert,
         VeterenKill,
         ShifterShift,
@@ -390,6 +393,9 @@ namespace TheOtherRoles
                         break;
                     case RoleId.Poucher:
                         Poucher.poucher = player;
+                        break;
+                    case RoleId.PrivateInvestigator:
+                        PrivateInvestigator.privateInvestigator = player;
                         break;
                     case RoleId.Mimic:
                         Mimic.mimic = player;
@@ -1032,6 +1038,12 @@ namespace TheOtherRoles
                     Medium.medium = amnisiac;
                     Amnisiac.clearAndReload();
                     break;
+					
+                case RoleId.PrivateInvestigator:
+                    if (Amnisiac.resetRole) PrivateInvestigator.clearAndReload();
+                    PrivateInvestigator.privateInvestigator = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
 
                 case RoleId.Lawyer:
                     // Never reset Lawyer
@@ -1440,6 +1452,7 @@ namespace TheOtherRoles
             if (player == Mayor.mayor) Mayor.clearAndReload();
             if (player == Portalmaker.portalmaker) Portalmaker.clearAndReload();
             if (player == Engineer.engineer) Engineer.clearAndReload();
+			if (player == PrivateInvestigator.privateInvestigator) PrivateInvestigator.clearAndReload();
             if (player == Sheriff.sheriff) Sheriff.clearAndReload();
             if (player == Deputy.deputy) Deputy.clearAndReload();
             if (player == Lighter.lighter) Lighter.clearAndReload();
@@ -1930,6 +1943,25 @@ namespace TheOtherRoles
         BodyGuard.usedGuard = true;
         BodyGuard.guarded = target;
     }
+	
+    public static void privateInvestigatorWatchPlayer(byte targetId) {
+        PlayerControl target = Helpers.playerById(targetId);
+        PrivateInvestigator.watching = target;
+    }
+	
+    public static void privateInvestigatorWatchFlash(byte targetId) {
+        PlayerControl target = Helpers.playerById(targetId);
+        // GetDefaultOutfit().ColorId
+		if (CachedPlayer.LocalPlayer.PlayerControl == PrivateInvestigator.privateInvestigator) {
+			if (PrivateInvestigator.seeFlashColor) {
+				Helpers.showFlash(Palette.PlayerColors[target.Data.DefaultOutfit.ColorId]);
+			} else {
+				Helpers.showFlash(PrivateInvestigator.color);
+			}
+		} else {
+			return;
+		}
+    }
 
     public static void unblackmailPlayer() {
       Blackmailer.blackmailed = null;
@@ -2248,6 +2280,12 @@ namespace TheOtherRoles
                     break;  
                 case (byte)CustomRPC.BodyGuardGuardPlayer:
                     RPCProcedure.bodyGuardGuardPlayer(reader.ReadByte());
+                    break;  
+                case (byte)CustomRPC.PrivateInvestigatorWatchPlayer:
+                    RPCProcedure.privateInvestigatorWatchPlayer(reader.ReadByte());
+                    break;  
+                case (byte)CustomRPC.PrivateInvestigatorWatchFlash:
+                    RPCProcedure.privateInvestigatorWatchFlash(reader.ReadByte());
                     break;  
                 case (byte)CustomRPC.DeputyUsedHandcuffs:
                     RPCProcedure.deputyUsedHandcuffs(reader.ReadByte());
