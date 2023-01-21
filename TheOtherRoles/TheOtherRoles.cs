@@ -960,6 +960,7 @@ namespace TheOtherRoles
 
         public static List<Arrow> localArrows = new List<Arrow>();
         public static int taskCountForReveal = 1;
+		public static bool seeInMeeting = false;
         public static bool includeTeamJackal = false;
         public static bool teamJackalUseDifferentArrowColor = true;
 
@@ -973,6 +974,7 @@ namespace TheOtherRoles
             localArrows = new List<Arrow>();
             taskCountForReveal = Mathf.RoundToInt(CustomOptionHolder.snitchLeftTasksForReveal.getFloat());
             includeTeamJackal = CustomOptionHolder.snitchIncludeTeamJackal.getBool();
+            seeInMeeting = CustomOptionHolder.snitchSeeMeeting.getBool();
             teamJackalUseDifferentArrowColor = CustomOptionHolder.snitchTeamJackalUseDifferentArrowColor.getBool();
             snitch = null;
         }

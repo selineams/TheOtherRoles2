@@ -223,6 +223,8 @@ namespace TheOtherRoles {
         public static CustomOption snitchSpawnRate;
         public static CustomOption snitchLeftTasksForReveal;
         public static CustomOption snitchIncludeTeamJackal;
+        public static CustomOption snitchSeeMeeting;
+
         public static CustomOption snitchTeamJackalUseDifferentArrowColor;
 
         public static CustomOption spySpawnRate;
@@ -690,6 +692,7 @@ namespace TheOtherRoles {
             snitchSpawnRate = CustomOption.Create(210, Types.Crewmate, cs(Snitch.color, "Snitch"), rates, null, true);
             snitchLeftTasksForReveal = CustomOption.Create(211, Types.Crewmate, "Task Count Where The Snitch Will Be Revealed", 1f, 0f, 5f, 1f, snitchSpawnRate);
             snitchIncludeTeamJackal = CustomOption.Create(212, Types.Crewmate, "Include Team Jackal", false, snitchSpawnRate);
+            snitchSeeMeeting = CustomOption.Create(8836, Types.Crewmate, "Show roles in Meeting", false, snitchSpawnRate);
             snitchTeamJackalUseDifferentArrowColor = CustomOption.Create(213, Types.Crewmate, "Use Different Arrow Color For Team Jackal", true, snitchIncludeTeamJackal);
 
             spySpawnRate = CustomOption.Create(240, Types.Crewmate, cs(Spy.color, "Spy"), rates, null, true);
