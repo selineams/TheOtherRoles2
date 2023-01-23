@@ -123,8 +123,10 @@ namespace TheOtherRoles
             bodyGuardGuardButton.MaxTimer = 0f;
             garlicButton.MaxTimer = 0f;
             jackalKillButton.MaxTimer = Jackal.cooldown;
+			Helpers.Log("Pre Swoop Button Set time");
 			if (!CustomOptionHolder.swooperAsWell.getBool())
               swooperKillButton.MaxTimer = Jackal.cooldown;
+			Helpers.Log("Post Swoop Button Set time");
             werewolfKillButton.MaxTimer = Werewolf.killCooldown;
 			
             sidekickKillButton.MaxTimer = Sidekick.cooldown;
@@ -1157,26 +1159,24 @@ namespace TheOtherRoles
             );
 
 
-			if (!CustomOptionHolder.swooperAsWell.getBool()) {
 
-				// Swooper Kill
-				swooperKillButton = new CustomButton(
-					() => {
-						if (Helpers.checkAndDoVetKill(Swooper.currentTarget)) return;
-						if (Helpers.checkMuderAttemptAndKill(Swooper.swooper, Swooper.currentTarget) == MurderAttemptResult.SuppressKill) return;
+			// Swooper Kill
+			swooperKillButton = new CustomButton(
+				() => {
+					if (Helpers.checkAndDoVetKill(Swooper.currentTarget)) return;
+					if (Helpers.checkMuderAttemptAndKill(Swooper.swooper, Swooper.currentTarget) == MurderAttemptResult.SuppressKill) return;
 
-						swooperKillButton.Timer = swooperKillButton.MaxTimer; 
-						Swooper.currentTarget = null;
-					},
-					() => { return Swooper.swooper != null && Swooper.swooper == CachedPlayer.LocalPlayer.PlayerControl && !CachedPlayer.LocalPlayer.Data.IsDead; },
-					() => { showTargetNameOnButton(Swooper.currentTarget, swooperKillButton, "KILL"); return Swooper.currentTarget && CachedPlayer.LocalPlayer.PlayerControl.CanMove; },
-					() => { swooperKillButton.Timer = swooperKillButton.MaxTimer;},
-					__instance.KillButton.graphic.sprite,
-					new Vector3(0, 1f, 0),
-					__instance,
-					KeyCode.Q
-				);
-			}
+					swooperKillButton.Timer = swooperKillButton.MaxTimer; 
+					Swooper.currentTarget = null;
+				},
+				() => { return Swooper.swooper != null && Swooper.swooper == CachedPlayer.LocalPlayer.PlayerControl && !CachedPlayer.LocalPlayer.Data.IsDead; },
+				() => { showTargetNameOnButton(Swooper.currentTarget, swooperKillButton, "KILL"); return Swooper.currentTarget && CachedPlayer.LocalPlayer.PlayerControl.CanMove; },
+				() => { swooperKillButton.Timer = swooperKillButton.MaxTimer;},
+				__instance.KillButton.graphic.sprite,
+				CustomButton.ButtonPositions.upperRowCenter,
+				__instance,
+				KeyCode.Q
+			);
 
             swooperSwoopButton = new CustomButton(
                 () => { /* On Use */ 
