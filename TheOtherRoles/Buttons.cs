@@ -1169,7 +1169,7 @@ namespace TheOtherRoles
 					swooperKillButton.Timer = swooperKillButton.MaxTimer; 
 					Swooper.currentTarget = null;
 				},
-				() => { return Swooper.swooper != null && Swooper.swooper == CachedPlayer.LocalPlayer.PlayerControl && !CachedPlayer.LocalPlayer.Data.IsDead; },
+				() => { return Swooper.swooper != null && Swooper.swooper != Jackal.jackal && Swooper.swooper == CachedPlayer.LocalPlayer.PlayerControl && !CachedPlayer.LocalPlayer.Data.IsDead; },
 				() => { showTargetNameOnButton(Swooper.currentTarget, swooperKillButton, "KILL"); return Swooper.currentTarget && CachedPlayer.LocalPlayer.PlayerControl.CanMove; },
 				() => { swooperKillButton.Timer = swooperKillButton.MaxTimer;},
 				__instance.KillButton.graphic.sprite,
