@@ -41,20 +41,10 @@ namespace TheOtherRoles.Objects {
             public static readonly Vector3 lowerRowRight = new Vector3(-2f, -0.06f, 0);  // Not usable for imps beacuse of new button positions!
             public static readonly Vector3 lowerRowCenter = new Vector3(-3f, -0.06f, 0);
             public static readonly Vector3 lowerRowLeft = new Vector3(-4f, -0.06f, 0);
-            public static readonly Vector3 lowerRowFarLeft = new Vector3(-3f, -0.06f, 0f);
-
             public static readonly Vector3 upperRowRight = new Vector3(0f, 1f, 0f);  // Not usable for imps beacuse of new button positions!
             public static readonly Vector3 upperRowCenter = new Vector3(-1f, 1f, 0f);  // Not usable for imps beacuse of new button positions!
             public static readonly Vector3 upperRowLeft = new Vector3(-2f, 1f, 0f);
             public static readonly Vector3 upperRowFarLeft = new Vector3(-3f, 1f, 0f);
-
-/*
-            public static readonly Vector3 topRowRight = new Vector3(0f, 1.6f, 0f);  // Not usable for imps beacuse of new button positions!
-            public static readonly Vector3 topRowCenter = new Vector3(-1f, 1.6f, 0f);  // Not usable for imps beacuse of new button positions!
-            public static readonly Vector3 topRowLeft = new Vector3(-2f, 1.6f, 0f);
-            public static readonly Vector3 topRowFarLeft = new Vector3(-3f, 1.6f, 0f);
-*/
-
         }
 
         public CustomButton(Action OnClick, Func<bool> HasButton, Func<bool> CouldUse, Action OnMeetingEnds, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager, KeyCode? hotkey, bool HasEffect, float EffectDuration, Action OnEffectEnds, bool mirror = false, string buttonText = "")

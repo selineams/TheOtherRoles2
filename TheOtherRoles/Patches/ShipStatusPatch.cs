@@ -15,7 +15,19 @@ namespace TheOtherRoles.Patches {
         [HarmonyPrefix]
         [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.CalculateLightRadius))]
         public static bool Prefix(ref float __result, ShipStatus __instance, [HarmonyArgument(0)] GameData.PlayerInfo player) {
-            if (!__instance.Systems.ContainsKey(SystemTypes.Electrical) || GameOptionsManager.Instance.currentGameOptions.GameMode == GameModes.HideNSeek) return true;
+            if ((!__instance.Systems.ContainsKey(SystemTypes.Electrical) && !Helpers.isFungle()) || GameOptionsManager.Instance.currentGameOptions.GameMode == GameModes.HideNSeek) return true;
+
+            // If Game Mode is PropHunt:
+            if (PropHunt.isPropHuntGM) {
+                if (!PropHunt.timerRunning) {
+                    float progress = (PropHunt.blackOutTimer > 0f && PropHunt.blackOutTimer < 1f) ? 1 - PropHunt.blackOutTimer : 0f;
+                    float minVision = __instance.MaxLightRadius * (PropHunt.propBecomesHunterWhenFound ? 0.25f : PropHunt.propVision);
+                    __result = Mathf.Lerp(minVision, __instance.MaxLightRadius * PropHunt.propVision, progress); // For future start animation
+                } else {
+                    __result = __instance.MaxLightRadius * (PlayerControl.LocalPlayer.Data.Role.IsImpostor ? PropHunt.hunterVision : PropHunt.propVision);
+                }
+                return false;
+            }
 
             if (!HideNSeek.isHideNSeekGM || (HideNSeek.isHideNSeekGM && !Hunter.lightActive.Contains(player.PlayerId))) {
                 // If player is a role which has Impostor vision
@@ -27,7 +39,7 @@ namespace TheOtherRoles.Patches {
             }
 
             // If player is Lighter with ability active
-            if (Lighter.lighter != null && Lighter.lighter.PlayerId == player.PlayerId && Lighter.lighterTimer > 0f) {
+            if (Lighter.lighter != null && Lighter.lighter.PlayerId == player.PlayerId) {
                 float unlerped = Mathf.InverseLerp(__instance.MinLightRadius, __instance.MaxLightRadius, GetNeutralLightRadius(__instance, false));
                 __result = Mathf.Lerp(__instance.MaxLightRadius * Lighter.lighterModeLightsOffVision, __instance.MaxLightRadius * Lighter.lighterModeLightsOnVision, unlerped);
             }
@@ -36,6 +48,7 @@ namespace TheOtherRoles.Patches {
             else if (HideNSeek.isHideNSeekGM && Hunter.isLightActive(player.PlayerId)) {
                 float unlerped = Mathf.InverseLerp(__instance.MinLightRadius, __instance.MaxLightRadius, GetNeutralLightRadius(__instance, false));
                 __result = Mathf.Lerp(__instance.MaxLightRadius * Hunter.lightVision, __instance.MaxLightRadius * Hunter.lightVision, unlerped);
+                return false;
             }
 
             // If there is a Trickster with their ability active
@@ -73,9 +86,11 @@ namespace TheOtherRoles.Patches {
             }
 
             if (isImpostor) return shipStatus.MaxLightRadius * GameOptionsManager.Instance.currentNormalGameOptions.ImpostorLightMod;
-
-            SwitchSystem switchSystem = MapUtilities.Systems[SystemTypes.Electrical].CastFast<SwitchSystem>();
-            float lerpValue = switchSystem.Value / 255f;
+            float lerpValue = 1.0f;
+            try {
+                SwitchSystem switchSystem = MapUtilities.Systems[SystemTypes.Electrical].CastFast<SwitchSystem>();
+                lerpValue = switchSystem.Value / 255f;
+            } catch { }
 
             return Mathf.Lerp(shipStatus.MinLightRadius, shipStatus.MaxLightRadius, lerpValue) * GameOptionsManager.Instance.currentNormalGameOptions.CrewLightMod;
         }
@@ -102,10 +117,15 @@ namespace TheOtherRoles.Patches {
             originalNumShortTasksOption = GameOptionsManager.Instance.currentNormalGameOptions.NumShortTasks;
             originalNumLongTasksOption = GameOptionsManager.Instance.currentNormalGameOptions.NumLongTasks;
 
-            if (MapOptionsTor.gameMode != CustomGamemodes.HideNSeek) {
+            if (TORMapOptions.gameMode != CustomGamemodes.HideNSeek) {
                 var commonTaskCount = __instance.CommonTasks.Count;
-                var normalTaskCount = __instance.NormalTasks.Count;
+                var normalTaskCount = __instance.ShortTasks.Count;
                 var longTaskCount = __instance.LongTasks.Count;
+
+                if (TORMapOptions.gameMode == CustomGamemodes.PropHunt) {
+                    commonTaskCount = normalTaskCount = longTaskCount = 0;
+                }
+
 
                 if (GameOptionsManager.Instance.currentNormalGameOptions.NumCommonTasks > commonTaskCount) GameOptionsManager.Instance.currentNormalGameOptions.NumCommonTasks = commonTaskCount;
                 if (GameOptionsManager.Instance.currentNormalGameOptions.NumShortTasks > normalTaskCount) GameOptionsManager.Instance.currentNormalGameOptions.NumShortTasks = normalTaskCount;
@@ -116,6 +136,7 @@ namespace TheOtherRoles.Patches {
                 GameOptionsManager.Instance.currentNormalGameOptions.NumLongTasks = Mathf.RoundToInt(CustomOptionHolder.hideNSeekLongTasks.getFloat());
             }
 
+            MapBehaviourPatch.VentNetworks.Clear();
             return true;
         }
 

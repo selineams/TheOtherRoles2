@@ -13,16 +13,15 @@ namespace TheOtherRoles.Patches
     [HarmonyPatch]
     public static class ClientOptionsPatch
     {
-        private static SelectionBehaviour[] AllOptions = {
-            new SelectionBehaviour("Ghosts See Remaining Tasks", () => MapOptionsTor.ghostsSeeTasks = TheOtherRolesPlugin.GhostsSeeTasks.Value = !TheOtherRolesPlugin.GhostsSeeTasks.Value, TheOtherRolesPlugin.GhostsSeeTasks.Value),
-            new SelectionBehaviour("Ghosts Can See Votes", () => MapOptionsTor.ghostsSeeVotes = TheOtherRolesPlugin.GhostsSeeVotes.Value = !TheOtherRolesPlugin.GhostsSeeVotes.Value, TheOtherRolesPlugin.GhostsSeeVotes.Value),
-            new SelectionBehaviour("Ghosts Can See Roles", () => MapOptionsTor.ghostsSeeRoles = TheOtherRolesPlugin.GhostsSeeRoles.Value = !TheOtherRolesPlugin.GhostsSeeRoles.Value, TheOtherRolesPlugin.GhostsSeeRoles.Value),
-            new SelectionBehaviour("Ghosts Can Additionally See Modifier", () => MapOptionsTor.ghostsSeeModifier = TheOtherRolesPlugin.GhostsSeeModifier.Value = !TheOtherRolesPlugin.GhostsSeeModifier.Value, TheOtherRolesPlugin.GhostsSeeModifier.Value),
-            new SelectionBehaviour("Show Role Summary", () => MapOptionsTor.showRoleSummary = TheOtherRolesPlugin.ShowRoleSummary.Value = !TheOtherRolesPlugin.ShowRoleSummary.Value, TheOtherRolesPlugin.ShowRoleSummary.Value),
-            new SelectionBehaviour("Show Lighter / Darker", () => MapOptionsTor.showLighterDarker = TheOtherRolesPlugin.ShowLighterDarker.Value = !TheOtherRolesPlugin.ShowLighterDarker.Value, TheOtherRolesPlugin.ShowLighterDarker.Value),
-            new SelectionBehaviour("Better Cursor", () => MapOptionsTor.toggleCursor = TheOtherRolesPlugin.ToggleCursor.Value = !TheOtherRolesPlugin.ToggleCursor.Value, TheOtherRolesPlugin.ToggleCursor.Value),
-            // new SelectionBehaviour("Hide Kill Animation", () => MapOptionsTor.showKillAnimation = TheOtherRolesPlugin.showKillAnimation.Value = !TheOtherRolesPlugin.showKillAnimation.Value, TheOtherRolesPlugin.showKillAnimation.Value),
-            new SelectionBehaviour("Enable Sound Effects", () => MapOptionsTor.enableSoundEffects = TheOtherRolesPlugin.EnableSoundEffects.Value = !TheOtherRolesPlugin.EnableSoundEffects.Value, TheOtherRolesPlugin.EnableSoundEffects.Value),
+        private static readonly SelectionBehaviour[] AllOptions = {
+            new("Ghosts See Tasks & Other Info", () => TORMapOptions.ghostsSeeInformation = TheOtherRolesPlugin.GhostsSeeInformation.Value = !TheOtherRolesPlugin.GhostsSeeInformation.Value, TheOtherRolesPlugin.GhostsSeeInformation.Value),
+            new("Ghosts Can See Votes", () => TORMapOptions.ghostsSeeVotes = TheOtherRolesPlugin.GhostsSeeVotes.Value = !TheOtherRolesPlugin.GhostsSeeVotes.Value, TheOtherRolesPlugin.GhostsSeeVotes.Value),
+            new("Ghosts Can See Roles", () => TORMapOptions.ghostsSeeRoles = TheOtherRolesPlugin.GhostsSeeRoles.Value = !TheOtherRolesPlugin.GhostsSeeRoles.Value, TheOtherRolesPlugin.GhostsSeeRoles.Value),
+            new("Ghosts Can Additionally See Modifier", () => TORMapOptions.ghostsSeeModifier = TheOtherRolesPlugin.GhostsSeeModifier.Value = !TheOtherRolesPlugin.GhostsSeeModifier.Value, TheOtherRolesPlugin.GhostsSeeModifier.Value),
+            new("Show Role Summary", () => TORMapOptions.showRoleSummary = TheOtherRolesPlugin.ShowRoleSummary.Value = !TheOtherRolesPlugin.ShowRoleSummary.Value, TheOtherRolesPlugin.ShowRoleSummary.Value),
+            new("Show Lighter / Darker", () => TORMapOptions.showLighterDarker = TheOtherRolesPlugin.ShowLighterDarker.Value = !TheOtherRolesPlugin.ShowLighterDarker.Value, TheOtherRolesPlugin.ShowLighterDarker.Value),
+            new("Enable Sound Effects", () => TORMapOptions.enableSoundEffects = TheOtherRolesPlugin.EnableSoundEffects.Value = !TheOtherRolesPlugin.EnableSoundEffects.Value, TheOtherRolesPlugin.EnableSoundEffects.Value),
+            new("Show Vents On Map", () => TORMapOptions.ShowVentsOnMap = TheOtherRolesPlugin.ShowVentsOnMap.Value = !TheOtherRolesPlugin.ShowVentsOnMap.Value, TheOtherRolesPlugin.ShowVentsOnMap.Value),
         };
         
         private static GameObject popUp;
@@ -36,11 +35,12 @@ namespace TheOtherRoles.Patches
         public static void MainMenuManager_StartPostfix(MainMenuManager __instance)
         {
             // Prefab for the title
-            var tmp = __instance.Announcement.transform.Find("Title_Text").gameObject.GetComponent<TextMeshPro>();
+            var go = new GameObject("TitleTextTOR");
+            var tmp = go.AddComponent<TextMeshPro>();
+            tmp.fontSize = 4;
             tmp.alignment = TextAlignmentOptions.Center;
             tmp.transform.localPosition += Vector3.left * 0.2f;
             titleText = Object.Instantiate(tmp);
-            Object.Destroy(titleText.GetComponent<TextTranslatorTMP>());
             titleText.gameObject.SetActive(false);
             Object.DontDestroyOnLoad(titleText);
         }
@@ -50,12 +50,11 @@ namespace TheOtherRoles.Patches
         public static void OptionsMenuBehaviour_StartPostfix(OptionsMenuBehaviour __instance)
         {
             if (!__instance.CensorChatButton) return;
-
+            
             if (!popUp)
             {
                 CreateCustom(__instance);
             }
-
             if (!buttonPrefab)
             {
                 buttonPrefab = Object.Instantiate(__instance.CensorChatButton);
@@ -63,7 +62,6 @@ namespace TheOtherRoles.Patches
                 buttonPrefab.name = "CensorChatPrefab";
                 buttonPrefab.gameObject.SetActive(false);
             }
-            
             SetUpOptions();
             InitializeMoreButton(__instance);
         }
@@ -110,12 +108,14 @@ namespace TheOtherRoles.Patches
             moreOptionsButton.OnClick = new ButtonClickedEvent();
             moreOptionsButton.OnClick.AddListener((Action) (() =>
             {
+                bool closeUnderlying = false;
                 if (!popUp) return;
 
                 if (__instance.transform.parent && __instance.transform.parent == FastDestroyableSingleton<HudManager>.Instance.transform)
                 {
                     popUp.transform.SetParent(FastDestroyableSingleton<HudManager>.Instance.transform);
                     popUp.transform.localPosition = new Vector3(0, 0, -800f);
+                    closeUnderlying = true;
                 }
                 else
                 {
@@ -125,6 +125,8 @@ namespace TheOtherRoles.Patches
                 
                 CheckSetTitle();
                 RefreshOpen();
+                if (closeUnderlying)
+                    __instance.Close();                    
             }));
         }
 
@@ -164,7 +166,7 @@ namespace TheOtherRoles.Patches
                 button.Background.color = button.onState ? Color.green : Palette.ImpostorRed;
                 
                 button.Text.text = info.Title;
-                button.Text.fontSizeMin = button.Text.fontSizeMax = 2.5f;
+                button.Text.fontSizeMin = button.Text.fontSizeMax = 1.8f;
                 button.Text.font = Object.Instantiate(titleText.font);
                 button.Text.GetComponent<RectTransform>().sizeDelta = new Vector2(2, 2);
 
@@ -182,9 +184,6 @@ namespace TheOtherRoles.Patches
 
                 passiveButton.OnClick.AddListener((Action) (() =>
                 {
-                    if(info.Title == "Better Cursor") {
-                        Helpers.enableCursor(false);                  
-                    }
                     button.onState = info.OnClick();
                     button.Background.color = button.onState ? Color.green : Palette.ImpostorRed;
                 }));

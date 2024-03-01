@@ -3,17 +3,17 @@ using HarmonyLib;
 using System.Linq;
 using TheOtherRoles.Players;
 using TheOtherRoles.Utilities;
+using Hazel;
 
 namespace TheOtherRoles.Modules {
     [HarmonyPatch]
     public static class ChatCommands {
         public static bool isLover(this PlayerControl player) => !(player == null) && (player == Lovers.lover1 || player == Lovers.lover2);
-        public static bool isTeamJackal(this PlayerControl player) => !(player == null) && (player == Jackal.jackal || player == Sidekick.sidekick);
 
         [HarmonyPatch(typeof(ChatController), nameof(ChatController.SendChat))]
         private static class SendChatPatch {
             static bool Prefix(ChatController __instance) {
-                string text = __instance.TextArea.text;
+                string text = __instance.freeChatField.Text;
                 bool handled = false;
                 if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) {
                     if (text.ToLower().StartsWith("/kick ")) {
@@ -36,6 +36,28 @@ namespace TheOtherRoles.Modules {
                                 handled = true;
                             }
                         }
+                    } else if (text.ToLower().StartsWith("/gm")) {
+                        string gm = text.Substring(4).ToLower();
+                        CustomGamemodes gameMode = CustomGamemodes.Classic;
+                        if (gm.StartsWith("prop") || gm.StartsWith("ph")) {
+                            gameMode = CustomGamemodes.PropHunt;
+                        } else if (gm.StartsWith("guess") || gm.StartsWith("gm")) {
+                            gameMode = CustomGamemodes.Guesser;
+                        } else if (gm.StartsWith("hide") || gm.StartsWith("hn")) {
+                            gameMode = CustomGamemodes.HideNSeek;
+                        }
+                        // else its classic!
+
+                        if (AmongUsClient.Instance.AmHost) {
+                            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ShareGamemode, Hazel.SendOption.Reliable, -1);
+                            writer.Write((byte)TORMapOptions.gameMode);
+                            AmongUsClient.Instance.FinishRpcImmediately(writer);
+                            RPCProcedure.shareGamemode((byte)gameMode);
+                            RPCProcedure.shareGamemode((byte)TORMapOptions.gameMode);
+                        } else {
+                            __instance.AddChat(CachedPlayer.LocalPlayer.PlayerControl, "Nice try, but you have to be the host to use this feature");
+                        }
+                        handled = true;
                     }
                 }
                 
@@ -65,18 +87,18 @@ namespace TheOtherRoles.Modules {
                     }
                 }
 
-
-                if (text.ToLower().StartsWith("/team")) {
-                    if (CachedPlayer.LocalPlayer.PlayerControl.isLover() && CachedPlayer.LocalPlayer.PlayerControl.isTeamJackal() && Jackal.hasChat) {
-                        if (Sidekick.sidekick == CachedPlayer.LocalPlayer.PlayerControl) Sidekick.chatTarget = Helpers.flipBitwise(Sidekick.chatTarget);
-                        if (Jackal.jackal == CachedPlayer.LocalPlayer.PlayerControl) Jackal.chatTarget = Helpers.flipBitwise(Jackal.chatTarget);
+                if (text.ToLower().StartsWith("/role")) {
+                    RoleInfo localRole = RoleInfo.getRoleInfoForPlayer(CachedPlayer.LocalPlayer.PlayerControl, false).FirstOrDefault();
+                    if (localRole != RoleInfo.impostor && localRole != RoleInfo.crewmate) {
+                        string info = RoleInfo.GetRoleDescription(localRole);
+                        __instance.AddChat(CachedPlayer.LocalPlayer.PlayerControl, info);
                         handled = true;
                     }
                 }
 
                 if (handled) {
-                    __instance.TextArea.Clear();
-                    __instance.quickChatMenu.ResetGlyphs();
+                    __instance.freeChatField.Clear();
+                    __instance.quickChatMenu.Clear();
                 }
                 return !handled;
             }
@@ -103,12 +125,8 @@ namespace TheOtherRoles.Modules {
                 if (__instance != FastDestroyableSingleton<HudManager>.Instance.Chat)
                     return true;
                 PlayerControl localPlayer = CachedPlayer.LocalPlayer.PlayerControl;
-                bool isTeamJackalWithChat = CachedPlayer.LocalPlayer.PlayerControl.isTeamJackal() && Jackal.hasChat;
-                return localPlayer == null || 
-                    (MeetingHud.Instance != null || LobbyBehaviour.Instance != null ||
-                    localPlayer.Data.IsDead || (int)sourcePlayer.PlayerId == (int)CachedPlayer.LocalPlayer.PlayerId ||
-                    (localPlayer.isLover() && Lovers.enableChat && Helpers.getChatPartner(sourcePlayer) == localPlayer) || 
-                    (isTeamJackalWithChat && Helpers.getChatPartner(sourcePlayer) == localPlayer));
+                return localPlayer == null || (MeetingHud.Instance != null || LobbyBehaviour.Instance != null || (localPlayer.Data.IsDead || localPlayer.isLover() && Lovers.enableChat) || (int)sourcePlayer.PlayerId == (int)CachedPlayer.LocalPlayer.PlayerId);
+
             }
         }
     }
