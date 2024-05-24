@@ -227,7 +227,7 @@ namespace TheOtherRoles
         public static void stopStart(byte playerId) {
             if (AmongUsClient.Instance.AmHost && CustomOptionHolder.anyPlayerCanStopStart.getBool()) {
                 GameStartManager.Instance.ResetStartState();
-                PlayerControl.LocalPlayer.RpcSendChat($"{Helpers.playerById(playerId).Data.PlayerName} stopped the game start!");
+                PlayerControl.LocalPlayer.RpcSendChat($"{Helpers.playerById(playerId).Data.PlayerName} 中止了游戏开始!");
             }
         }
 
@@ -502,7 +502,7 @@ namespace TheOtherRoles
         public static void engineerUsedRepair() {
             Engineer.remainingFixes--;
             if (Helpers.shouldShowGhostInfo()) {
-                Helpers.showFlash(Engineer.color, 0.5f, "Engineer Fix"); ;
+                Helpers.showFlash(Engineer.color, 0.5f, "工程师修复"); ;
             }
         }
 
@@ -570,7 +570,7 @@ namespace TheOtherRoles
             isShieldedAndShow = isShieldedAndShow && (Medic.meetingAfterShielding || !Medic.showShieldAfterMeeting);  // Dont show attempt, if shield is not shown yet
             bool isMedicAndShow = Medic.medic == CachedPlayer.LocalPlayer.PlayerControl && Medic.showAttemptToMedic;
 
-            if (isShieldedAndShow || isMedicAndShow || Helpers.shouldShowGhostInfo()) Helpers.showFlash(Palette.ImpostorRed, duration: 0.5f, "Failed Murder Attempt on Shielded Player");
+            if (isShieldedAndShow || isMedicAndShow || Helpers.shouldShowGhostInfo()) Helpers.showFlash(Palette.ImpostorRed, duration: 0.5f, "刀到了一个盾");
         }
 
         public static void shifterShift(byte targetId) {
@@ -871,7 +871,7 @@ namespace TheOtherRoles
             Trickster.lightsOutTimer = Trickster.lightsOutDuration;
             // If the local player is impostor indicate lights out
             if(Helpers.hasImpVision(GameData.Instance.GetPlayerById(CachedPlayer.LocalPlayer.PlayerId))) {
-                new CustomMessage("Lights are out", Trickster.lightsOutDuration);
+                new CustomMessage("骗术师把灯灭了", Trickster.lightsOutDuration);
             }
         }
 
@@ -888,7 +888,7 @@ namespace TheOtherRoles
 
             var camera = UnityEngine.Object.Instantiate<SurvCamera>(referenceCamera);
             camera.transform.position = new Vector3(position.x, position.y, referenceCamera.transform.position.z - 1f);
-            camera.CamName = $"Security Camera {SecurityGuard.placedCameras}";
+            camera.CamName = $"安保监控 {SecurityGuard.placedCameras}";
             camera.Offset = new Vector3(0f, 0f, camera.Offset.z);
             if (GameOptionsManager.Instance.currentNormalGameOptions.MapId == 2 || GameOptionsManager.Instance.currentNormalGameOptions.MapId == 4) camera.transform.localRotation = new Quaternion(0, 0, 1, 1); // Polus and Airship 
 
@@ -1042,7 +1042,7 @@ namespace TheOtherRoles
             PlayerControl guessedTarget = Helpers.playerById(guessedTargetId);
             if (CachedPlayer.LocalPlayer.Data.IsDead && guessedTarget != null && guesser != null) {
                 RoleInfo roleInfo = RoleInfo.allRoleInfos.FirstOrDefault(x => (byte)x.roleId == guessedRoleId);
-                string msg = $"{guesser.Data.PlayerName} guessed the role {roleInfo?.name ?? ""} for {guessedTarget.Data.PlayerName}!";
+                string msg = $"{guesser.Data.PlayerName} 猜测的职业是 {roleInfo?.name ?? ""} ，猜测对象为 {guessedTarget.Data.PlayerName}!";
                 if (AmongUsClient.Instance.AmClient && FastDestroyableSingleton<HudManager>.Instance)
                     FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(guesser, msg);
                 if (msg.IndexOf("who", StringComparison.OrdinalIgnoreCase) >= 0)

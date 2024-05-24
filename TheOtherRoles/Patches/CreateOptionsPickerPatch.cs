@@ -21,13 +21,13 @@ namespace TheOtherRoles.Patches {
             __instance.SetGameMode(GameModes.Normal);
             CustomGamemodes gm = (CustomGamemodes)((int) mode - 2);
             if (gm == CustomGamemodes.Guesser) {
-                __instance.GameModeText.text = "TOR Guesser";
+                __instance.GameModeText.text = "超多猜测";
                 TORMapOptions.gameMode = CustomGamemodes.Guesser;
             } else if (gm == CustomGamemodes.HideNSeek) {
-                __instance.GameModeText.text = "TOR Hide N Seek";
+                __instance.GameModeText.text = "超多躲猫猫";
                 TORMapOptions.gameMode = CustomGamemodes.HideNSeek;
             } else if (gm == CustomGamemodes.PropHunt) {
-                __instance.GameModeText.text = "TOR Prop Hunt";
+                __instance.GameModeText.text = "超多伪装捉迷藏";
                 TORMapOptions.gameMode = CustomGamemodes.PropHunt;
             }
             return false;
@@ -37,12 +37,12 @@ namespace TheOtherRoles.Patches {
         [HarmonyPatch(typeof(CreateOptionsPicker), nameof(CreateOptionsPicker.Refresh))]
         public static void Postfix(CreateOptionsPicker __instance) {
             if (TORMapOptions.gameMode == CustomGamemodes.Guesser) {
-                __instance.GameModeText.text = "TOR Guesser";
+                __instance.GameModeText.text = "超多猜测";
             }
             else if (TORMapOptions.gameMode == CustomGamemodes.HideNSeek) {
-                __instance.GameModeText.text = "TOR Hide N Seek";
+                __instance.GameModeText.text = "超多躲猫猫";
             } else if (TORMapOptions.gameMode == CustomGamemodes.PropHunt) {
-                __instance.GameModeText.text = "TOR Prop Hunt";
+                __instance.GameModeText.text = "超多伪装捉迷藏";
             }
         }
     }

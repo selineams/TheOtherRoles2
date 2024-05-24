@@ -81,7 +81,7 @@ namespace TheOtherRoles {
         }
 
         public static CustomOption Create(int id, CustomOptionType type, string name, bool defaultValue, CustomOption parent = null, bool isHeader = false, Action onChange = null) {
-            return new CustomOption(id, type, name, new string[]{"Off", "On"}, defaultValue ? "On" : "Off", parent, isHeader, onChange);
+            return new CustomOption(id, type, name, new string[]{"关", "开"}, defaultValue ? "开" : "关", parent, isHeader, onChange);
         }
 
         // Static behaviour
@@ -316,11 +316,11 @@ namespace TheOtherRoles {
         private static void createClassicTabs(GameOptionsMenu __instance) {
             bool isReturn = setNames(
                 new Dictionary<string, string>() {
-                    ["TORSettings"] = "The Other Roles Settings",
-                    ["ImpostorSettings"] = "Impostor Roles Settings",
-                    ["NeutralSettings"] = "Neutral Roles Settings",
-                    ["CrewmateSettings"] = "Crewmate Roles Settings",
-                    ["ModifierSettings"] = "Modifier Settings"
+                    ["TORSettings"] = "超多职业模组设置",
+                    ["ImpostorSettings"] = "内鬼角色设置",
+                    ["NeutralSettings"] = "中立角色设置",
+                    ["CrewmateSettings"] = "船员角色设置",
+                    ["ModifierSettings"] = "附加特性设置"
                 });
 
             if (isReturn) return;
@@ -439,12 +439,12 @@ namespace TheOtherRoles {
         private static void createGuesserTabs(GameOptionsMenu __instance) {
             bool isReturn = setNames(
                 new Dictionary<string, string>() {
-                    ["TORSettings"] = "The Other Roles Settings",
-                    ["GuesserSettings"] = "Guesser Mode Settings",
-                    ["ImpostorSettings"] = "Impostor Roles Settings",
-                    ["NeutralSettings"] = "Neutral Roles Settings",
-                    ["CrewmateSettings"] = "Crewmate Roles Settings",
-                    ["ModifierSettings"] = "Modifier Settings"
+                    ["TORSettings"] = "超多职业模组设置",
+                    ["GuesserSettings"] = "赌怪模式设置",
+                    ["ImpostorSettings"] = "内鬼角色设置",
+                    ["NeutralSettings"] = "中立角色设置",
+                    ["CrewmateSettings"] = "船员角色设置",
+                    ["ModifierSettings"] = "附加特性设置"
                 });
 
             if (isReturn) return;
@@ -965,7 +965,7 @@ namespace TheOtherRoles {
             if (customOption.getSelection() == 0) return "";
             if (quantity.Count == 1) return $" ({quantity[0].getQuantity()})";
             if (customOption == CustomOptionHolder.modifierLover) {
-                return $" (1 Evil: {CustomOptionHolder.modifierLoverImpLoverRate.getSelection() * 10}%)";
+                return $" (1 邪恶: {CustomOptionHolder.modifierLoverImpLoverRate.getSelection() * 10}%)";
             }
             return "";
         }
@@ -993,11 +993,11 @@ namespace TheOtherRoles {
                 }
                 else if (option.parent.getSelection() > 0) {
                     if (option.id == 103) //Deputy
-                        sb.AppendLine($"- {Helpers.cs(Deputy.color, "Deputy")}: {option.selections[option.selection].ToString()}");
+                        sb.AppendLine($"- {Helpers.cs(Deputy.color, "辅警")}: {option.selections[option.selection].ToString()}");
                     else if (option.id == 224) //Sidekick
-                        sb.AppendLine($"- {Helpers.cs(Sidekick.color, "Sidekick")}: {option.selections[option.selection].ToString()}");
+                        sb.AppendLine($"- {Helpers.cs(Sidekick.color, "跟班")}: {option.selections[option.selection].ToString()}");
                     else if (option.id == 358) //Prosecutor
-                        sb.AppendLine($"- {Helpers.cs(Lawyer.color, "Prosecutor")}: {option.selections[option.selection].ToString()}");
+                        sb.AppendLine($"- {Helpers.cs(Lawyer.color, "检察官")}: {option.selections[option.selection].ToString()}");
                 }
             }
             if (headerOnly) return sb.ToString();

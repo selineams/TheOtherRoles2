@@ -178,7 +178,7 @@ namespace TheOtherRoles.Patches {
             if (roleInfo.isNeutral) {
                 var neutralColor = new Color32(76, 84, 78, 255);
                 __instance.BackgroundBar.material.color = neutralColor;
-                __instance.TeamTitle.text = "Neutral";
+                __instance.TeamTitle.text = "中立阵营";
                 __instance.TeamTitle.color = neutralColor;
             }
         }
@@ -230,14 +230,14 @@ namespace TheOtherRoles.Patches {
                         __instance.RoleBlurbText.text += Helpers.cs(modifierInfo.color, $"\n{modifierInfo.introDescription}");
                     else {
                         PlayerControl otherLover = CachedPlayer.LocalPlayer.PlayerControl == Lovers.lover1 ? Lovers.lover2 : Lovers.lover1;
-                        __instance.RoleBlurbText.text += Helpers.cs(Lovers.color, $"\n♥ You are in love with {otherLover?.Data?.PlayerName ?? ""} ♥");
+                        __instance.RoleBlurbText.text += Helpers.cs(Lovers.color, $"\n♥ 你与 {otherLover?.Data?.PlayerName ?? ""} 坠入爱河♥");
                     }
                 }
                 if (Deputy.knowsSheriff && Deputy.deputy != null && Sheriff.sheriff != null) {
                     if (infos.Any(info => info.roleId == RoleId.Sheriff))
-                        __instance.RoleBlurbText.text += Helpers.cs(Sheriff.color, $"\nYour Deputy is {Deputy.deputy?.Data?.PlayerName ?? ""}");
+                        __instance.RoleBlurbText.text += Helpers.cs(Sheriff.color, $"\n你的辅警是 {Deputy.deputy?.Data?.PlayerName ?? ""}");
                     else if (infos.Any(info => info.roleId == RoleId.Deputy))
-                        __instance.RoleBlurbText.text += Helpers.cs(Sheriff.color, $"\nYour Sheriff is {Sheriff.sheriff?.Data?.PlayerName ?? ""}");
+                        __instance.RoleBlurbText.text += Helpers.cs(Sheriff.color, $"\n你的警长是 {Sheriff.sheriff?.Data?.PlayerName ?? ""}");
                 }
             }
             public static bool Prefix(IntroCutscene __instance) {

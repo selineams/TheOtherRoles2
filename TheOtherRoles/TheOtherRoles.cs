@@ -1458,46 +1458,46 @@ namespace TheOtherRoles
                 var selectedInfo = infos[rnd.Next(infos.Count)];
                 switch (selectedInfo) {
                     case SpecialMediumInfo.SheriffSuicide:
-                        msg = "Yikes, that Sheriff shot backfired.";
+                        msg = "害, 警长走火了!";
                         break;
                     case SpecialMediumInfo.WarlockSuicide:
-                        msg = "MAYBE I cursed the person next to me and killed myself. Oops.";
+                        msg = "哎呀. 我的诅咒貌似降临到自己身上，咒杀了自己!";
                         break;
                     case SpecialMediumInfo.ThiefSuicide:
-                        msg = "I tried to steal the gun from their pocket, but they were just happy to see me.";
+                        msg = "我想要从他们的兜里抢到一把枪, 但是他们却是满面笑容、天真无邪地看向我...";
                         break;
                     case SpecialMediumInfo.ActiveLoverDies:
-                        msg = "I wanted to get out of this toxic relationship anyways.";
+                        msg = "不仅一次我想要剪断这让她痛不欲生的红线。";
                         break;
                     case SpecialMediumInfo.PassiveLoverSuicide:
-                        msg = "The love of my life died, thus with a kiss I die.";
+                        msg = "我最挚爱的人死了, 我也想要一了百了了, 去天国迎接他的吻。";
                         break;
                     case SpecialMediumInfo.LawyerKilledByClient:
-                        msg = "My client killed me. Do I still get paid?";
+                        msg = "我的客户把我杀了。请问我还能拿到酬金吗?";
                         break;
                     case SpecialMediumInfo.JackalKillsSidekick:
-                        msg = "First they sidekicked me, then they killed me. At least I don't need to do tasks anymore.";
+                        msg = "他们招募了我, 却又杀了我。不过至少看样子我不用做任务了。";
                         break;
                     case SpecialMediumInfo.ImpostorTeamkill:
-                        msg = "I guess they confused me for the Spy, is there even one?";
+                        msg = "呵呵, 我想他们把我当做卧底了?";
                         break;
                     case SpecialMediumInfo.BodyCleaned:
-                        msg = "Is my dead body some kind of art now or... aaand it's gone.";
+                        msg = "我的尸体成为艺术品了吗? 让我看看有没有价值辶...啊? 我尸体呢?";
                         break;
                 }
             } else {
                 int randomNumber = rnd.Next(4);
-                string typeOfColor = Helpers.isLighterColor(Medium.target.killerIfExisting) ? "lighter" : "darker";
+                string typeOfColor = Helpers.isLighterColor(Medium.target.killerIfExisting) ? "浅色的" : "深色的";
                 float timeSinceDeath = ((float)(Medium.meetingStartTime - Medium.target.timeOfDeath).TotalMilliseconds);
                 var roleString = RoleInfo.GetRolesString(Medium.target.player, false);
                 if (randomNumber == 0) {
-                    if (!roleString.Contains("Impostor") && !roleString.Contains("Crewmate"))
-                        msg = "If my role hasn't been saved, there's no " + roleString + " in the game anymore.";
+                    if (!roleString.Contains("内鬼") && !roleString.Contains("船员"))
+                        msg = "如果我死了,那么场上将不在有 " + roleString + " 了。";
                     else
-                        msg = "I was a " + roleString + " without another role."; 
-                } else if (randomNumber == 1) msg = "I'm not sure, but I guess a " + typeOfColor + " color killed me.";
-                else if (randomNumber == 2) msg = "If I counted correctly, I died " + Math.Round(timeSinceDeath / 1000) + "s before the next meeting started.";
-                else msg = "It seems like my killer is the " + RoleInfo.GetRolesString(Medium.target.killerIfExisting, false, false, true) + ".";
+                        msg = "我是一个" + roleString + " 没有其他额外的角色了."; 
+                } else if (randomNumber == 1) msg = "我不确定, 但是我认为是一个有着" + typeOfColor + " 颜色的人杀了我。";
+                else if (randomNumber == 2) msg = "如果我没记错的话, 我在会议前 " + Math.Round(timeSinceDeath / 1000) + "秒就死了。";
+                else msg = "我想那杀我的凶手职业应该是 " + RoleInfo.GetRolesString(Medium.target.killerIfExisting, false, false, true) + "。";
             }
 
             if (rnd.NextDouble() < chanceAdditionalInfo) {
@@ -1507,24 +1507,24 @@ namespace TheOtherRoles
                 switch (rnd.Next(3)) {
                     case 0:
                         count = alivePlayersList.Where(pc => pc.Data.Role.IsImpostor || new List<RoleInfo>() { RoleInfo.jackal, RoleInfo.sidekick, RoleInfo.sheriff, RoleInfo.thief }.Contains(RoleInfo.getRoleInfoForPlayer(pc, false).FirstOrDefault())).Count();
-                        condition = "killer" + (count == 1 ? "" : "s");
+                        condition = "名持刃者" + (count == 1 ? "" : "");
                         break;
                     case 1:
                         count = alivePlayersList.Where(Helpers.roleCanUseVents).Count();
-                        condition = "player" + (count == 1 ? "" : "s") + " who can use vents";
+                        condition = "名玩家" + (count == 1 ? "" : "") + " 作为可跳管的人";
                         break;
                     case 2:
                         count = alivePlayersList.Where(pc => Helpers.isNeutral(pc) && pc != Jackal.jackal && pc != Sidekick.sidekick && pc != Thief.thief).Count();
-                        condition = "player" + (count == 1 ? "" : "s") + " who " + (count == 1 ? "is" : "are") + " neutral but cannot kill";
+                        condition = "名玩家" + (count == 1 ? "" : "s") + " 作为 " + (count == 1 ? "" : "") + " 无刀独立职业";
                         break;
                     case 3:
                         //count = alivePlayersList.Where(pc =>
                         break;               
                 }
-                msg += $"\nWhen you asked, {count} " + condition + (count == 1 ? " was" : " were") + " still alive";
+                msg += $"\n当你询问时, {count} " + condition + (count == 1 ? " " : " ") + " 仍然活着";
             }
 
-            return Medium.target.player.Data.PlayerName + "'s Soul:\n" + msg;
+            return Medium.target.player.Data.PlayerName + "的灵魂:\n" + msg;
         }
     }
 

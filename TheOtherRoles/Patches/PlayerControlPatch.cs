@@ -629,8 +629,8 @@ namespace TheOtherRoles.Patches {
                     Snitch.text.transform.localPosition += new Vector3(0f, 1.8f, -69f);
                     Snitch.text.gameObject.SetActive(true);
                 } else {
-                    Snitch.text.text = $"Snitch is alive: " + playerCompleted + "/" + playerTotal;
-                    if (snitchIsDead) Snitch.text.text = $"Snitch is dead!";
+                    Snitch.text.text = $"告密者还活着: " + playerCompleted + "/" + playerTotal;
+                    if (snitchIsDead) Snitch.text.text = $"告密者死了!";
                 }
             } else if (Snitch.text != null)
                 Snitch.text.Destroy();
@@ -1147,15 +1147,15 @@ namespace TheOtherRoles.Patches {
                     string msg = "";
 
                     if (isMedicReport) {
-                        msg = $"Body Report: Killed {Math.Round(timeSinceDeath / 1000)}s ago!";
+                        msg = $"尸检报告: 在{Math.Round(timeSinceDeath / 1000)}秒前死亡!";
                     } else if (isDetectiveReport) {
                         if (timeSinceDeath < Detective.reportNameDuration * 1000) {
-                            msg =  $"Body Report: The killer appears to be {deadPlayer.killerIfExisting.Data.PlayerName}!";
+                            msg =  $"尸检报告: 凶手似乎是 {deadPlayer.killerIfExisting.Data.PlayerName}!";
                         } else if (timeSinceDeath < Detective.reportColorDuration * 1000) {
-                            var typeOfColor = Helpers.isLighterColor(deadPlayer.killerIfExisting) ? "lighter" : "darker";
-                            msg =  $"Body Report: The killer appears to be a {typeOfColor} color!";
+                            var typeOfColor = Helpers.isLighterColor(deadPlayer.killerIfExisting) ? "浅" : "深";
+                            msg =  $"尸检报告: 凶手似乎是 {typeOfColor} 色!";
                         } else {
-                            msg = $"Body Report: The corpse is too old to gain information from!";
+                            msg = $"尸检报告: 尸体死亡时间过久，无有效信息!";
                         }
                     }
 
@@ -1239,7 +1239,7 @@ namespace TheOtherRoles.Patches {
 
             // Seer show flash and add dead player position
             if (Seer.seer != null && (CachedPlayer.LocalPlayer.PlayerControl == Seer.seer || Helpers.shouldShowGhostInfo()) && !Seer.seer.Data.IsDead && Seer.seer != target && Seer.mode <= 1) {
-                Helpers.showFlash(new Color(42f / 255f, 187f / 255f, 245f / 255f), message : "Seer Info: Someone Died");
+                Helpers.showFlash(new Color(42f / 255f, 187f / 255f, 245f / 255f), message : "灵媒信息: 有人死了");
             }
             if (Seer.deadBodyPositions != null) Seer.deadBodyPositions.Add(target.transform.position);
 

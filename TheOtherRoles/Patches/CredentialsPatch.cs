@@ -14,18 +14,21 @@ namespace TheOtherRoles.Patches {
     [HarmonyPatch]
     public static class CredentialsPatch {
         public static string fullCredentialsVersion = 
-$@"<size=130%><color=#ff351f>TheOtherRoles</color></size> v{TheOtherRolesPlugin.Version.ToString() + (TheOtherRolesPlugin.betaDays>0 ? "-BETA": "")}";
+$@"<size=140%><color=#ff351f>超多职业</color></size> v{TheOtherRolesPlugin.Version.ToString() + (TheOtherRolesPlugin.betaDays>0 ? "-BETA": "")}";
 public static string fullCredentials =
-$@"<size=60%>Modded by <color=#FCCE03FF>Eisbison</color>, <color=#FCCE03FF>EndOfFile</color>
+$@"<size=40%>Modded by <color=#FCCE03FF>Eisbison</color>, <color=#FCCE03FF>EndOfFile</color>
 <color=#FCCE03FF>Thunderstorm584</color>, <color=#FCCE03FF>Mallöris</color> & <color=#FCCE03FF>Gendelo</color>
-Design by <color=#FCCE03FF>Bavari</color></size>";
+Design by <color=#FCCE03FF>Bavari</color></size>
+<size=60%>汉化:<color=#DC143C>四个憨批汉化组</color>
+amonguscn.club</size>";
 
     public static string mainMenuCredentials = 
 $@"Modded by <color=#FCCE03FF>Eisbison</color>, <color=#FCCE03FF>Thunderstorm584</color>, <color=#FCCE03FF>EndOfFile</color>, <color=#FCCE03FF>Mallöris</color> & <color=#FCCE03FF>Gendelo</color>
 Design by <color=#FCCE03FF>Bavari</color>";
 
         public static string contributorsCredentials =
-$@"<size=60%> <color=#FCCE03FF>Special thanks to Smeggy</color></size>";
+$@"<size=60%> <color=#FCCE03FF>Special thanks to Smeggy</color></size>
+汉化:<color=#DC143C>四个憨批汉化组</color></size>    amonguscn.club   ";
 
         [HarmonyPatch(typeof(PingTracker), nameof(PingTracker.Update))]
         internal static class PingTrackerPatch
@@ -40,7 +43,7 @@ $@"<size=60%> <color=#FCCE03FF>Special thanks to Smeggy</color></size>";
                     else if (HandleGuesser.isGuesserGm) gameModeText = $"Guesser";
                     else if (PropHunt.isPropHuntGM) gameModeText = "Prop Hunt";
                     if (gameModeText != "") gameModeText = Helpers.cs(Color.yellow, gameModeText) + "\n";
-                    __instance.text.text = $"<size=130%><color=#ff351f>TheOtherRoles</color></size> v{TheOtherRolesPlugin.Version.ToString() + (TheOtherRolesPlugin.betaDays > 0 ? "-BETA" : "")}\n{gameModeText}" + __instance.text.text;
+                    __instance.text.text = $"<size=130%><color=#ff351f>超多职业</color></size> v{TheOtherRolesPlugin.Version.ToString() + (TheOtherRolesPlugin.betaDays > 0 ? "-BETA" : "")}\n{gameModeText}  <size=80%> 汉化:<color=#ff351f>四个憨批汉化组</color>\namonguscn.club\n </size>" + __instance.text.text;
                     position.DistanceFromEdge = new Vector3(2.25f, 0.11f, 0);
                 } else {
                     string gameModeText = $"";
