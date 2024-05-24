@@ -231,6 +231,16 @@ namespace TheOtherRoles.Patches {
                     if (target != null)  player.NameText.text += $" ({(Helpers.isLighterColor(target) ? "L" : "D")})";
                 }
             }
+
+            // Add medic shield info:
+            if (MeetingHud.Instance != null && Medic.medic != null && Medic.shielded != null && Medic.shieldVisible(Medic.shielded)) {
+                foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates)
+                    if (player.TargetPlayerId == Medic.shielded.PlayerId) {
+                        player.NameText.text = Helpers.cs(Medic.color, "[") + player.NameText.text + Helpers.cs(Medic.color, "]");
+                        // player.HighlightedFX.color = Medic.color;
+                        // player.HighlightedFX.enabled = true;
+                    }
+            }
         }
 
         static void updateShielded() {
@@ -314,6 +324,7 @@ namespace TheOtherRoles.Patches {
 
         static void updateSabotageButton(HudManager __instance) {
             if (MeetingHud.Instance || TORMapOptions.gameMode == CustomGamemodes.HideNSeek || TORMapOptions.gameMode == CustomGamemodes.PropHunt) __instance.SabotageButton.Hide();
+            if (PlayerControl.LocalPlayer.Data.IsDead && CustomOptionHolder.deadImpsBlockSabotage.getBool()) __instance.SabotageButton.Hide();
         }
 
         static void updateMapButton(HudManager __instance) {
