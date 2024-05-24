@@ -19,7 +19,11 @@ namespace TheOtherRoles{
         public static bool enableHorseMode = false;
         public static bool shieldFirstKill = false;
         public static bool ShowVentsOnMap = true;
-        public static CustomGamemodes gameMode = CustomGamemodes.Classic;
+        public static bool impostorSeeRoles = false;
+        public static bool camoComms = false;
+
+
+        public static CustomGamemodes gameMode = CustomGamemodes.Guesser;
 
         // Updating values
         public static int meetingsCount = 0;
@@ -41,6 +45,8 @@ namespace TheOtherRoles{
             hidePlayerNames = CustomOptionHolder.hidePlayerNames.getBool();
             allowParallelMedBayScans = CustomOptionHolder.allowParallelMedBayScans.getBool();
             shieldFirstKill = CustomOptionHolder.shieldFirstKill.getBool();
+            impostorSeeRoles = CustomOptionHolder.impostorSeeRoles.getBool();
+            camoComms = CustomOptionHolder.enableCamoComms.getBool();
             firstKillPlayer = null;
         }
 

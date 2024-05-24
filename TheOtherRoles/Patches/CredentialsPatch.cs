@@ -14,21 +14,23 @@ namespace TheOtherRoles.Patches {
     [HarmonyPatch]
     public static class CredentialsPatch {
         public static string fullCredentialsVersion = 
-$@"<size=140%><color=#ff351f>超多职业</color></size> v{TheOtherRolesPlugin.Version.ToString() + (TheOtherRolesPlugin.betaDays>0 ? "-BETA": "")}";
+$@"<size=140%><color=#ff351f>超多职业PLUS</color></size> v{TheOtherRolesPlugin.Version.ToString() + (TheOtherRolesPlugin.betaDays>0 ? "-BETA": "")}";
 public static string fullCredentials =
 $@"<size=40%>Modded by <color=#FCCE03FF>Eisbison</color>, <color=#FCCE03FF>EndOfFile</color>
 <color=#FCCE03FF>Thunderstorm584</color>, <color=#FCCE03FF>Mallöris</color> & <color=#FCCE03FF>Gendelo</color>
 Design by <color=#FCCE03FF>Bavari</color></size>
-<size=60%>汉化:<color=#DC143C>四个憨批汉化组</color>
-amonguscn.club</size>";
+<size=60%>汉化与图标:<color=#8B008B>匿名者汉化组</color>    <color=#DC143C>四个憨批汉化组-amonguscn.club</color>
+参考：<color=#FFB793>ismywb,spex,dabao40,miru-y,沫夏悠轩,善良的好人,Vitaxses</color>
+</size>";
 
     public static string mainMenuCredentials = 
 $@"Modded by <color=#FCCE03FF>Eisbison</color>, <color=#FCCE03FF>Thunderstorm584</color>, <color=#FCCE03FF>EndOfFile</color>, <color=#FCCE03FF>Mallöris</color> & <color=#FCCE03FF>Gendelo</color>
 Design by <color=#FCCE03FF>Bavari</color>";
 
         public static string contributorsCredentials =
-$@"<size=60%> <color=#FCCE03FF>Special thanks to Smeggy</color></size>
-汉化:<color=#DC143C>四个憨批汉化组</color></size>    amonguscn.club   ";
+$@"<size=40%> <color=#FCCE03FF>Special thanks to Smeggy</color></size>
+汉化:<color=#8B008B>匿名者汉化组</color>     <color=#DC143C>四个憨批汉化组-amonguscn.club</color></size>
+参考：<color=#FFB793>ismywb,spex,dabao40,miru-y,沫夏悠轩,善良的好人,Vitaxses</color>  ";
 
         [HarmonyPatch(typeof(PingTracker), nameof(PingTracker.Update))]
         internal static class PingTrackerPatch
@@ -39,20 +41,20 @@ $@"<size=60%> <color=#FCCE03FF>Special thanks to Smeggy</color></size>
                 var position = __instance.GetComponent<AspectPosition>();
                 if (AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started) {
                     string gameModeText = $"";
-                    if (HideNSeek.isHideNSeekGM) gameModeText = $"Hide 'N Seek";
-                    else if (HandleGuesser.isGuesserGm) gameModeText = $"Guesser";
-                    else if (PropHunt.isPropHuntGM) gameModeText = "Prop Hunt";
+                    if (HideNSeek.isHideNSeekGM) gameModeText = $"捉迷藏";
+                    else if (HandleGuesser.isGuesserGm) gameModeText = $"猜猜猜";
+                    else if (PropHunt.isPropHuntGM) gameModeText = "躲猫猫";
                     if (gameModeText != "") gameModeText = Helpers.cs(Color.yellow, gameModeText) + "\n";
-                    __instance.text.text = $"<size=130%><color=#ff351f>超多职业</color></size> v{TheOtherRolesPlugin.Version.ToString() + (TheOtherRolesPlugin.betaDays > 0 ? "-BETA" : "")}\n{gameModeText}  <size=80%> 汉化:<color=#ff351f>四个憨批汉化组</color>\namonguscn.club\n </size>" + __instance.text.text;
+                    __instance.text.text = $"<size=100%><color=#ff351f>超多职业PLUS</color></size> v{TheOtherRolesPlugin.Version.ToString() + (TheOtherRolesPlugin.betaDays > 0 ? "-BETA" : "")}\n{gameModeText}<size=50%> 整合:<color=#8B008B>匿名者</color>\n"/*<color=#ff351f>四个憨批汉化组-amonguscn.club</color> \n 追加参考：<color=#FFB793>ismywb,spex,dabao40,miru-y,沫夏悠轩,善良的好人,Vitaxses</color> \n </size>"*/ + __instance.text.text;
                     position.DistanceFromEdge = new Vector3(2.25f, 0.11f, 0);
                 } else {
                     string gameModeText = $"";
-                    if (TORMapOptions.gameMode == CustomGamemodes.HideNSeek) gameModeText = $"Hide 'N Seek";
-                    else if (TORMapOptions.gameMode == CustomGamemodes.Guesser) gameModeText = $"Guesser";
-                    else if (TORMapOptions.gameMode == CustomGamemodes.PropHunt) gameModeText = $"Prop Hunt";
+                    if (TORMapOptions.gameMode == CustomGamemodes.HideNSeek) gameModeText = $"捉迷藏";
+                    else if (TORMapOptions.gameMode == CustomGamemodes.Guesser) gameModeText = $"猜猜猜";
+                    else if (TORMapOptions.gameMode == CustomGamemodes.PropHunt) gameModeText = $"躲猫猫";
                     if (gameModeText != "") gameModeText = Helpers.cs(Color.yellow, gameModeText) + "\n";
 
-                    var host = $"Host: {GameData.Instance?.GetHost()?.PlayerName}";
+                    var host = $"房主: {GameData.Instance?.GetHost()?.PlayerName}";
                     __instance.text.text = $"{fullCredentialsVersion}\n  {gameModeText + fullCredentials}\n {host}\n {__instance.text.text}";
                     position.DistanceFromEdge = new Vector3(3.5f, 0.1f, 0);
                 }
@@ -163,7 +165,7 @@ $@"<size=60%> <color=#FCCE03FF>Special thanks to Smeggy</color></size>
 
             public static async Task loadMOTDs() {
                 HttpClient client = new HttpClient();
-                HttpResponseMessage response = await client.GetAsync("https://raw.githubusercontent.com/TheOtherRolesAU/MOTD/main/motd.txt");
+                HttpResponseMessage response = await client.GetAsync("");
                 response.EnsureSuccessStatusCode();
                 string motds = await response.Content.ReadAsStringAsync();
                 foreach(string line in motds.Split("\n", StringSplitOptions.RemoveEmptyEntries)) {

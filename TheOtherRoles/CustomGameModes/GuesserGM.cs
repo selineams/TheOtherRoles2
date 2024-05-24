@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static TheOtherRoles.TheOtherRoles;
 
 namespace TheOtherRoles.CustomGameModes {
     class GuesserGM { // Guesser Gamemode
@@ -13,10 +14,12 @@ namespace TheOtherRoles.CustomGameModes {
             guessers.Add(this);
         }
 
+        
         public static int remainingShots(byte playerId, bool shoot = false) {
 
             var g = guessers.FindLast(x => x.guesser.PlayerId == playerId);
             if (g == null) return 0;
+            if (Doomsayer.doomsayer != null && g.guesser.PlayerId == Doomsayer.doomsayer.PlayerId) return g.shots;
             if (shoot) g.shots--;
             return g.shots;
         }

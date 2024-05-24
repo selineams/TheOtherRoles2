@@ -86,6 +86,8 @@ namespace TheOtherRoles.Patches {
         }
     }
 
+
+
     [HarmonyPatch(typeof(VentButton), nameof(VentButton.DoClick))]
     class VentButtonDoClickPatch {
         static  bool Prefix(VentButton __instance) {
@@ -94,6 +96,9 @@ namespace TheOtherRoles.Patches {
             return false;
         }
     }
+
+
+
 
     [HarmonyPatch(typeof(Vent), nameof(Vent.Use))]
     public static class VentUsePatch {
@@ -231,18 +236,18 @@ namespace TheOtherRoles.Patches {
             // Deactivate emergency button for Swapper
             if (Swapper.swapper != null && Swapper.swapper == CachedPlayer.LocalPlayer.PlayerControl && !Swapper.canCallEmergency) {
                 roleCanCallEmergency = false;
-                statusText = "The Swapper can't start an emergency meeting";
+                statusText = "换票师无法开会";
             }
             // Potentially deactivate emergency button for Jester
             if (Jester.jester != null && Jester.jester == CachedPlayer.LocalPlayer.PlayerControl && !Jester.canCallEmergency) {
                 roleCanCallEmergency = false;
-                statusText = "The Jester can't start an emergency meeting";
+                statusText = "小丑无法开会";
             }
             // Potentially deactivate emergency button for Lawyer/Prosecutor
             if (Lawyer.lawyer != null && Lawyer.lawyer == CachedPlayer.LocalPlayer.PlayerControl && !Lawyer.canCallEmergency) {
                 roleCanCallEmergency = false;
-                statusText = "The Lawyer can't start an emergency meeting";
-                if (Lawyer.isProsecutor) statusText = "The Prosecutor can't start an emergency meeting";
+                statusText = "律师无法开会";
+                if (Lawyer.isProsecutor) statusText = "检察官无法开会";
             }
 
             if (!roleCanCallEmergency) {
@@ -259,7 +264,7 @@ namespace TheOtherRoles.Patches {
                 int localRemaining = CachedPlayer.LocalPlayer.PlayerControl.RemainingEmergencies;
                 int teamRemaining = Mathf.Max(0, maxNumberOfMeetings - meetingsCount);
                 int remaining = Mathf.Min(localRemaining, (Mayor.mayor != null && Mayor.mayor == CachedPlayer.LocalPlayer.PlayerControl) ? 1 : teamRemaining);
-                __instance.NumberText.text = $"{localRemaining.ToString()} and the ship has {teamRemaining.ToString()}";
+                __instance.NumberText.text = $"{localRemaining.ToString()} ，剩余开会次数： {teamRemaining.ToString()}";
                 __instance.ButtonActive = remaining > 0;
                 __instance.ClosedLid.gameObject.SetActive(!__instance.ButtonActive);
                 __instance.OpenLid.gameObject.SetActive(__instance.ButtonActive);
@@ -743,6 +748,65 @@ namespace TheOtherRoles.Patches {
                 return false;
             }               
             return true;
+        }
+    }
+
+    [HarmonyPatch]
+    public static class MapBehaviourPatch2
+    {
+        public static void ResetIcons() {
+            if (kataomoiMark != null) {
+                GameObject.Destroy(kataomoiMark.gameObject);
+                kataomoiMark = null;
+            }
+        }
+
+        [HarmonyPatch(typeof(MapBehaviour), nameof(MapBehaviour.GenericShow))]
+        class GenericShowPatch
+        {
+            static void Postfix(MapBehaviour __instance) {
+                if (Kataomoi.kataomoi == CachedPlayer.LocalPlayer.PlayerControl) {
+                    if (kataomoiMark == null) {
+                        kataomoiMark = UnityEngine.Object.Instantiate(__instance.HerePoint, __instance.HerePoint.transform.parent);
+                        kataomoiMark.sprite = GetKataomoiMarkSprite();
+                        kataomoiMark.transform.localScale = Vector3.one * 0.5f;
+                        kataomoiMark.enabled = IsShowKataomoiMark();
+                        kataomoiMark.color = Kataomoi.color;
+                    }
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(MapBehaviour), nameof(MapBehaviour.FixedUpdate))]
+        class FixedUpdatePatch
+        {
+            static void Postfix(MapBehaviour __instance) {
+
+                if (Kataomoi.kataomoi == CachedPlayer.LocalPlayer.PlayerControl) {
+                    bool isShowKataomoiMark = IsShowKataomoiMark();
+                    kataomoiMark.enabled = isShowKataomoiMark;
+                    if (isShowKataomoiMark) {
+                        Vector3 vector = Kataomoi.target.transform.position;
+                        vector /= MapUtilities.CachedShipStatus.MapScale;
+                        vector.x *= Mathf.Sign(MapUtilities.CachedShipStatus.transform.localScale.x);
+                        vector.z = -1f;
+                        kataomoiMark.transform.localPosition = vector;
+                    }
+                }
+            }
+        }
+
+        static bool IsShowKataomoiMark() {
+            return Kataomoi.kataomoi == CachedPlayer.LocalPlayer.PlayerControl && !CachedPlayer.LocalPlayer.PlayerControl.isDead() && Kataomoi.target != null && !Kataomoi.target.isDead() && Kataomoi.isSearch;
+        }
+
+        static SpriteRenderer kataomoiMark;
+        static Sprite kataomoiMarkSprite;
+
+        static Sprite GetKataomoiMarkSprite() {
+            if (kataomoiMarkSprite) return kataomoiMarkSprite;
+            kataomoiMarkSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.KataomoiMark.png", 115f);
+            return kataomoiMarkSprite;
         }
     }
 

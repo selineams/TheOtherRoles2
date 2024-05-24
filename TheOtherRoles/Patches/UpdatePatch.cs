@@ -80,12 +80,12 @@ namespace TheOtherRoles.Patches {
                 setPlayerNameColor(Mayor.mayor, Mayor.color);
             else if (Engineer.engineer != null && Engineer.engineer == localPlayer)
                 setPlayerNameColor(Engineer.engineer, Engineer.color);
-            else if (Sheriff.sheriff != null && Sheriff.sheriff == localPlayer) {
+            else*/ if (Sheriff.sheriff != null && Sheriff.sheriff == localPlayer) {
                 setPlayerNameColor(Sheriff.sheriff, Sheriff.color);
                 if (Deputy.deputy != null && Deputy.knowsSheriff) {
                     setPlayerNameColor(Deputy.deputy, Deputy.color);
                 }
-            } else*/
+            } /*else*/
             if (Deputy.deputy != null && Deputy.deputy == localPlayer) {
                 setPlayerNameColor(Deputy.deputy, Deputy.color);
                 if (Sheriff.sheriff != null && Deputy.knowsSheriff) {
@@ -143,6 +143,13 @@ namespace TheOtherRoles.Patches {
                 setPlayerNameColor(Lawyer.lawyer, Lawyer.color);
             } else if (Pursuer.pursuer != null && Pursuer.pursuer == localPlayer) {
                 setPlayerNameColor(Pursuer.pursuer, Pursuer.color);
+            } else if (Swooper.swooper != null && Swooper.swooper == localPlayer) {
+                setPlayerNameColor(Swooper.swooper, Swooper.color);
+             } else if (Kataomoi.kataomoi != null && Kataomoi.kataomoi == localPlayer) {
+                setPlayerNameColor(Kataomoi.kataomoi, Kataomoi.color);
+                if (Kataomoi.target != null)
+                    setPlayerNameColor(Kataomoi.target, Kataomoi.color);
+            
             }*/
 
             // No else if here, as a Lover of team Jackal needs the colors
@@ -201,11 +208,73 @@ namespace TheOtherRoles.Patches {
                             player.NameText.text += suffix;
             }
 
+                // Kataomoi
+            if (Kataomoi.kataomoi != null && (Kataomoi.target != null ))
+            {
+
+                if (Kataomoi.target != null)
+                {
+                    if (CachedPlayer.LocalPlayer.PlayerControl == Kataomoi.kataomoi) Kataomoi.target.cosmetics.nameText.text += Helpers.cs(Kataomoi.color, " ♡ ");
+                    
+                }
+                if (MeetingHud.Instance != null)
+                {
+                    foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates)
+                    {
+                        
+                        if (CachedPlayer.LocalPlayer.PlayerControl == Kataomoi.kataomoi)
+                        {
+                            if (player.TargetPlayerId == Kataomoi.target?.PlayerId) player.NameText.text += Helpers.cs(Kataomoi.color, " ♡ ");
+                        }
+                    }
+                }
+            }
+
+
+                // Akujo
+            if (Akujo.akujo != null && (Akujo.keeps != null || Akujo.honmei != null))
+            {
+                if (Akujo.keeps != null)
+                {
+                    foreach (PlayerControl p in Akujo.keeps)
+                    {
+                        if (CachedPlayer.LocalPlayer.PlayerControl == Akujo.akujo) p.cosmetics.nameText.text += Helpers.cs(Color.gray, " ♥");
+                        if (CachedPlayer.LocalPlayer.PlayerControl == p)
+                        {
+                            Akujo.akujo.cosmetics.nameText.text += Helpers.cs(Akujo.color, " ♥");
+                            p.cosmetics.nameText.text += Helpers.cs(Akujo.color, " ♥");
+                        }
+                    }
+                }
+                if (Akujo.honmei != null)
+                {
+                    if (CachedPlayer.LocalPlayer.PlayerControl == Akujo.akujo) Akujo.honmei.cosmetics.nameText.text += Helpers.cs(Akujo.color, " ♥");
+                    if (CachedPlayer.LocalPlayer.PlayerControl == Akujo.honmei)
+                    {
+                        Akujo.akujo.cosmetics.nameText.text += Helpers.cs(Akujo.color, " ♥");
+                        Akujo.honmei.cosmetics.nameText.text += Helpers.cs(Akujo.color, " ♥");
+                    }
+                }
+                if (MeetingHud.Instance != null)
+                {
+                    foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates)
+                    {
+                        if (player.TargetPlayerId == Akujo.akujo.PlayerId && ((Akujo.honmei != null && Akujo.honmei == CachedPlayer.LocalPlayer.PlayerControl) || (Akujo.keeps != null && Akujo.keeps.Any(x => x.PlayerId == CachedPlayer.LocalPlayer.PlayerControl.PlayerId))))
+                            player.NameText.text += Helpers.cs(Akujo.color, " ♥");
+                        if (CachedPlayer.LocalPlayer.PlayerControl == Akujo.akujo)
+                        {
+                            if (player.TargetPlayerId == Akujo.honmei?.PlayerId) player.NameText.text += Helpers.cs(Akujo.color, " ♥");
+                            if (Akujo.keeps != null && Akujo.keeps.Any(x => x.PlayerId == player.TargetPlayerId)) player.NameText.text += Helpers.cs(Color.gray, " ♥");
+                        }
+                    }
+                }
+            }
+
             // Lawyer or Prosecutor
             if ((Lawyer.lawyer != null && Lawyer.target != null && Lawyer.lawyer == CachedPlayer.LocalPlayer.PlayerControl)) {
                 Color color = Lawyer.color;
                 PlayerControl target = Lawyer.target;
-                string suffix = Helpers.cs(color, " 律§");
+                string suffix = Helpers.cs(color, " §");
                 target.cosmetics.nameText.text += suffix;
 
                 if (MeetingHud.Instance != null)
@@ -258,12 +327,13 @@ namespace TheOtherRoles.Patches {
             Tracker.corpsesTrackingTimer -= dt;
             Ninja.invisibleTimer -= dt;
             HideNSeek.timer -= dt;
+			Swooper.swoopTimer -= dt;
             foreach (byte key in Deputy.handcuffedKnows.Keys)
                 Deputy.handcuffedKnows[key] -= dt;
         }
 
         public static void miniUpdate() {
-            if (Mini.mini == null || Camouflager.camouflageTimer > 0f || Helpers.MushroomSabotageActive() || Mini.mini == Morphling.morphling && Morphling.morphTimer > 0f || Mini.mini == Ninja.ninja && Ninja.isInvisble || SurveillanceMinigamePatch.nightVisionIsActive) return;
+            if (Mini.mini == null || Camouflager.camouflageTimer > 0f || Helpers.MushroomSabotageActive() || Mini.mini == Morphling.morphling && Morphling.morphTimer > 0f || Mini.mini == Ninja.ninja && Ninja.isInvisble || Mini.mini == Swooper.swooper && Swooper.isInvisable || Helpers.isActiveCamoComms() || SurveillanceMinigamePatch.nightVisionIsActive) return;
                 
             float growingProgress = Mini.growingProgress();
             float scale = growingProgress * 0.35f + 0.35f;
@@ -304,10 +374,29 @@ namespace TheOtherRoles.Patches {
             if (Deputy.handcuffedKnows.ContainsKey(CachedPlayer.LocalPlayer.PlayerId) && Deputy.handcuffedKnows[CachedPlayer.LocalPlayer.PlayerId] > 0) __instance.KillButton.Hide();
         }
 
+        static void updateParanoid() {
+			if (CachedPlayer.LocalPlayer.PlayerControl != Paranoid.paranoid) return;
+            if (PlayerControl.LocalPlayer.Data.IsDead || PlayerControl.LocalPlayer.Data.Disconnected) return;
+            if (!Minigame.Instance) return;
+            var Base = Minigame.Instance as MonoBehaviour;
+            SpriteRenderer[] rends = Base.GetComponentsInChildren<SpriteRenderer>();
+            for (int i = 0; i < rends.Length; i++)
+            {
+                var oldColor1 = rends[i].color[0];
+                var oldColor2 = rends[i].color[1];
+                var oldColor3 = rends[i].color[2];
+                rends[i].color = new Color(oldColor1, oldColor2, oldColor3, 0.5f);
+            }
+		}
         static void updateReportButton(HudManager __instance) {
             if (GameOptionsManager.Instance.currentGameOptions.GameMode == GameModes.HideNSeek) return;
             if (Deputy.handcuffedKnows.ContainsKey(CachedPlayer.LocalPlayer.PlayerId) && Deputy.handcuffedKnows[CachedPlayer.LocalPlayer.PlayerId] > 0 || MeetingHud.Instance) __instance.ReportButton.Hide();
             else if (!__instance.ReportButton.isActiveAndEnabled) __instance.ReportButton.Show();
+            
+            if(AntiReport.antiReport.FindAll(x => x.PlayerId == CachedPlayer.LocalPlayer.PlayerId).Count() > 0)
+            {
+                __instance.ReportButton.Hide();
+            }
         }
          
         static void updateVentButton(HudManager __instance)
@@ -350,6 +439,10 @@ namespace TheOtherRoles.Patches {
             timerUpdate();
             // Mini
             miniUpdate();
+            // Shinobi
+            Shinobi.shinobiAction();
+            // Viewer
+            Viewer.UpdateArrows();
 
             // Deputy Sabotage, Use and Vent Button Disabling
             updateReportButton(__instance);
@@ -357,6 +450,8 @@ namespace TheOtherRoles.Patches {
             // Meeting hide buttons if needed (used for the map usage, because closing the map would show buttons)
             updateSabotageButton(__instance);
             updateUseButton(__instance);
+
+			updateParanoid();
             updateMapButton(__instance);
             if (!MeetingHud.Instance) __instance.AbilityButton?.Update();
 

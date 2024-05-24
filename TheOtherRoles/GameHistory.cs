@@ -17,6 +17,11 @@ namespace TheOtherRoles {
             WitchExile,
             Bomb,
             Arson,
+            KataomoiSuicide,
+            AkujoSuicide,
+            LoveStolen,
+            Loneliness,
+            BrainwashedKilled,
         };
 
         public PlayerControl player;

@@ -121,10 +121,27 @@ namespace TheOtherRoles.Patches {
             impSettings.Add((byte)RoleId.Ninja, CustomOptionHolder.ninjaSpawnRate.getSelection());
             impSettings.Add((byte)RoleId.Bomber, CustomOptionHolder.bomberSpawnRate.getSelection());
             impSettings.Add((byte)RoleId.Yoyo, CustomOptionHolder.yoyoSpawnRate.getSelection());
+			impSettings.Add((byte)RoleId.Poucher, CustomOptionHolder.poucherSpawnRate.getSelection());
+			impSettings.Add((byte)RoleId.Mimic, CustomOptionHolder.mimicSpawnRate.getSelection());
+            impSettings.Add((byte)RoleId.Escapist, CustomOptionHolder.escapistSpawnRate.getSelection());
+            impSettings.Add((byte)RoleId.Pitfaller, CustomOptionHolder.pitfallerSpawnRate.getSelection());
+            impSettings.Add((byte)RoleId.Shinobi, CustomOptionHolder.shinobiSpawnRate.getSelection());
+            impSettings.Add((byte)RoleId.Miner, CustomOptionHolder.minerSpawnRate.getSelection());
+            impSettings.Add((byte)RoleId.Snarer, CustomOptionHolder.snarerSpawnRate.getSelection());
+            impSettings.Add((byte)RoleId.Transportist, CustomOptionHolder.transportistSpawnRate.getSelection());
+
 
             neutralSettings.Add((byte)RoleId.Jester, CustomOptionHolder.jesterSpawnRate.getSelection());
+            neutralSettings.Add((byte)RoleId.Amnisiac, CustomOptionHolder.amnisiacSpawnRate.getSelection());
             neutralSettings.Add((byte)RoleId.Arsonist, CustomOptionHolder.arsonistSpawnRate.getSelection());
             neutralSettings.Add((byte)RoleId.Jackal, CustomOptionHolder.jackalSpawnRate.getSelection());
+  	        neutralSettings.Add((byte)RoleId.Swooper, CustomOptionHolder.swooperSpawnRate.getSelection());
+            neutralSettings.Add((byte)RoleId.Werewolf, CustomOptionHolder.werewolfSpawnRate.getSelection());
+            neutralSettings.Add((byte)RoleId.Juggernaut, CustomOptionHolder.juggernautSpawnRate.getSelection());
+            neutralSettings.Add((byte)RoleId.Doomsayer, CustomOptionHolder.doomsayerSpawnRate.getSelection());
+            neutralSettings.Add((byte)RoleId.Kataomoi, CustomOptionHolder.kataomoiSpawnRate.getSelection());
+            neutralSettings.Add((byte)RoleId.Akujo, CustomOptionHolder.akujoSpawnRate.getSelection());
+            neutralSettings.Add((byte)RoleId.Cerenovus, CustomOptionHolder.cerenovusSpawnRate.getSelection());
             neutralSettings.Add((byte)RoleId.Vulture, CustomOptionHolder.vultureSpawnRate.getSelection());
             neutralSettings.Add((byte)RoleId.Thief, CustomOptionHolder.thiefSpawnRate.getSelection());
 
@@ -137,8 +154,13 @@ namespace TheOtherRoles.Patches {
             crewSettings.Add((byte)RoleId.Portalmaker, CustomOptionHolder.portalmakerSpawnRate.getSelection());
             crewSettings.Add((byte)RoleId.Engineer, CustomOptionHolder.engineerSpawnRate.getSelection());
             crewSettings.Add((byte)RoleId.Lighter, CustomOptionHolder.lighterSpawnRate.getSelection());
+            crewSettings.Add((byte)RoleId.BodyGuard, CustomOptionHolder.bodyGuardSpawnRate.getSelection());
+            crewSettings.Add((byte)RoleId.Transporter, CustomOptionHolder.transporterSpawnRate.getSelection());
+            crewSettings.Add((byte)RoleId.Teleporter, CustomOptionHolder.teleporterSpawnRate.getSelection());
+            crewSettings.Add((byte)RoleId.Arbiter, CustomOptionHolder.arbiterSpawnRate.getSelection());
             crewSettings.Add((byte)RoleId.Detective, CustomOptionHolder.detectiveSpawnRate.getSelection());
             crewSettings.Add((byte)RoleId.TimeMaster, CustomOptionHolder.timeMasterSpawnRate.getSelection());
+            crewSettings.Add((byte)RoleId.Veteren, CustomOptionHolder.veterenSpawnRate.getSelection());
             crewSettings.Add((byte)RoleId.Medic, CustomOptionHolder.medicSpawnRate.getSelection());
             crewSettings.Add((byte)RoleId.Swapper,CustomOptionHolder.swapperSpawnRate.getSelection());
             crewSettings.Add((byte)RoleId.Seer, CustomOptionHolder.seerSpawnRate.getSelection());
@@ -387,7 +409,7 @@ namespace TheOtherRoles.Patches {
                 var possibleTargets = new List<PlayerControl>();
                 if (!Lawyer.isProsecutor) { // Lawyer
                     foreach (PlayerControl p in CachedPlayer.AllPlayers) {
-                        if (!p.Data.IsDead && !p.Data.Disconnected && p != Lovers.lover1 && p != Lovers.lover2 && (p.Data.Role.IsImpostor || p == Jackal.jackal || (Lawyer.targetCanBeJester && p == Jester.jester)))
+                        if (!p.Data.IsDead && !p.Data.Disconnected && p != Lovers.lover1 && p != Lovers.lover2 && (p.Data.Role.IsImpostor || p == Jackal.jackal || p == Swooper.swooper || p == Werewolf.werewolf || p == Juggernaut.juggernaut || (Lawyer.targetCanBeJester && p == Jester.jester)))
                             possibleTargets.Add(p);
                     }
                 } else { // Prosecutor
@@ -407,6 +429,22 @@ namespace TheOtherRoles.Patches {
                     writer.Write(target.PlayerId);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     RPCProcedure.lawyerSetTarget(target.PlayerId);
+                }
+            }
+
+            // Set Kataomoi target
+            if (Kataomoi.kataomoi != null) {
+                var possibleTargets = new List<PlayerControl>();
+                foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
+                    if (!p.isDead() && p != Kataomoi.kataomoi)
+                        possibleTargets.Add(p);
+                }
+                if (possibleTargets.Count > 0) {
+                    var target = possibleTargets[TheOtherRoles.rnd.Next(0, possibleTargets.Count)];
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.KataomoiSetTarget, Hazel.SendOption.Reliable, -1);
+                    writer.Write(target.PlayerId);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.kataomoiSetTarget(target.PlayerId);
                 }
             }
         }
@@ -436,8 +474,24 @@ namespace TheOtherRoles.Patches {
                 RoleId.Vip,
                 RoleId.Invert,
                 RoleId.Chameleon,
-                RoleId.Shifter
+                RoleId.Shifter,
+				RoleId.Cursed,
+                RoleId.Disperser,
+                RoleId.Slueth,
+                RoleId.Radar,
+                RoleId.Indomitable,
+				RoleId.Paranoid,
+                RoleId.AntiReport,
+                RoleId.AllKnowing,
+                RoleId.Viewer,
+                RoleId.Giant, // ADDED
+                RoleId.Flash, // ADDED
+                RoleId.OneTimeKiller // ADDED
+           
             });
+            if (getRoleAssignmentData().impostors.Count == 1) {
+                allModifiers.Add(RoleId.Recruiter);
+            }
 
             if (rnd.Next(1, 101) <= CustomOptionHolder.modifierLover.getSelection() * 10) { // Assign lover
                 bool isEvilLover = rnd.Next(1, 101) <= CustomOptionHolder.modifierLoverImpLoverRate.getSelection() * 10;
@@ -445,7 +499,7 @@ namespace TheOtherRoles.Patches {
                 List<PlayerControl> impPlayer = new List<PlayerControl>(players);
                 List<PlayerControl> crewPlayer = new List<PlayerControl>(players);
                 impPlayer.RemoveAll(x => !x.Data.Role.IsImpostor);
-                crewPlayer.RemoveAll(x => x.Data.Role.IsImpostor || x == Lawyer.lawyer);
+                crewPlayer.RemoveAll(x => x.Data.Role.IsImpostor || x == Lawyer.lawyer || x == Akujo.akujo);
 
                 if (isEvilLover) firstLoverId = setModifierToRandomPlayer((byte)RoleId.Lover, impPlayer);
                 else firstLoverId = setModifierToRandomPlayer((byte)RoleId.Lover, crewPlayer);
@@ -486,26 +540,55 @@ namespace TheOtherRoles.Patches {
             List<PlayerControl> impPlayer = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
             List<PlayerControl> neutralPlayer = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
             List<PlayerControl> crewPlayer = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
+            List<PlayerControl> doomPlayer = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
             impPlayer.RemoveAll(x => !x.Data.Role.IsImpostor);
-            neutralPlayer.RemoveAll(x => !Helpers.isNeutral(x));
+            neutralPlayer.RemoveAll(x => !Helpers.isNeutral(x) || x == Doomsayer.doomsayer);
             crewPlayer.RemoveAll(x => x.Data.Role.IsImpostor || Helpers.isNeutral(x));
+            doomPlayer.RemoveAll(x => x !=Doomsayer.doomsayer);
             assignGuesserGamemodeToPlayers(crewPlayer, Mathf.RoundToInt(CustomOptionHolder.guesserGamemodeCrewNumber.getFloat()));
             assignGuesserGamemodeToPlayers(neutralPlayer, Mathf.RoundToInt(CustomOptionHolder.guesserGamemodeNeutralNumber.getFloat()), CustomOptionHolder.guesserForceJackalGuesser.getBool(), CustomOptionHolder.guesserForceThiefGuesser.getBool());
             assignGuesserGamemodeToPlayers(impPlayer, Mathf.RoundToInt(CustomOptionHolder.guesserGamemodeImpNumber.getFloat()));
+            assignGuesserGamemodeToDoomsayer(doomPlayer,1, CustomOptionHolder.guesserForceDoomsayerGuesser.getBool());
         }
 
-        private static void assignGuesserGamemodeToPlayers(List<PlayerControl> playerList, int count, bool forceJackal = false, bool forceThief = false) {
+        private static void assignGuesserGamemodeToDoomsayer(List<PlayerControl> playerList, int count, bool forceDoomsayer = false) {
             for (int i = 0; i < count && playerList.Count > 0; i++) {
                 var index = rnd.Next(0, playerList.Count);
-                if (forceThief && !forceJackal) {
+                if (forceDoomsayer) {
+                    if (Doomsayer.doomsayer != null)
+                        index = playerList.FindIndex(x => x == Doomsayer.doomsayer);
+                    forceDoomsayer = false;
+                }
+                byte playerId = playerList[index].PlayerId;
+                playerList.RemoveAt(index);
+
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SetGuesserGm, Hazel.SendOption.Reliable, -1);
+                writer.Write(playerId);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.setGuesserGm(playerId);
+            }
+        }
+
+
+
+
+        private static void assignGuesserGamemodeToPlayers(List<PlayerControl> playerList, int count, bool forceJackal = false, bool forceThief = false, bool forceDoomsayer = false) {
+            for (int i = 0; i < count && playerList.Count > 0; i++) {
+                var index = rnd.Next(0, playerList.Count);
+                if (forceThief && !forceDoomsayer) {
                     if (Thief.thief != null)
                         index = playerList.FindIndex(x => x == Thief.thief);
                     forceThief = false;
                 }
-                if (forceJackal) {
+                if (forceJackal && !forceThief && !forceDoomsayer) {
                     if (Jackal.jackal != null)
                         index = playerList.FindIndex(x => x == Jackal.jackal);
                     forceJackal = false;
+                }
+                if (forceDoomsayer) {
+                    if (Doomsayer.doomsayer != null)
+                        index = playerList.FindIndex(x => x == Doomsayer.doomsayer);
+                    forceDoomsayer = false;
                 }
                 byte playerId = playerList[index].PlayerId;
                 playerList.RemoveAt(index);
@@ -556,8 +639,20 @@ namespace TheOtherRoles.Patches {
             }
 
             byte playerId;
+            
+            if (modifiers.Contains(RoleId.Disperser)) {
+                List<PlayerControl> impPlayerD = new List<PlayerControl>(playerList); //testing
+                impPlayerD.RemoveAll(x => !x.Data.Role.IsImpostor);
+                    playerId = setModifierToRandomPlayer((byte)RoleId.Disperser, impPlayerD);
+                 //   crewPlayer.RemoveAll(x => x.PlayerId == playerId);
+                    playerList.RemoveAll(x => x.PlayerId == playerId);
+                modifiers.RemoveAll(x => x == RoleId.Disperser);
+            }
+
+
 
             List<PlayerControl> crewPlayer = new List<PlayerControl>(playerList);
+            List<PlayerControl> impPlayer = new List<PlayerControl>(playerList);
             crewPlayer.RemoveAll(x => x.Data.Role.IsImpostor || RoleInfo.getRoleInfoForPlayer(x).Any(r => r.isNeutral));
             if (modifiers.Contains(RoleId.Shifter)) {
                 var crewPlayerShifter = new List<PlayerControl>(crewPlayer);
@@ -575,8 +670,63 @@ namespace TheOtherRoles.Patches {
                     playerList.RemoveAll(x => x.PlayerId == playerId);
                     sunglassesCount++;
                 }
-                modifiers.RemoveAll(x => x == RoleId.Sunglasses);
             }
+                modifiers.RemoveAll(x => x == RoleId.Sunglasses);
+
+            if (modifiers.Contains(RoleId.Cursed)) {
+                playerId = setModifierToRandomPlayer((byte)RoleId.Cursed, crewPlayer);
+                crewPlayer.RemoveAll(x => x.PlayerId == playerId);
+                playerList.RemoveAll(x => x.PlayerId == playerId);
+                modifiers.RemoveAll(x => x == RoleId.Cursed);
+            }
+            if (modifiers.Contains(RoleId.Paranoid)) {
+                playerId = setModifierToRandomPlayer((byte)RoleId.Paranoid, crewPlayer);
+                crewPlayer.RemoveAll(x => x.PlayerId == playerId);
+                playerList.RemoveAll(x => x.PlayerId == playerId);
+                modifiers.RemoveAll(x => x == RoleId.Paranoid);
+            }
+            if (modifiers.Contains(RoleId.AllKnowing)) {
+                int assignedcount = 0;
+                List<PlayerControl> imps = new List<PlayerControl>(playerList);
+                imps.RemoveAll(x => !x.Data.Role.IsImpostor || RoleInfo.getRoleInfoForPlayer(x).Any(r => r.isNeutral));
+                while (assignedcount < modifiers.FindAll(x => x == RoleId.AllKnowing).Count) {
+                    playerId = setModifierToRandomPlayer((byte)RoleId.AllKnowing, imps);
+                    crewPlayer.RemoveAll(x => x.PlayerId == playerId);
+                    playerList.RemoveAll(x => x.PlayerId == playerId);
+                    imps.RemoveAll(x => x.PlayerId == playerId);
+                    assignedcount++;
+                }
+                modifiers.RemoveAll(x => x == RoleId.AllKnowing);
+            }
+            if (modifiers.Contains(RoleId.Viewer))
+            {   
+                List<PlayerControl> neutralPlayer = new List<PlayerControl>(playerList);
+                neutralPlayer.RemoveAll(x => !RoleInfo.getRoleInfoForPlayer(x).Any(r => r.isNeutral) || x == Doomsayer.doomsayer || x == Amnisiac.amnisiac || x == Lawyer.lawyer || x == Pursuer.pursuer);
+                var neutralPlayerViewer = new List<PlayerControl>(neutralPlayer);
+                playerId = setModifierToRandomPlayer((byte)RoleId.Viewer, neutralPlayerViewer);
+                neutralPlayer.RemoveAll(x => x.PlayerId == playerId);
+                playerList.RemoveAll(x => x.PlayerId == playerId);
+                modifiers.RemoveAll(x => x == RoleId.Viewer);
+            }
+            if (modifiers.Contains(RoleId.OneTimeKiller)) {
+                var crewPlayerOneTimeKiller = new List<PlayerControl>(crewPlayer);
+                playerId = setModifierToRandomPlayer((byte)RoleId.OneTimeKiller, crewPlayerOneTimeKiller);
+             //   impPlayer.RemoveAll(x => x.PlayerId == playerId);
+                crewPlayer.RemoveAll(x => x.PlayerId == playerId);
+                playerList.RemoveAll(x => x.PlayerId == playerId);
+                modifiers.RemoveAll(x => x == RoleId.OneTimeKiller);
+            }
+            
+            if (modifiers.Contains(RoleId.Recruiter)) { 
+                var impostorPlayerRecruiter = new List<PlayerControl>(impPlayer);
+                impPlayer.RemoveAll(x => !x.Data.Role.IsImpostor);
+                playerId = setModifierToRandomPlayer((byte)RoleId.Recruiter, impostorPlayerRecruiter);
+                impPlayer.RemoveAll(x => x.PlayerId == playerId);
+              //  crewPlayer.RemoveAll(x => x.PlayerId == playerId);
+                playerList.RemoveAll(x => x.PlayerId == playerId);
+                modifiers.RemoveAll(x => x == RoleId.Recruiter);
+            }
+            
 
             foreach (RoleId modifier in modifiers) {
                 if (playerList.Count == 0) break;
@@ -592,6 +742,29 @@ namespace TheOtherRoles.Patches {
                     selection = CustomOptionHolder.modifierLover.getSelection(); break;
                 case RoleId.Tiebreaker:
                     selection = CustomOptionHolder.modifierTieBreaker.getSelection(); break;
+
+                case RoleId.Cursed:
+                    selection = CustomOptionHolder.modifierCursed.getSelection(); break;
+                case RoleId.Disperser:
+                    selection = CustomOptionHolder.modifierDisperser.getSelection(); break;
+                case RoleId.Slueth:
+                    selection = CustomOptionHolder.modifierSlueth.getSelection(); break;
+                 case RoleId.AntiReport:
+                    selection = CustomOptionHolder.modifierAntiReport.getSelection();
+                    break;
+                case RoleId.Indomitable:
+                    selection = CustomOptionHolder.modifierIndomitable.getSelection(); break;
+                case RoleId.Radar:
+                    selection = CustomOptionHolder.modifierRadar.getSelection(); break;
+                case RoleId.Paranoid:
+                    selection = CustomOptionHolder.modifierParanoid.getSelection(); break;
+                case RoleId.AllKnowing:
+                    selection = CustomOptionHolder.modifierAllknowing.getSelection();
+                    if (multiplyQuantity) selection *= CustomOptionHolder.modifierAllknowingQuantity.getQuantity();
+                    break;
+                case RoleId.Viewer:
+                    selection = CustomOptionHolder.modifierViewer.getSelection(); break;
+                    
                 case RoleId.Mini:
                     selection = CustomOptionHolder.modifierMini.getSelection(); break;
                 case RoleId.Bait:
@@ -605,7 +778,7 @@ namespace TheOtherRoles.Patches {
                 case RoleId.AntiTeleport:
                     selection = CustomOptionHolder.modifierAntiTeleport.getSelection();
                     if (multiplyQuantity) selection *= CustomOptionHolder.modifierAntiTeleportQuantity.getQuantity();
-                    break;
+                    break;                   
                 case RoleId.Sunglasses:
                     selection = CustomOptionHolder.modifierSunglasses.getSelection();
                     if (multiplyQuantity) selection *= CustomOptionHolder.modifierSunglassesQuantity.getQuantity();
@@ -624,6 +797,20 @@ namespace TheOtherRoles.Patches {
                     break;
                 case RoleId.Shifter:
                     selection = CustomOptionHolder.modifierShifter.getSelection(); break;
+                case RoleId.Giant:
+                    selection = CustomOptionHolder.modifierGiant.getSelection();
+                    if (multiplyQuantity) selection *= CustomOptionHolder.modifierGiantQuantity.getQuantity();
+                    break;
+                case RoleId.Flash:
+                    selection = CustomOptionHolder.modifierFlash.getSelection();
+                    if (multiplyQuantity) selection *= CustomOptionHolder.modifierFlashQuantity.getQuantity();
+                    break;
+                case RoleId.Recruiter:
+                    selection = CustomOptionHolder.modifierRecruiter.getSelection();
+                    if (multiplyQuantity) selection *= 1;
+                    break;
+                case RoleId.OneTimeKiller:
+                    selection = CustomOptionHolder.modifierOneTimeKiller.getSelection(); break;
             }
                  
             return selection;

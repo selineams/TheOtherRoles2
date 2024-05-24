@@ -34,6 +34,7 @@ namespace TheOtherRoles.Objects {
         public bool mirror;
         public KeyCode? hotkey;
         public string buttonText;
+        private bool SeeInMeeting = false;
         public bool isHandcuffed = false;
         private static readonly int Desat = Shader.PropertyToID("_Desat");
 
@@ -41,13 +42,23 @@ namespace TheOtherRoles.Objects {
             public static readonly Vector3 lowerRowRight = new Vector3(-2f, -0.06f, 0);  // Not usable for imps beacuse of new button positions!
             public static readonly Vector3 lowerRowCenter = new Vector3(-3f, -0.06f, 0);
             public static readonly Vector3 lowerRowLeft = new Vector3(-4f, -0.06f, 0);
+            public static readonly Vector3 lowerRowFarLeft = new Vector3(-3f, -0.06f, 0f);
+
             public static readonly Vector3 upperRowRight = new Vector3(0f, 1f, 0f);  // Not usable for imps beacuse of new button positions!
             public static readonly Vector3 upperRowCenter = new Vector3(-1f, 1f, 0f);  // Not usable for imps beacuse of new button positions!
             public static readonly Vector3 upperRowLeft = new Vector3(-2f, 1f, 0f);
             public static readonly Vector3 upperRowFarLeft = new Vector3(-3f, 1f, 0f);
+
+/*
+            public static readonly Vector3 topRowRight = new Vector3(0f, 1.6f, 0f);  // Not usable for imps beacuse of new button positions!
+            public static readonly Vector3 topRowCenter = new Vector3(-1f, 1.6f, 0f);  // Not usable for imps beacuse of new button positions!
+            public static readonly Vector3 topRowLeft = new Vector3(-2f, 1.6f, 0f);
+            public static readonly Vector3 topRowFarLeft = new Vector3(-3f, 1.6f, 0f);
+*/
+
         }
 
-        public CustomButton(Action OnClick, Func<bool> HasButton, Func<bool> CouldUse, Action OnMeetingEnds, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager, KeyCode? hotkey, bool HasEffect, float EffectDuration, Action OnEffectEnds, bool mirror = false, string buttonText = "")
+        public CustomButton(Action OnClick, Func<bool> HasButton, Func<bool> CouldUse, Action OnMeetingEnds, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager, KeyCode? hotkey, bool HasEffect, float EffectDuration, Action OnEffectEnds, bool mirror = false, string buttonText = "", bool seeInMeeting = false)
         {
             this.hudManager = hudManager;
             this.OnClick = OnClick;
@@ -63,6 +74,7 @@ namespace TheOtherRoles.Objects {
             this.mirror = mirror;
             this.hotkey = hotkey;
             this.buttonText = buttonText;
+            this.SeeInMeeting = seeInMeeting;
             Timer = 16.2f;
             buttons.Add(this);
             actionButton = UnityEngine.Object.Instantiate(hudManager.KillButton, hudManager.KillButton.transform.parent);
@@ -78,8 +90,8 @@ namespace TheOtherRoles.Objects {
             setActive(false);
         }
 
-        public CustomButton(Action OnClick, Func<bool> HasButton, Func<bool> CouldUse, Action OnMeetingEnds, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager, KeyCode? hotkey, bool mirror = false, string buttonText = "")
-        : this(OnClick, HasButton, CouldUse, OnMeetingEnds, Sprite, PositionOffset, hudManager, hotkey, false, 0f, () => {}, mirror, buttonText) { }
+        public CustomButton(Action OnClick, Func<bool> HasButton, Func<bool> CouldUse, Action OnMeetingEnds, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager, KeyCode? hotkey, bool mirror = false, string buttonText = "", bool seeInMeeting = false)
+        : this(OnClick, HasButton, CouldUse, OnMeetingEnds, Sprite, PositionOffset, hudManager, hotkey, false, 0f, () => {}, mirror, buttonText, seeInMeeting) { }
 
         public void onClickEvent()
         {
@@ -164,11 +176,11 @@ namespace TheOtherRoles.Objects {
             var localPlayer = CachedPlayer.LocalPlayer;
             var moveable = localPlayer.PlayerControl.moveable;
             
-            if (localPlayer.Data == null || MeetingHud.Instance || ExileController.Instance || !HasButton()) {
+            if (localPlayer.Data == null || (MeetingHud.Instance && !SeeInMeeting) || ExileController.Instance || !HasButton()) {
                 setActive(false);
                 return;
             }
-            setActive(hudManager.UseButton.isActiveAndEnabled || hudManager.PetButton.isActiveAndEnabled);
+            setActive(hudManager.UseButton.isActiveAndEnabled || hudManager.PetButton.isActiveAndEnabled || (MeetingHud.Instance && SeeInMeeting));
 
             if (DeputyTimer >= 0) { // This had to be reordered, so that the handcuffs do not stop the underlying timers from running
                 if (HasEffect && isEffectActive)

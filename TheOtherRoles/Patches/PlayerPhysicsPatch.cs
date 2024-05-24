@@ -1,5 +1,6 @@
 using HarmonyLib;
 using UnityEngine;
+using TheOtherRoles.Players;
 
 namespace TheOtherRoles.Patches;
 
@@ -13,3 +14,12 @@ public static class PlayerPhysiscs_Awake_Patch
         __instance.body.interpolation = RigidbodyInterpolation2D.Interpolate;
     }
 }
+
+[HarmonyPatch(typeof(PlayerPhysics), nameof(PlayerPhysics.FixedUpdate))]
+    public static class PlayerPhysicsFixedUpdatePatch
+    {
+        public static void Postfix(PlayerPhysics __instance)
+        {
+            Kataomoi.FixedUpdate(__instance);
+        }
+    }

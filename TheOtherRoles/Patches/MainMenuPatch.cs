@@ -149,7 +149,7 @@ ugackMiner53 - Idea and core code for the Prop Hunt game mode</size>";
         public static void addSceneChangeCallbacks() {
             SceneManager.add_sceneLoaded((Action<Scene, LoadSceneMode>)((scene, _) => {
                 if (!scene.name.Equals("MatchMaking", StringComparison.Ordinal)) return;
-                TORMapOptions.gameMode = CustomGamemodes.Classic;
+                TORMapOptions.gameMode = CustomGamemodes.Guesser;
                 // Add buttons For Guesser Mode, Hide N Seek in this scene.
                 // find "HostLocalGameButton"
                 var template = GameObject.FindObjectOfType<HostLocalGameButton>();
@@ -163,7 +163,7 @@ ugackMiner53 - Idea and core code for the Prop Hunt game mode</size>";
                 
                 guesserButtonPassiveButton.OnClick = new Button.ButtonClickedEvent();
                 guesserButtonPassiveButton.OnClick.AddListener((System.Action)(() => {
-                    TORMapOptions.gameMode = CustomGamemodes.Guesser;
+                    TORMapOptions.gameMode = CustomGamemodes.Classic;
                     template.OnClick();
                 }));
 
@@ -190,9 +190,9 @@ ugackMiner53 - Idea and core code for the Prop Hunt game mode</size>";
                 }));
 
                 template.StartCoroutine(Effects.Lerp(0.1f, new System.Action<float>((p) => {
-                    guesserButtonText.SetText("TOR Guesser");
-                    HideNSeekButtonText.SetText("TOR Hide N Seek");
-                    PropHuntButtonText.SetText("TOR Prop Hunt");
+                    guesserButtonText.SetText("TOR 猜猜猜");
+                    HideNSeekButtonText.SetText("TOR 捉迷藏");
+                    PropHuntButtonText.SetText("TOR 躲猫猫");
                 })));
             }));
         }

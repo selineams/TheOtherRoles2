@@ -21,17 +21,32 @@ namespace TheOtherRoles
 
         public static void clearAndReloadRoles() {
             Jester.clearAndReload();
+			Swooper.clearAndReload();
+            Poucher.clearAndReload();
+			Mimic.clearAndReload();
+            Escapist.clearAndReload();
+            Snarer.clearAndReload();
             Mayor.clearAndReload();
             Portalmaker.clearAndReload();
             Engineer.clearAndReload();
             Sheriff.clearAndReload();
+			Cursed.clearAndReload();
             Deputy.clearAndReload();
+	        Amnisiac.clearAndReload();
             Lighter.clearAndReload();
             Godfather.clearAndReload();
             Mafioso.clearAndReload();
             Janitor.clearAndReload();
             Detective.clearAndReload();
+            Werewolf.clearAndReload();
+            Juggernaut.clearAndReload();
+            Doomsayer.clearAndReload();
+            Kataomoi.clearAndReload();
+            Akujo.clearAndReload();
+            Cerenovus.clearAndReload();
             TimeMaster.clearAndReload();
+            BodyGuard.clearAndReload();
+            Veteren.clearAndReload();
             Medic.clearAndReload();
             Shifter.clearAndReload();
             Swapper.clearAndReload();
@@ -63,6 +78,13 @@ namespace TheOtherRoles
             Trapper.clearAndReload();
             Bomber.clearAndReload();
             Yoyo.clearAndReload();
+            Pitfaller.clearAndReload();
+            Shinobi.clearAndReload();
+            Transporter.clearAndReload();
+            Transportist.clearAndReload();
+            Teleporter.clearAndReload();
+            Miner.clearAndReload();
+            Arbiter.clearAndReload();
 
             // Modifier
             Bait.clearAndReload();
@@ -71,9 +93,21 @@ namespace TheOtherRoles
             Tiebreaker.clearAndReload();
             Sunglasses.clearAndReload();
             Mini.clearAndReload();
+            Paranoid.clearAndReload();
+            Slueth.clearAndReload();
+            Radar.clearAndReload();
+            AllKnowing.clearAndReload();
+            Viewer.clearAndReload();
+            AntiReport.clearAndReload();
+            Indomitable.clearAndReload();
             Vip.clearAndReload();
             Invert.clearAndReload();
             Chameleon.clearAndReload();
+            Disperser.clearAndReload();
+            Recruiter.clearAndReload();
+            Flash.clearAndReload();
+            Giant.clearAndReload();
+            OneTimeKiller.clearAndReload();
 
             // Gamemodes
             HandleGuesser.clearAndReload();
@@ -86,14 +120,96 @@ namespace TheOtherRoles
             public static Color color = new Color32(236, 98, 165, byte.MaxValue);
 
             public static bool triggerJesterWin = false;
+            public static bool canVent = false;
             public static bool canCallEmergency = true;
             public static bool hasImpostorVision = false;
 
             public static void clearAndReload() {
                 jester = null;
                 triggerJesterWin = false;
+                canVent = CustomOptionHolder.jesterCanVent.getBool();
                 canCallEmergency = CustomOptionHolder.jesterCanCallEmergency.getBool();
                 hasImpostorVision = CustomOptionHolder.jesterHasImpostorVision.getBool();
+            }
+        }
+        
+       public static class Doomsayer
+    {
+        public static PlayerControl doomsayer;
+        //public static PlayerControl evilGuesser;
+        public static Color color = new Color(0f, 1f, 0.5f, 1f);
+        public static PlayerControl currentTarget;
+        public static List<PlayerControl> playerTargetinformation = new List<PlayerControl>();
+        public static float cooldown = 30f;
+        public static float formationNum = 1f;
+        public static bool hasMultipleShotsPerMeeting = false;
+        public static bool showInfoInGhostChat = true;
+        public static bool canGuessNeutral = false;
+        public static bool canGuessImpostor = false;
+        public static bool triggerDoomsayerrWin = false;
+        public static bool canGuess = true;
+        public static bool onlineTarger = false;
+        public static float killToWin = 3;
+        public static float killedToWin = 0;
+
+
+        private static Sprite buttonSprite;
+
+        public static Sprite getButtonSprite()
+        {
+            if (buttonSprite) return buttonSprite;
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Observe.png", 115f);
+            return buttonSprite;
+
+        }
+        public static void clearAndReload()
+        {
+            doomsayer = null;
+            currentTarget = null;
+            killedToWin = 0;
+            canGuess = true;
+            triggerDoomsayerrWin = false;
+            cooldown = CustomOptionHolder.doomsayerCooldown.getFloat();
+            hasMultipleShotsPerMeeting = CustomOptionHolder.doomsayerHasMultipleShotsPerMeeting.getBool();
+            showInfoInGhostChat = CustomOptionHolder.doomsayerShowInfoInGhostChat.getBool();
+            canGuessNeutral = CustomOptionHolder.doomsayerCanGuessNeutral.getBool();
+            canGuessImpostor = CustomOptionHolder.doomsayerCanGuessImpostor.getBool();
+            formationNum = CustomOptionHolder.doomsayerDormationNum.getFloat();
+            killToWin = CustomOptionHolder.doomsayerKillToWin.getFloat();
+            onlineTarger = CustomOptionHolder.doomsayerOnlineTarger.getBool();
+
+        }
+    }
+
+    
+
+        
+        public static class BodyGuard {
+            public static PlayerControl bodyguard;
+            public static PlayerControl guarded = null;
+            public static Color color = new Color32(145, 102, 64, byte.MaxValue);
+            public static bool reset = true;
+            public static bool usedGuard = false;
+            private static Sprite guardButtonSprite;
+            public static PlayerControl currentTarget;            
+
+            public static void resetGuarded() {
+                currentTarget = guarded = null;
+                usedGuard = false;
+            }
+
+
+            public static Sprite getGuardButtonSprite() {
+                if (guardButtonSprite) return guardButtonSprite;
+                guardButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Shield.png", 115f);
+                return guardButtonSprite;
+            }
+
+            public static void clearAndReload() {
+                bodyguard = null;
+                reset = CustomOptionHolder.bodyGuardResetTargetAfterMeeting.getBool();
+                guarded = null;
+                usedGuard = false;
             }
         }
         
@@ -423,6 +539,322 @@ namespace TheOtherRoles
         }
     }
 
+    public static class Amnisiac {
+        public static PlayerControl amnisiac;
+        public static List<Arrow> localArrows = new List<Arrow>();
+        public static Color color = new Color(0.5f, 0.7f, 1f, 1f);
+        public static List<PoolablePlayer> poolIcons = new List<PoolablePlayer>();
+
+        public static bool showArrows = true;
+        public static bool resetRole = false;
+
+        private static Sprite buttonSprite;
+        public static Sprite getButtonSprite() {
+            if (buttonSprite) return buttonSprite;
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Remember.png", 115f);
+            return buttonSprite;
+        }
+
+        public static void clearAndReload() {
+            amnisiac = null;
+            showArrows = CustomOptionHolder.amnisiacShowArrows.getBool();
+            resetRole = CustomOptionHolder.amnisiacResetRole.getBool();
+            if (localArrows != null) {
+                foreach (Arrow arrow in localArrows)
+                    if (arrow?.arrow != null)
+                        UnityEngine.Object.Destroy(arrow.arrow);
+            }
+            localArrows = new List<Arrow>();
+        }
+    }
+
+    public static class Veteren {
+        public static PlayerControl veteren;
+        public static Color color = new Color32(255, 77, 0, byte.MaxValue);
+
+        public static float alertDuration = 3f;
+        public static float cooldown = 30f;
+
+        public static bool alertActive = false;
+
+        private static Sprite buttonSprite;
+        public static Sprite getButtonSprite() {
+            if (buttonSprite) return buttonSprite;
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Alert.png", 115f);
+            return buttonSprite;
+        }
+
+        public static void clearAndReload() {
+            veteren = null;
+            alertActive = false;
+            alertDuration = CustomOptionHolder.veterenAlertDuration.getFloat();
+            cooldown = CustomOptionHolder.veterenCooldown.getFloat();
+        }
+    }
+
+     public static class Teleporter
+    {
+        public static PlayerControl teleporter;
+        public static Color color = new Color32(164, 249, 255, byte.MaxValue);
+        private static Sprite teleportButtonSprite;
+        private static Sprite sampleSprite;
+        public static float teleportCooldown = 30f;
+        public static float sampleCooldown = 30f;
+        public static int teleportNumber = 5;
+        public static PlayerControl target1;
+        public static PlayerControl target2;
+        public static PlayerControl currentTarget;
+
+        public static Sprite getButtonSprite()
+        {
+            if (teleportButtonSprite) return teleportButtonSprite;
+            teleportButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.TeleporterButton.png", 115f);
+            return teleportButtonSprite;
+        }
+
+        public static Sprite getTeleporterSampleSprite()
+        {
+            if (sampleSprite) return sampleSprite;
+            sampleSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.SampleButton.png", 115f);
+            return sampleSprite;
+        }
+
+        public static void clearAndReload()
+        {
+            teleporter = null;
+            target1 = null;
+            target2 = null;
+            currentTarget = null;
+            teleportCooldown = CustomOptionHolder.teleporterCooldown.getFloat();
+            teleportNumber = (int)CustomOptionHolder.teleporterTeleportNumber.getFloat();
+            sampleCooldown = CustomOptionHolder.teleporterSampleCooldown.getFloat();
+        }
+    }
+
+    public static class Transporter {
+    
+        public static PlayerControl transporter;
+        public static Color color = new Color32(23, 86, 92, byte.MaxValue);
+        private static Sprite sampleSprite;
+        private static Sprite morphSprite;
+
+        public static float cooldown = 15f;
+        public static float delaiAfterScan = 15f;
+
+        public static bool haveArrow = true;
+        public static float arrowUpdateInterval = 1f;
+        public static Arrow localArrow = new Arrow(Color.blue);
+        public static float timeUntilUpdate = 0f;
+
+        public static PlayerControl currentTarget;
+        public static PlayerControl sampledTarget;
+
+        public static void TransportPlayers(PlayerControl TP2)
+        {
+            var TP1 = Transporter.transporter;
+            var deadBodies = UnityEngine.Object.FindObjectsOfType<DeadBody>();
+            DeadBody Player1Body = null;
+            DeadBody Player2Body = null;
+            if (TP1.Data.IsDead)
+                foreach (var body in deadBodies)
+                    if (body.ParentId == TP1.PlayerId)
+                        Player1Body = body;
+            if (TP2.Data.IsDead)
+                foreach (var body in deadBodies)
+                    if (body.ParentId == TP2.PlayerId)
+                        Player2Body = body;
+
+            if (TP1.inVent && PlayerControl.LocalPlayer.PlayerId == TP1.PlayerId)
+            {
+                TP1.MyPhysics.ExitAllVents();
+            }
+            if (TP2.inVent && PlayerControl.LocalPlayer.PlayerId == TP2.PlayerId)
+            {
+                TP2.MyPhysics.ExitAllVents();
+            }
+
+            if (Player1Body == null && Player2Body == null)
+            {
+                TP1.MyPhysics.ResetMoveState();
+                TP2.MyPhysics.ResetMoveState();
+                var TempPosition = TP1.GetTruePosition();
+                //       var TempFacing = TP1.myRend.flipX;
+                TP1.NetTransform.SnapTo(new Vector2(TP2.GetTruePosition().x, TP2.GetTruePosition().y + 0.3636f));
+                //       TP1.myRend.flipX = TP2.myRend.flipX;
+                TP2.NetTransform.SnapTo(new Vector2(TempPosition.x, TempPosition.y + 0.3636f));
+                //        TP2.myRend.flipX = TempFacing;
+            }
+
+            TP1.moveable = true;
+            TP2.moveable = true;
+            TP1.Collider.enabled = true;
+            TP2.Collider.enabled = true;
+            TP1.NetTransform.enabled = true;
+            TP2.NetTransform.enabled = true;
+        }
+
+        public static void clearAndReload()
+        {
+            transporter = null;
+            currentTarget = null;
+            sampledTarget = null;
+            timeUntilUpdate = 0f;
+            cooldown = CustomOptionHolder.transporterScanCooldown.getFloat();
+            delaiAfterScan = CustomOptionHolder.transporterDelaiAfterScan.getFloat();
+            haveArrow = CustomOptionHolder.transporterAddArrow.getBool();
+            arrowUpdateInterval = CustomOptionHolder.transporterUpdateIntervall.getFloat();
+            if (localArrow?.arrow != null) UnityEngine.Object.Destroy(localArrow.arrow);
+            localArrow = new Arrow(Color.blue);
+            if (localArrow.arrow != null) localArrow.arrow.SetActive(false);
+        }
+
+        public static Sprite getTransporterSampleSprite()
+        {
+            if (sampleSprite) return sampleSprite;
+            sampleSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.SampleButton.png", 115f);
+            return sampleSprite;
+        }
+
+        public static Sprite getTransporterMorphSprite()
+        {
+            if (morphSprite) return morphSprite;
+            morphSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.TransporterButton.png", 115f);
+            return morphSprite;
+        }
+    }
+
+    public static class Transportist {
+    
+        public static PlayerControl transportist;
+        public static Color color = Palette.ImpostorRed;
+        private static Sprite sampleSprite;
+        private static Sprite morphSprite;
+
+        public static float cooldown = 15f;
+        public static float delaiAfterScan = 15f;
+
+        public static bool haveArrow = true;
+        public static float arrowUpdateInterval = 1f;
+        public static Arrow localArrow = new Arrow(Color.blue);
+        public static float timeUntilUpdate = 0f;
+
+        public static PlayerControl currentTarget;
+        public static PlayerControl sampledTarget;
+
+        public static void TransportistPlayers(PlayerControl TP2)
+        {
+            var TP1 = Transportist.transportist;
+            var deadBodies = UnityEngine.Object.FindObjectsOfType<DeadBody>();
+            DeadBody Player1Body = null;
+            DeadBody Player2Body = null;
+            if (TP1.Data.IsDead)
+                foreach (var body in deadBodies)
+                    if (body.ParentId == TP1.PlayerId)
+                        Player1Body = body;
+            if (TP2.Data.IsDead)
+                foreach (var body in deadBodies)
+                    if (body.ParentId == TP2.PlayerId)
+                        Player2Body = body;
+
+            if (TP1.inVent && PlayerControl.LocalPlayer.PlayerId == TP1.PlayerId)
+            {
+                TP1.MyPhysics.ExitAllVents();
+            }
+            if (TP2.inVent && PlayerControl.LocalPlayer.PlayerId == TP2.PlayerId)
+            {
+                TP2.MyPhysics.ExitAllVents();
+            }
+
+            if (Player1Body == null && Player2Body == null)
+            {
+                TP1.MyPhysics.ResetMoveState();
+                TP2.MyPhysics.ResetMoveState();
+                var TempPosition = TP1.GetTruePosition();
+                //       var TempFacing = TP1.myRend.flipX;
+                //TP1.NetTransform.SnapTo(new Vector2(TP2.GetTruePosition().x, TP2.GetTruePosition().y + 0.3636f));
+                //       TP1.myRend.flipX = TP2.myRend.flipX;
+                TP2.NetTransform.SnapTo(new Vector2(TempPosition.x, TempPosition.y + 0.3636f));
+                //        TP2.myRend.flipX = TempFacing;
+            }
+
+            TP1.moveable = true;
+            TP2.moveable = true;
+            TP1.Collider.enabled = true;
+            TP2.Collider.enabled = true;
+            TP1.NetTransform.enabled = true;
+            TP2.NetTransform.enabled = true;
+        }
+
+        public static void clearAndReload()
+        {
+            transportist = null;
+            currentTarget = null;
+            sampledTarget = null;
+            timeUntilUpdate = 0f;
+            cooldown = CustomOptionHolder.transportistScanCooldown.getFloat();
+            delaiAfterScan = CustomOptionHolder.transportistDelaiAfterScan.getFloat();
+            haveArrow = CustomOptionHolder.transportistAddArrow.getBool();
+            arrowUpdateInterval = CustomOptionHolder.transportistUpdateIntervall.getFloat();
+            if (localArrow?.arrow != null) UnityEngine.Object.Destroy(localArrow.arrow);
+            localArrow = new Arrow(Color.blue);
+            if (localArrow.arrow != null) localArrow.arrow.SetActive(false);
+        }
+
+        public static Sprite getTransportistSampleSprite()
+        {
+            if (sampleSprite) return sampleSprite;
+            sampleSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.SampleButton.png", 115f);
+            return sampleSprite;
+        }
+
+        public static Sprite getTransportistMorphSprite()
+        {
+            if (morphSprite) return morphSprite;
+            morphSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.TransportistButton.png", 115f);
+            return morphSprite;
+        }
+    }
+
+
+    public static class Arbiter
+    {
+        public static PlayerControl arbiter;
+        public static Color color = new Color32(179, 128, 0, byte.MaxValue);
+        public static byte specialVoteTargetPlayerId = byte.MaxValue;
+        private static int _remainingSpecialVotes = 1;
+        private static Sprite targetSprite;
+
+        public static void clearAndReload()
+        {
+            arbiter = null;
+            _remainingSpecialVotes = Mathf.RoundToInt(CustomOptionHolder.arbiterNumberOfSpecialVotes.getFloat());
+            specialVoteTargetPlayerId = byte.MaxValue;
+        }
+
+        public static Sprite getTargetSprite()
+        {
+            if (targetSprite) return targetSprite;
+            targetSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.ArbiterTargetIcon.png", 150f);
+            return targetSprite;
+        }
+
+        public static int remainingSpecialVotes(bool isVote = false)
+        {
+            if (arbiter == null)
+                return 0;
+
+            if (isVote)
+                _remainingSpecialVotes = Mathf.Max(0, _remainingSpecialVotes - 1);
+            return _remainingSpecialVotes;
+        }
+
+        public static bool isArbiter(byte playerId)
+        {
+            return arbiter != null && arbiter.PlayerId == playerId;
+        }
+    }
+
+
     public static class Medic {
         public static PlayerControl medic;
         public static PlayerControl shielded;
@@ -536,6 +968,9 @@ namespace TheOtherRoles
         public static bool existingWithKiller() {
             return existing() && (lover1 == Jackal.jackal     || lover2 == Jackal.jackal
                                || lover1 == Sidekick.sidekick || lover2 == Sidekick.sidekick
+                               || lover1 == Swooper.swooper || lover2 == Swooper.swooper
+                               || lover1 == Werewolf.werewolf || lover2 == Werewolf.werewolf
+                               || lover1 == Juggernaut.juggernaut || lover2 == Juggernaut.juggernaut
                                || lover1.Data.Role.IsImpostor      || lover2.Data.Role.IsImpostor);
         }
 
@@ -641,6 +1076,7 @@ namespace TheOtherRoles
         public static float cooldown = 30f;
         public static float duration = 10f;
         public static float camouflageTimer = 0f;
+        public static bool camoComms = false;
 
         private static Sprite buttonSprite;
         public static Sprite getButtonSprite() {
@@ -650,6 +1086,8 @@ namespace TheOtherRoles
         }
 
         public static void resetCamouflage() {
+            if (Helpers.isCamoComms()) return;
+			    camoComms = false;
             camouflageTimer = 0f;
             foreach (PlayerControl p in CachedPlayer.AllPlayers) {
                 if (p == Ninja.ninja && Ninja.isInvisble)
@@ -815,6 +1253,7 @@ namespace TheOtherRoles
         public static bool canKillNearGarlics = true;
         public static bool localPlacedGarlic = false;
         public static bool garlicsActive = true;
+        public static bool garlicButton = false;
 
         public static PlayerControl currentTarget;
         public static PlayerControl bitten; 
@@ -844,6 +1283,7 @@ namespace TheOtherRoles
             delay = CustomOptionHolder.vampireKillDelay.getFloat();
             cooldown = CustomOptionHolder.vampireCooldown.getFloat();
             canKillNearGarlics = CustomOptionHolder.vampireCanKillNearGarlics.getBool();
+            garlicButton = CustomOptionHolder.vampireGarlicButton.getBool();
         }
     }
 
@@ -863,6 +1303,8 @@ namespace TheOtherRoles
         public static Mode mode = Mode.Chat;
         public static Targets targets = Targets.EvilPlayers;
         public static int taskCountForReveal = 1;
+		public static bool seeInMeeting = false;
+
 
         public static bool isRevealed = false;
         public static Dictionary<byte, byte> playerRoomMap = new Dictionary<byte, byte>();
@@ -879,8 +1321,354 @@ namespace TheOtherRoles
             needsUpdate = true;
             mode = (Mode) CustomOptionHolder.snitchMode.getSelection();
             targets = (Targets) CustomOptionHolder.snitchTargets.getSelection();
+            seeInMeeting = CustomOptionHolder.snitchSeeMeeting.getBool();
         }
     }
+
+	 public static class Swooper {
+        public static PlayerControl swooper;
+        public static PlayerControl currentTarget;
+        public static float cooldown = 30f;
+        public static bool isInvisable = false;
+        public static Color color = new Color32(224, 197, 219, byte.MaxValue);
+        public static float duration = 5f;
+        public static float swoopCooldown = 30f;
+        public static float swoopTimer = 0f;
+        public static Sprite buttonSprite;
+        public static bool hasImpVision = false;
+       public static bool swooperAsWell = false; 
+
+        public static Sprite getSwoopButtonSprite() {
+            if (buttonSprite) return buttonSprite;
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Swoop.png", 115f);
+            return buttonSprite;
+        }
+      
+        public static Vector3 getSwooperSwoopVector() {
+            return CustomButton.ButtonPositions.upperRowLeft; //brb
+        }
+
+        public static void clearAndReload() {
+          swooper = null;
+          isInvisable = false;
+          cooldown = CustomOptionHolder.jackalKillCooldown.getFloat();
+          swoopCooldown = CustomOptionHolder.swooperCooldown.getFloat();
+          duration = CustomOptionHolder.swooperDuration.getFloat();
+          hasImpVision = CustomOptionHolder.swooperHasImpVision.getBool();
+
+        }
+    }
+    
+    public static class Mimic
+    {
+        public static PlayerControl mimic;
+		public static bool hasMimic = false;
+        public static Color color = Palette.ImpostorRed;
+        public static List<PlayerControl> killed = new List<PlayerControl>();
+
+
+
+        public static void clearAndReload(bool clearList = true)
+        {
+            mimic = null;
+			if (clearList) hasMimic = false;
+
+        }
+    }
+
+     public class Miner {
+        public readonly static List<Vent> Vents = new List<Vent>();
+        public static PlayerControl miner;
+        public KillButton _mineButton;
+        public static DateTime LastMined;
+        public static Sprite buttonSprite;
+
+        public static float cooldown = 30f;
+        public static float duration = 0f;
+        public static Color color = Palette.ImpostorRed;
+
+        public bool CanPlace { get; set; }
+        public static Vector2 VentSize { get; set; }
+
+        public static void clearAndReload() {
+            miner = null;
+            cooldown = CustomOptionHolder.minerCooldown.getFloat();
+        }
+        
+        public static Sprite getMineButtonSprite() {
+            if (buttonSprite) return buttonSprite;
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Mine.png", 115f);
+            return buttonSprite;
+        }
+    }
+    
+    public static class Pitfaller {
+        public static PlayerControl pitfaller;
+        public static PlayerControl pitfallbody;
+        public static Color color = Palette.ImpostorRed;
+
+        public static float cooldown = 30f;
+
+        private static Sprite buttonSprite;
+        public static Sprite getButtonSprite()
+        {
+            if (buttonSprite) return buttonSprite;
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.PitfallTarget.png", 115f);
+            return buttonSprite;
+        }
+
+        public static void clearAndReload()
+        {
+            pitfaller = null;
+            pitfallbody = null;
+            cooldown = CustomOptionHolder.pitfallerCooldown.getFloat();
+        }
+    }
+
+
+    public static class Shinobi {
+        public static PlayerControl shinobi;
+        public static Color color = Palette.ImpostorRed;
+        public static float cooldown = 30f;
+        public static float duration = 10f;
+        public static float shinobiTimer = 0f;
+        public static int killDistance = 0;
+        public static bool moveToPlayer = true;
+
+        private static Sprite shinobiSprite;
+        public static Sprite getButtonSprite() {
+            if(shinobiSprite) return shinobiSprite;
+            shinobiSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.ShinobiButton.png", 115f);
+            return shinobiSprite;
+        }
+
+        public static void resetShinobi() {
+            shinobiTimer = 0f;
+            if(shinobi == null) return;
+            GameOptionsManager.Instance.currentNormalGameOptions.KillDistance = 2;
+            moveToPlayer = true;
+        }
+
+        // Call in TheOtherRoles.cs
+        public static void clearAndReload() {
+            resetShinobi();
+            shinobi = null;
+            shinobiTimer = 0f;
+            cooldown = CustomOptionHolder.shinobiCooldown.getFloat();
+            duration = CustomOptionHolder.shinobiDuration.getFloat();
+            killDistance = Convert.ToInt32(CustomOptionHolder.shinobiKillDistance.getFloat()); 
+        }
+
+        // Call in UpdatePatch.cs
+        public static void shinobiAction() {
+            float oldShinobiTimer = Shinobi.shinobiTimer;
+
+            Shinobi.shinobiTimer -= Time.deltaTime;
+
+            // Set Shinobi effect
+            if(Shinobi.shinobiTimer > 0f) {
+                GameOptionsManager.Instance.currentNormalGameOptions.KillDistance = killDistance;
+                moveToPlayer = false;
+            }
+
+            if(oldShinobiTimer > 0f && Shinobi.shinobiTimer <= 0f) {
+                Shinobi.resetShinobi();
+            }
+        }
+
+        // Call in RPC.cs
+        public static void shinobiExpand() {
+            if(Shinobi.shinobi == null) return;
+            Shinobi.shinobiTimer = Shinobi.duration;
+        }
+    }
+
+
+
+        public static class Escapist {
+        public static PlayerControl escapist;
+        public static Color color = Palette.ImpostorRed;
+
+        public static float escapistEscapeTime = 30f;
+        public static float escapistChargesOnPlace = 1f;
+        public static bool resetPlaceAfterMeeting = false;
+    //    public static float jumperChargesGainOnMeeting = 2f;
+        public static float escapistMaxCharges = 3f;
+        public static float escapistCharges = 0f;
+
+        public static Vector3 escapeLocation;
+
+        private static Sprite escapeMarkButtonSprite;
+        private static Sprite escapeButtonSprite;
+        public static bool usedPlace = false;
+
+        public static Sprite getEscapeMarkButtonSprite() {
+            if (escapeMarkButtonSprite) return escapeMarkButtonSprite;
+            escapeMarkButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.JumperButton.png", 115f);
+            return escapeMarkButtonSprite;
+        }
+
+        public static Sprite getEscapeButtonSprite() {
+            if (escapeButtonSprite) return escapeButtonSprite;
+            escapeButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.JumperJumpButton.png", 115f);
+            return escapeButtonSprite;
+        }
+
+        public static void resetPlaces() {
+            escapistCharges = Mathf.RoundToInt(CustomOptionHolder.escapistChargesOnPlace.getFloat());
+            escapeLocation = Vector3.zero;
+            usedPlace = false;
+        }
+
+        public static void clearAndReload() {
+            resetPlaces();
+            escapeLocation = Vector3.zero;
+            escapist = null;
+            resetPlaceAfterMeeting = true;
+            escapistCharges = 0f;
+            escapistEscapeTime = CustomOptionHolder.escapistEscapeTime.getFloat();
+            escapistChargesOnPlace = CustomOptionHolder.escapistChargesOnPlace.getFloat();
+      //      jumperChargesGainOnMeeting = CustomOptionHolder.jumperChargesGainOnMeeting.getFloat();
+            escapistMaxCharges = CustomOptionHolder.escapistMaxCharges.getFloat();
+            usedPlace = false;
+        }
+    }
+
+
+     public static class Snarer
+    {
+        public static PlayerControl snarer;
+        public static Color color = Palette.ImpostorRed;
+
+        public static float minDistance = 0f;
+        public static float maxDistance;
+        public static int numSnare;
+        public static float extensionTime;
+        public static float killTimer;
+        public static float cooldown;
+        public static float snareRange;
+        public static float penaltyTime;
+        public static float bonusTime;
+        public static bool isSnareKill = false;
+        public static bool meetingFlag;
+
+        public static Sprite snareButtonSprite;
+        public static DateTime placedTime;
+
+        public static Sprite getSnareButtonSprite()
+        {
+            if (snareButtonSprite) return snareButtonSprite;
+            snareButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.SnarerButton.png", 115f);
+            return snareButtonSprite;
+        }
+
+        public static void setSnare()
+        {
+            var pos = CachedPlayer.LocalPlayer.PlayerControl.transform.position;
+            byte[] buff = new byte[sizeof(float) * 2];
+            Buffer.BlockCopy(BitConverter.GetBytes(pos.x), 0, buff, 0 * sizeof(float), sizeof(float));
+            Buffer.BlockCopy(BitConverter.GetBytes(pos.y), 0, buff, 1 * sizeof(float), sizeof(float));
+            MessageWriter writer = AmongUsClient.Instance.StartRpc(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.PlaceSnare, Hazel.SendOption.Reliable);
+            writer.WriteBytesAndSize(buff);
+            writer.EndMessage();
+            RPCProcedure.placeSnare(buff);
+            placedTime = DateTime.UtcNow;
+        }
+
+        public static void clearAndReload()
+        {
+            snarer = null;
+            numSnare = (int)CustomOptionHolder.snarerNumSnare.getFloat();
+            extensionTime = CustomOptionHolder.snarerExtensionTime.getFloat();
+            killTimer = CustomOptionHolder.snarerKillTimer.getFloat();
+            cooldown = CustomOptionHolder.snarerCooldown.getFloat();
+            snareRange = CustomOptionHolder.snarerSnareRange.getFloat();
+            penaltyTime = CustomOptionHolder.snarerPenaltyTime.getFloat();
+            bonusTime = CustomOptionHolder.snarerBonusTime.getFloat();
+            meetingFlag = false;
+            
+        }
+    }
+
+
+
+
+
+
+    public static class Werewolf
+    {
+        public static PlayerControl werewolf;
+        public static PlayerControl currentTarget;
+        public static Color color = new Color32(79, 56, 21, byte.MaxValue);
+
+        // Kill Button 
+        public static float killCooldown = 3f;
+
+        // Rampage Button
+        public static float rampageCooldown = 30f;
+        public static float rampageDuration = 5f;
+        public static bool canUseVents = false;
+        public static bool canKill = false;
+        public static bool hasImpostorVision = false;
+
+        public static Sprite buttonSprite;
+
+        public static Sprite getRampageButtonSprite()
+        {
+            if (buttonSprite) return buttonSprite;
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Rampage.png", 115f);
+            return buttonSprite;
+        }
+
+        public static Vector3 getRampageVector()
+        {
+            return new Vector3(-2.7f, -0.06f, 0);
+        }
+
+        public static void clearAndReload()
+        {
+            werewolf = null;
+            currentTarget = null;
+            canUseVents = false;
+            canKill = false;
+            hasImpostorVision = false;
+            rampageCooldown = CustomOptionHolder.werewolfRampageCooldown.getFloat();
+            rampageDuration = CustomOptionHolder.werewolfRampageDuration.getFloat();
+            killCooldown = CustomOptionHolder.werewolfKillCooldown.getFloat();
+
+        }
+    }
+
+    public static class Juggernaut
+    {
+        public static PlayerControl juggernaut;
+        public static Color color = new Color(0.55f, 0f, 0.3f, Byte.MaxValue);
+        public static PlayerControl currentTarget;
+
+        public static float cooldown = 30f;
+        public static float reducedkill = 5f;
+        public static bool hasImpostorVision = false;
+
+        public static void setkill() {
+            cooldown = cooldown - reducedkill;
+            if (cooldown <= 0f) {
+                cooldown = 0f;
+            }
+
+        }
+        public static void clearAndReload()
+        {
+            juggernaut = null;
+            currentTarget = null;
+            hasImpostorVision = CustomOptionHolder.juggernautHasImpVision.getBool();
+            cooldown = CustomOptionHolder.juggernautCooldown.getFloat();
+            reducedkill = CustomOptionHolder.juggernautReducedkillEach.getFloat();
+
+        }
+
+    }
+
+
 
     public static class Jackal {
         public static PlayerControl jackal;
@@ -895,7 +1683,7 @@ namespace TheOtherRoles
         public static bool canCreateSidekick = true;
         public static Sprite buttonSprite;
         public static bool jackalPromotedFromSidekickCanCreateSidekick = true;
-        public static bool canCreateSidekickFromImpostor = true;
+        public static bool canCreateSidekickFromImpostor = false;
         public static bool hasImpostorVision = false;
         public static bool wasTeamRed;
         public static bool wasImpostor;
@@ -926,7 +1714,7 @@ namespace TheOtherRoles
             canUseVents = CustomOptionHolder.jackalCanUseVents.getBool();
             canCreateSidekick = CustomOptionHolder.jackalCanCreateSidekick.getBool();
             jackalPromotedFromSidekickCanCreateSidekick = CustomOptionHolder.jackalPromotedFromSidekickCanCreateSidekick.getBool();
-            canCreateSidekickFromImpostor = CustomOptionHolder.jackalCanCreateSidekickFromImpostor.getBool();
+            //canCreateSidekickFromImpostor = CustomOptionHolder.jackalCanCreateSidekickFromImpostor.getBool();
             formerJackals.Clear();
             hasImpostorVision = CustomOptionHolder.jackalAndSidekickHaveImpostorVision.getBool();
             wasTeamRed = wasImpostor = wasSpy = false;
@@ -1066,6 +1854,24 @@ namespace TheOtherRoles
         public static void clearAndReload() {
             cleaner = null;
             cooldown = CustomOptionHolder.cleanerCooldown.getFloat();
+        }
+    }
+
+  
+	
+    public static class Poucher
+    {
+        public static PlayerControl poucher;
+        public static Color color = Palette.ImpostorRed;
+        public static List<PlayerControl> killed = new List<PlayerControl>();
+
+
+
+        public static void clearAndReload(bool clearList = true)
+        {
+            poucher = null;
+			if (clearList) killed = new List<PlayerControl>();
+
         }
     }
 
@@ -1234,6 +2040,7 @@ namespace TheOtherRoles
         public static PlayerControl currentTarget;
         public static PlayerControl douseTarget;
         public static List<PlayerControl> dousedPlayers = new List<PlayerControl>();
+	public static List<PoolablePlayer> poolIcons = new List<PoolablePlayer>();
 
         private static Sprite douseSprite;
         public static Sprite getDouseSprite() {
@@ -1506,7 +2313,7 @@ namespace TheOtherRoles
                 var alivePlayersList = PlayerControl.AllPlayerControls.ToArray().Where(pc => !pc.Data.IsDead);
                 switch (rnd.Next(3)) {
                     case 0:
-                        count = alivePlayersList.Where(pc => pc.Data.Role.IsImpostor || new List<RoleInfo>() { RoleInfo.jackal, RoleInfo.sidekick, RoleInfo.sheriff, RoleInfo.thief }.Contains(RoleInfo.getRoleInfoForPlayer(pc, false).FirstOrDefault())).Count();
+                        count = alivePlayersList.Where(pc => pc.Data.Role.IsImpostor || new List<RoleInfo>() { RoleInfo.jackal, RoleInfo.sidekick, RoleInfo.sheriff, RoleInfo.thief, RoleInfo.swooper, RoleInfo.werewolf, RoleInfo.juggernaut, RoleInfo.cerenovus, RoleInfo.onetimekiller }.Contains(RoleInfo.getRoleInfoForPlayer(pc, false).FirstOrDefault())).Count();
                         condition = "名持刃者" + (count == 1 ? "" : "");
                         break;
                     case 1:
@@ -1514,7 +2321,7 @@ namespace TheOtherRoles
                         condition = "名玩家" + (count == 1 ? "" : "") + " 作为可跳管的人";
                         break;
                     case 2:
-                        count = alivePlayersList.Where(pc => Helpers.isNeutral(pc) && pc != Jackal.jackal && pc != Sidekick.sidekick && pc != Thief.thief).Count();
+                        count = alivePlayersList.Where(pc => Helpers.isNeutral(pc) && pc != Jackal.jackal && pc != Sidekick.sidekick && pc != Thief.thief && pc != Swooper.swooper && pc != Werewolf.werewolf && pc != Juggernaut.juggernaut && pc != Cerenovus.cerenovus).Count();
                         condition = "名玩家" + (count == 1 ? "" : "s") + " 作为 " + (count == 1 ? "" : "") + " 无刀独立职业";
                         break;
                     case 3:
@@ -1694,6 +2501,8 @@ namespace TheOtherRoles
         public static bool canUseVents;
         public static bool canKillSheriff;
         public static bool canStealWithGuess;
+        public static bool canKillDeputy;
+        public static bool canKillVeteren;
 
         public static void clearAndReload() {
             thief = null;
@@ -1705,10 +2514,12 @@ namespace TheOtherRoles
             canUseVents = CustomOptionHolder.thiefCanUseVents.getBool();
             canKillSheriff = CustomOptionHolder.thiefCanKillSheriff.getBool();
             canStealWithGuess = CustomOptionHolder.thiefCanStealWithGuess.getBool();
+            canKillDeputy = CustomOptionHolder.thiefCanKillDeputy.getBool();
+            canKillVeteren = CustomOptionHolder.thiefCanKillVeteren.getBool();
         }
 
         public static bool isFailedThiefKill(PlayerControl target, PlayerControl killer, RoleInfo targetRole) {
-            return killer == Thief.thief && !target.Data.Role.IsImpostor && !new List<RoleInfo> { RoleInfo.jackal, canKillSheriff ? RoleInfo.sheriff : null, RoleInfo.sidekick }.Contains(targetRole);
+            return killer == Thief.thief && !target.Data.Role.IsImpostor && !new List<RoleInfo> { RoleInfo.jackal, canKillSheriff ? RoleInfo.sheriff : null,canKillDeputy ? RoleInfo.deputy : null,canKillVeteren ? RoleInfo.veteren : null, RoleInfo.sidekick, RoleInfo.swooper, RoleInfo.werewolf, RoleInfo.juggernaut, RoleInfo.cerenovus }.Contains(targetRole);
         }
     }
 
@@ -1799,6 +2610,7 @@ namespace TheOtherRoles
         }
     }
 
+
     public static class Yoyo {
         public static PlayerControl yoyo = null;
         public static Color color = Palette.ImpostorRed;
@@ -1845,7 +2657,479 @@ namespace TheOtherRoles
         }
     }
 
+
+
+
+
+    public static class Akujo
+    {
+        public static Color color = new Color32(142, 69, 147, byte.MaxValue);
+        public static PlayerControl akujo;
+        public static PlayerControl honmei;
+        public static List<PlayerControl> keeps;
+        public static PlayerControl currentTarget;
+        public static DateTime startTime;
+
+        public static float timeLimit = 1300f;
+        public static bool knowsRoles = true;
+        public static int timeLeft;
+        public static int keepsLeft;
+        public static int numKeeps;
+
+        private static Sprite honmeiSprite;
+        public static Sprite getHonmeiSprite()
+        {
+            if (honmeiSprite) return honmeiSprite;
+            honmeiSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.AkujoHonmeiButton.png", 115f);
+            return honmeiSprite;
+        }
+
+        private static Sprite keepSprite;
+        public static Sprite getKeepSprite()
+        {
+            if (keepSprite) return keepSprite;
+            keepSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.AkujoKeepButton.png", 115f);
+            return keepSprite;
+        }
+
+        public static void breakLovers(PlayerControl lover)
+        {
+            if ((Lovers.lover1 != null && lover == Lovers.lover1) || (Lovers.lover2 != null && lover == Lovers.lover2))
+            {
+                PlayerControl otherLover = lover.getPartner();
+                if (otherLover != null)
+                {
+                    Lovers.clearAndReload();
+                    otherLover.MurderPlayer(otherLover, MurderResultFlags.Succeeded);
+                    GameHistory.overrideDeathReasonAndKiller(otherLover, DeadPlayer.CustomDeathReason.LoveStolen);
+                }
+            }
+        }
+
+        public static void clearAndReload()
+        {
+            akujo = null;
+            honmei = null;
+            keeps = new List<PlayerControl>();
+            currentTarget = null;
+            startTime = DateTime.UtcNow;
+            timeLimit = CustomOptionHolder.akujoTimeLimit.getFloat() + 360f;
+            knowsRoles = CustomOptionHolder.akujoKnowsRoles.getBool();
+            timeLeft = (int)Math.Ceiling(timeLimit - (DateTime.UtcNow - startTime).TotalSeconds);
+            numKeeps = Math.Min((int)CustomOptionHolder.akujoNumKeeps.getFloat(), PlayerControl.AllPlayerControls.Count - 2);
+            keepsLeft = numKeeps;
+        }
+    }
+
+    public static class Cerenovus
+    {
+        public static PlayerControl cerenovus;
+        public static PlayerControl formerCerenovus;
+        public static Color color = Color.green;
+
+        public static PlayerControl tmpTarget;
+        public static PlayerControl target;
+        public static PlayerControl currentTarget;
+        public static PlayerControl killTarget;
+        public static List<PlayerControl> brainwashed;
+
+        public static int counter;
+
+        public static float brainwashTime = 2f;
+        public static float brainwashCooldown = 30f;
+        public static int numberToWin = 3;
+
+        public static Sprite brainwashIcon;
+
+        public static List<Arrow> arrows = new();
+        public static float updateTimer = 0f;
+        public static float arrowUpdateInterval = 0.5f;
+        public static TMPro.TMP_Text targetPositionText;
+
+        public static bool triggerCerenovusWin = false;
+
+        public static Sprite getBrainwashIcon()
+        {
+            if (brainwashIcon) return brainwashIcon;
+            brainwashIcon = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.BrainwashButton.png", 115f);
+            return brainwashIcon;
+        }
+
+        public static void arrowUpdate()
+        {
+
+            //前フレームからの経過時間をマイナスする
+            updateTimer -= Time.fixedDeltaTime;
+
+            // 1秒経過したらArrowを更新
+            if (updateTimer <= 0.0f)
+            {
+
+                // 前回のArrowをすべて破棄する
+                foreach (Arrow arrow in arrows)
+                {
+                    if (arrow != null && arrow.arrow != null)
+                    {
+                        arrow.arrow.SetActive(false);
+                        UnityEngine.Object.Destroy(arrow.arrow);
+                    }
+                }
+
+                // Arrows一覧
+                arrows = new List<Arrow>();
+                // ターゲットの位置を示すArrowを描画
+                if (target != null && !target.Data.IsDead)
+                {
+                    Arrow arrow = new(Palette.CrewmateBlue);
+                    arrow.arrow.SetActive(true);
+                    arrow.Update(target.transform.position);
+                    arrows.Add(arrow);
+                    if (targetPositionText == null)
+                    {
+                        RoomTracker roomTracker = HudManager.Instance?.roomTracker;
+                        if (roomTracker == null) return;
+                        GameObject gameObject = UnityEngine.Object.Instantiate(roomTracker.gameObject);
+                        UnityEngine.Object.DestroyImmediate(gameObject.GetComponent<RoomTracker>());
+                        gameObject.transform.SetParent(HudManager.Instance.transform);
+                        gameObject.transform.localPosition = new Vector3(0, -2.0f, gameObject.transform.localPosition.z);
+                        gameObject.transform.localScale = Vector3.one * 1.0f;
+                        targetPositionText = gameObject.GetComponent<TMPro.TMP_Text>();
+                        targetPositionText.alpha = 1.0f;
+                    }
+                    PlainShipRoom room = Helpers.getPlainShipRoom(target);
+                    targetPositionText.gameObject.SetActive(true);
+                    int nearestPlayer = 0;
+                    foreach (var p in PlayerControl.AllPlayerControls)
+                    {
+                        if (p != target && !p.Data.IsDead)
+                        {
+                            float dist = Vector2.Distance(p.transform.position, target.transform.position);
+                            if (dist < 7f) nearestPlayer += 1;
+                        }
+                    }
+                    if (room != null)
+                    {
+                        targetPositionText.text = "<color=#8CFFFFFF>" + $"{target.Data.PlayerName}({nearestPlayer})(" + DestroyableSingleton<TranslationController>.Instance.GetString(room.RoomId) + ")</color>";
+                    }
+                    else
+                    {
+                        targetPositionText.text = "<color=#8CFFFFFF>" + $"{target.Data.PlayerName}({nearestPlayer})</color>";
+                    }
+                }
+                else
+                {
+                    if (targetPositionText != null)
+                    {
+                        targetPositionText.text = "";
+                    }
+                }
+
+                // タイマーに時間をセット
+                updateTimer = arrowUpdateInterval;
+            }
+        }
+
+        public static void clearAndReload()
+        {
+            cerenovus = null;
+            formerCerenovus = null;
+            tmpTarget = null;
+            target = null;
+            currentTarget = null;
+            killTarget = null;
+            brainwashed = new List<PlayerControl>();
+            counter = 0;
+            triggerCerenovusWin = false;
+            brainwashCooldown = CustomOptionHolder.cerenovusBrainwashCooldown.getFloat();
+            brainwashTime = CustomOptionHolder.cerenovusBrainwashTime.getFloat();
+            numberToWin = (int)CustomOptionHolder.cerenovusNumberToWin.getFloat();
+
+            if (targetPositionText != null) UnityEngine.Object.Destroy(targetPositionText);
+            targetPositionText = null;
+            if (arrows != null)
+            {
+                foreach (Arrow arrow in arrows)
+                    if (arrow?.arrow != null)
+                        UnityEngine.Object.Destroy(arrow.arrow);
+            }
+            arrows = new List<Arrow>();
+        }
+    }
+
+        [HarmonyPatch]
+    public static class Kataomoi
+    {
+        public static PlayerControl kataomoi;
+        public static Color color = new Color32(199, 21, 133, byte.MaxValue);
+
+        public static float stareCooldown = 30f;
+        public static float stareDuration = 3f;
+        public static int stareCount = 1;
+        public static int stareCountMax = 1;
+        public static float stalkingCooldown = 30f;
+        public static float stalkingDuration = 5f;
+        public static float stalkingFadeTime = 0.5f;
+        public static float searchCooldown = 30f;
+        public static float searchDuration = 5f;
+        public static bool isSearch = false;
+        public static float stalkingTimer = 0f;
+        public static float stalkingEffectTimer = 0f;
+        public static bool triggerKataomoiWin = false;
+        public static PlayerControl target = null;
+        public static PlayerControl currentTarget = null;
+        public static TMPro.TextMeshPro stareText = null;
+        public static SpriteRenderer[] gaugeRenderer = new SpriteRenderer[3];
+        public static Arrow arrow;
+        public static float gaugeTimer = 0.0f;
+        public static float baseGauge = 0f;
+
+        static bool _isStalking = false;
+
+        static Sprite stareSprite;
+        public static Sprite getStareSprite() {
+            if (stareSprite) return stareSprite;
+            stareSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.KataomoiStareButton.png", 115f);
+            return stareSprite;
+        }
+
+        static Sprite loveSprite;
+        public static Sprite getLoveSprite() {
+            if (loveSprite) return loveSprite;
+            loveSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.KataomoiLoveButton.png", 115f);
+            return loveSprite;
+        }
+
+        static Sprite searchSprite;
+        public static Sprite getSearchSprite() {
+            if (searchSprite) return searchSprite;
+            searchSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.KataomoiSearchButton.png", 115f);
+            return searchSprite;
+        }
+
+        static Sprite stalkingSprite;
+        public static Sprite getStalkingSprite() {
+            if (stalkingSprite) return stalkingSprite;
+            stalkingSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.KataomoiStalkingButton.png", 115f);
+            return stalkingSprite;
+        }
+
+        static Sprite[] loveGaugeSprites = new Sprite[3];
+        public static Sprite getLoveGaugeSprite(int index) {
+            if (index < 0 || index >= loveGaugeSprites.Length) return null;
+            if (loveGaugeSprites[index]) return loveGaugeSprites[index];
+
+            int id = 0;
+            switch (index) {
+                case 0: id = 1; break;
+                case 1: id = 2; break;
+                case 2: id = 11; break;
+            }
+            loveGaugeSprites[index] = Helpers.loadSpriteFromResources(String.Format("TheOtherRoles.Resources.KataomoiGauge_{0:d2}.png", id), 115f);
+            return loveGaugeSprites[index];
+        }
+
+        public static void doStare() {
+            baseGauge = getLoveGauge();
+            gaugeTimer = 1.0f;
+            stareCount = Mathf.Max(0, stareCount - 1);
+
+            if (gaugeRenderer[2] != null && stareCount == 0) {
+                gaugeRenderer[2].color = color;
+            }
+            if (Constants.ShouldPlaySfx()) SoundManager.Instance.PlaySound(DestroyableSingleton<HudManager>.Instance.TaskCompleteSound, false, 0.8f);
+        }
+
+        public static void doStalking() {
+            if (kataomoi == null) return;
+            stalkingTimer = stalkingDuration;
+            _isStalking = true;
+        }
+
+        public static void resetStalking() {
+            if (kataomoi == null) return;
+            _isStalking = false;
+            setkataomoiAlpha(1.0f);
+        }
+
+        public static bool isStalking(PlayerControl player) {
+            if (player == null || player != kataomoi) return false;
+            return _isStalking && stalkingTimer > 0;
+        }
+
+        public static bool isStalking() {
+            return isStalking(kataomoi);
+        }
+
+        public static void doSearch() {
+            if (kataomoi == null) return;
+            isSearch = true;
+        }
+
+        public static void resetSearch() {
+            if (kataomoi == null) return;
+            isSearch = false;
+        }
+
+        public static bool canLove() {
+            return stareCount <= 0;
+        }
+
+        public static float getLoveGauge() {
+            return 1.0f - (stareCountMax == 0 ? 0f : (float)stareCount / (float)stareCountMax);
+        }
+
+        public static void clearAndReload() {
+            resetStalking();
+
+            kataomoi = null;
+            stareCooldown = CustomOptionHolder.kataomoiStareCooldown.getFloat();
+            stareDuration = CustomOptionHolder.kataomoiStareDuration.getFloat();
+            stareCount = stareCountMax = (int)CustomOptionHolder.kataomoiStareCount.getFloat();
+            stalkingCooldown = CustomOptionHolder.kataomoiStalkingCooldown.getFloat();
+            stalkingDuration = CustomOptionHolder.kataomoiStalkingDuration.getFloat();
+            stalkingFadeTime = CustomOptionHolder.kataomoiStalkingFadeTime.getFloat();
+            searchCooldown = CustomOptionHolder.kataomoiSearchCooldown.getFloat();
+            searchDuration = CustomOptionHolder.kataomoiSearchDuration.getFloat();
+            isSearch = false;
+            stalkingTimer = 0f;
+            stalkingEffectTimer = 0f;
+            triggerKataomoiWin = false;
+            target = null;
+            currentTarget = null;
+            if (stareText != null && stareText.gameObject != null) UnityEngine.Object.Destroy(stareText.gameObject);
+            stareText = null;
+            if (arrow != null && arrow.arrow != null) UnityEngine.Object.Destroy(arrow.arrow);
+            for (int i = 0; i < gaugeRenderer.Length; ++i) {
+                if (gaugeRenderer[i] != null) {
+                    UnityEngine.Object.Destroy(gaugeRenderer[i].gameObject);
+                    gaugeRenderer[i] = null;
+                }
+            }
+            arrow = null;
+            gaugeTimer = 0.0f;
+            baseGauge = 0.0f;
+        }
+
+        public static void FixedUpdate(PlayerPhysics __instance) {
+            if (kataomoi == null) return;
+            if (kataomoi != __instance.myPlayer) return;
+
+            if (gaugeRenderer[1] != null && gaugeTimer > 0.0f)
+            {
+                gaugeTimer = Mathf.Max(gaugeTimer - Time.fixedDeltaTime, 0.0f);
+                float gauge = getLoveGauge();
+                float nowGauge = Mathf.Lerp(baseGauge, gauge, 1.0f - gaugeTimer);
+                gaugeRenderer[1].transform.localPosition = new Vector3(Mathf.Lerp(-3.470784f - 1.121919f, -3.470784f, nowGauge), -2.626999f, -8.1f);
+                gaugeRenderer[1].transform.localScale = new Vector3(nowGauge, 1, 1);
+            }
+
+            if (kataomoi.isDead()) return;
+            if (_isStalking && stalkingTimer > 0)
+            {
+                kataomoi.cosmetics.currentBodySprite.BodySprite.material.SetFloat("_Outline", 0f);
+                stalkingTimer = Mathf.Max(0f, stalkingTimer - Time.fixedDeltaTime);
+                if (stalkingFadeTime > 0)
+                {
+                    float elapsedTime = stalkingDuration - stalkingTimer;
+                    float alpha = Mathf.Min(elapsedTime, stalkingFadeTime) / stalkingFadeTime;
+                    alpha = Mathf.Clamp(1f - alpha, CachedPlayer.LocalPlayer.PlayerControl == kataomoi || CachedPlayer.LocalPlayer.PlayerControl.isDead() ? 0.1f : 0f, 1f);
+                    setkataomoiAlpha(alpha);
+                }
+                else
+                {
+                    setkataomoiAlpha(CachedPlayer.LocalPlayer.PlayerControl == kataomoi ? 0.1f : 0f);
+                }
+
+                if (stalkingTimer <= 0f)
+                {
+                    _isStalking = false;
+                    stalkingEffectTimer = stalkingFadeTime;
+                }
+            }
+            else if (!_isStalking && stalkingEffectTimer > 0)
+            {
+                stalkingEffectTimer = Mathf.Max(0f, stalkingEffectTimer - Time.fixedDeltaTime);
+                if (stalkingFadeTime > 0)
+                {
+                    float elapsedTime = stalkingFadeTime - stalkingEffectTimer;
+                    float alpha = Mathf.Min(elapsedTime, stalkingFadeTime) / stalkingFadeTime;
+                    alpha = Mathf.Clamp(alpha, CachedPlayer.LocalPlayer.PlayerControl == kataomoi || CachedPlayer.LocalPlayer.PlayerControl.isDead() ? 0.1f : 0f, 1f);
+                    setkataomoiAlpha(alpha);
+                }
+                else
+                {
+                    setkataomoiAlpha(1.0f);
+                }
+            }
+            else
+            {
+                setkataomoiAlpha(1.0f);
+            }
+        }
+
+        static void setkataomoiAlpha(float alpha) {
+            if (kataomoi == null) return;
+            var color = Color.Lerp(Palette.ClearWhite, Palette.White, alpha);
+            try {
+                if (kataomoi.cosmetics?.currentBodySprite?.BodySprite != null)
+                    kataomoi.cosmetics.currentBodySprite.BodySprite.color = color;
+
+                if (kataomoi.cosmetics?.skin?.layer != null)
+                    kataomoi.cosmetics.skin.layer.color = color;
+
+                if (kataomoi.cosmetics.hat != null)
+                    kataomoi.cosmetics.hat.SetMaterialColor(color.ToInteger(true));
+
+                //if (kataomoi.cosmetics.currentPet?.rend != null)
+                 //   kataomoi.cosmetics.currentPet.rend.color = color;
+
+                //if (kataomoi.cosmetics.currentPet?.shadowRend != null)
+                //    kataomoi.cosmetics.currentPet.shadowRend.color = color;
+
+                foreach (var rend in kataomoi.cosmetics.currentPet.renderers)
+                    rend.color = color;
+
+                foreach (var shadowRend in kataomoi.cosmetics.currentPet.shadows)
+                    shadowRend.color = color;
+
+                if (kataomoi.cosmetics.visor != null)
+                    kataomoi.cosmetics.visor.Alpha = alpha;
+
+                kataomoi.SetHatAndVisorAlpha(alpha);
+
+            } catch { }
+        }
+    }
+
+
+
+
     // Modifier
+    public static class Disperser {
+        public static PlayerControl disperser;
+        public static Color color = new Color32(48, 21, 89, byte.MaxValue);
+
+        public static float cooldown = 30f;
+        public static int remainingDisperses = 1;
+        public static bool dispersesToVent;
+        private static Sprite buttonSprite;
+
+        public static Sprite getButtonSprite() {
+            if (buttonSprite) return buttonSprite;
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Disperse.png", 115f);
+            return buttonSprite;
+        }
+
+        public static void clearAndReload() {
+            disperser = null;
+            cooldown = CustomOptionHolder.modifierDisperserCooldown.getFloat();
+            remainingDisperses = CustomOptionHolder.modifierDisperserNumberOfUses.getSelection() + 1;
+            dispersesToVent = CustomOptionHolder.modifierDisperserDispersesToVent.getBool(); 
+        }
+    }
+
+
+
     public static class Bait {
         public static List<PlayerControl> bait = new List<PlayerControl>();
         public static Dictionary<DeadPlayer, float> active = new Dictionary<DeadPlayer, float>();
@@ -1908,6 +3192,151 @@ namespace TheOtherRoles
         public static void clearAndReload() {
             tiebreaker = null;
             isTiebreak = false;
+        }
+    }
+    
+    public static class Indomitable {
+        public static PlayerControl indomitable;
+        public static Color color = new Color32(48, 21, 89, byte.MaxValue);
+
+
+        public static void clearAndReload() {
+            indomitable = null;
+        }
+    }
+    
+    public static class AntiReport
+    {
+        public static List<PlayerControl> antiReport = new List<PlayerControl>();
+
+        public static void clearAndReload()
+        {
+            antiReport = new List<PlayerControl>();
+        }
+    }
+
+
+
+
+    public static class Cursed {
+        public static PlayerControl cursed;
+        public static Color crewColor = new Color32(0, 247, 255, byte.MaxValue);
+        public static Color impColor = Palette.ImpostorRed;
+        public static Color color = crewColor;
+        public static void clearAndReload() {
+            cursed = null;
+        }
+    }
+    
+    public static class Slueth {
+        public static PlayerControl slueth;
+        public static Color color = new Color32(48, 21, 89, byte.MaxValue);
+        public static List<PlayerControl> reported = new List<PlayerControl>();
+
+        public static void clearAndReload() {
+            slueth = null;
+            reported = new List<PlayerControl>();
+        }
+    }
+    
+     public static class Radar {
+        public static PlayerControl radar;
+        public static List<Arrow> localArrows = new List<Arrow>();
+        public static PlayerControl ClosestPlayer;
+        public static Color color = new Color32(208, 0, 93, byte.MaxValue);
+        public static bool showArrows = true;
+        
+
+
+        public static void clearAndReload() {
+            radar = null;
+            showArrows = true;
+            if (localArrows != null) {
+                foreach (Arrow arrow in localArrows)
+                    if (arrow?.arrow != null)
+                        UnityEngine.Object.Destroy(arrow.arrow);
+            }
+            localArrows = new List<Arrow>();
+        }
+    }
+
+
+    public static class AllKnowing {
+
+        public static Dictionary<PlayerControl, Arrow> AliveCrew = new();
+
+        public static List<PlayerControl> Allknowers = new();
+
+        public static void clearAndReload() {
+            AliveCrew.Clear();
+            Allknowers.Clear();
+        }
+    }
+
+    public static class Viewer
+    {
+        public static PlayerControl viewer;
+        public static readonly Dictionary<byte, Arrow> Arrows = new();
+        private static bool _revealImpostors;
+        
+        public static void clearAndReload() {
+            viewer = null;
+            _revealImpostors = true; // First round with impostor arrow pointing
+            foreach (var a in Arrows)
+            {
+                if (!a.Value.arrow) continue;
+                UnityEngine.Object.Destroy(a.Value.arrow);
+            }
+            Arrows.Clear();
+        }
+
+        public static void ToggleArrowMode()
+        {
+            _revealImpostors = !_revealImpostors;
+        }
+
+        public static void UpdateArrows()
+        {
+            if (viewer != CachedPlayer.LocalPlayer.PlayerControl) return;
+            var localPlayerId = CachedPlayer.LocalPlayer.PlayerId;
+            var remainingKeys = Arrows.Keys.ToList();
+            var shouldBeActive = AmongUsClient.Instance && AmongUsClient.Instance.IsGameStarted && !MeetingHud.Instance;
+            foreach (var p in CachedPlayer.AllPlayers)
+            {
+                if (p.Data == null || !p.PlayerControl || p.Data.IsDead || p.PlayerId == localPlayerId) continue;
+                remainingKeys.Remove(p.PlayerId);
+                if (!Arrows.TryGetValue(p.PlayerId, out var arrow))
+                {
+                    arrow = Arrows[p.PlayerId] = new Arrow(Color.white);
+                }
+
+                var isActive = shouldBeActive && ((_revealImpostors && p.Data.Role.IsImpostor) || (!_revealImpostors && !p.Data.Role.IsImpostor));
+                arrow.arrow.SetActive(isActive);
+                if (isActive)
+                {
+                    arrow.Update(p.PlayerControl.transform.position, _revealImpostors ? Palette.ImpostorRed : Color.white);
+                }
+            }
+
+            foreach (var k in remainingKeys)
+            {
+                if (Arrows[k].arrow)
+                {
+                    UnityEngine.Object.Destroy(Arrows[k].arrow);
+                }
+                Arrows.Remove(k);
+            }
+        }
+    }
+
+
+
+	
+    public static class Paranoid {
+        public static PlayerControl paranoid;
+        public static Color color = new Color32(48, 21, 89, byte.MaxValue);
+        public static void clearAndReload() {
+            paranoid = null;
         }
     }
 
@@ -2076,6 +3505,15 @@ namespace TheOtherRoles
             }  else if (Medic.medic != null && Medic.medic == player2) {
                 if (repeat) shiftRole(player2, player1, false);
                 Medic.medic = player1;
+            }  else if (Veteren.veteren != null && Veteren.veteren == player2) {
+                if (repeat) shiftRole(player2, player1, false);
+                Veteren.veteren = player1;
+            }  else if (BodyGuard.bodyguard != null && BodyGuard.bodyguard == player2) {
+                if (repeat) shiftRole(player2, player1, false);
+                BodyGuard.bodyguard = player1;
+            }  else if (Transporter.transporter != null && Transporter.transporter == player2) {
+                if (repeat) shiftRole(player2, player1, false);
+                Transporter.transporter = player1;
             } else if (Swapper.swapper != null && Swapper.swapper == player2) {
                 if (repeat) shiftRole(player2, player1, false);
                 Swapper.swapper = player1;
@@ -2118,4 +3556,78 @@ namespace TheOtherRoles
             futureShift = null;
         }
     }
+
+     public static class Giant {
+            public static List<PlayerControl> giant = new List<PlayerControl>();
+
+            public static Color color = Color.yellow;
+
+            public static float speed;
+
+            public static float colliderOffset = 05f;
+            public static float colliderRadius = 1.7f; 
+            public static float scale = 1.5f;
+
+            public static Vector3 Scale = new Vector3(1.5f, 1.5f, 1.5f);
+
+            public static void clearAndReload() {
+                giant = new List<PlayerControl>();
+                scale = CustomOptionHolder.modifierGiantSize.getFloat();
+                Scale = new Vector3(scale,scale, scale);
+                speed = CustomOptionHolder.modifierGiantSpeed.getFloat();
+            }
+
+        }
+        public static class Flash {
+            public static List<PlayerControl> flash = new List<PlayerControl>();
+
+            public static Color color = Color.yellow;
+
+            public static float speed = 1.8f;
+
+            public static void clearAndReload() {
+                flash = new List<PlayerControl>();
+                speed = CustomOptionHolder.modifierFlashSpeed.getFloat();
+            }
+
+        }
+        public static class OneTimeKiller {
+            public static PlayerControl onetimekiller;
+            public static Color color = Palette.Orange;
+            public static PlayerControl currentTarget;
+            public static bool hasKilled = false;
+
+            public static void clearAndReload() {
+                onetimekiller = null;
+                currentTarget = null;
+                hasKilled = false;
+            }
+        }
+
+        public static class Recruiter {
+            public static List<PlayerControl> recruiter = new List<PlayerControl>();
+
+            public static Color color = new Color32(150, 0, 0, byte.MaxValue);
+
+            public static PlayerControl FutureRecruited;
+            public static PlayerControl currentTarget;
+
+            public static Sprite recruitSprite = null;
+
+            public static Sprite getRecruitSprite() {
+                if (recruitSprite) return recruitSprite;
+                recruitSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.TargetIcon.png", 100);
+                return recruitSprite;
+            }
+
+            public static void clearAndReload() {
+                currentTarget = null;
+                FutureRecruited = null;
+                recruiter = new List<PlayerControl>();
+                recruitSprite = null;
+            }
+
+        }
+
+
 }
