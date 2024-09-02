@@ -1,5 +1,30 @@
 ![eisbison banner](./Images/TOR_logo.png)
-<p align="center"><a href="https://github.com/Eisbison/TheOtherRoles/releases/"><img src="https://badgen.net/github/release/eisbison/theotherroles"></a></p>
+
+
+
+# Credits & Resources
+
+
+[TheOtherRoles-pulls](https://github.com/TheOtherRolesAU/TheOtherRoles/pulls)\
+[TheOtherRoles-forks](https://github.com/TheOtherRolesAU/TheOtherRoles/forks)\
+[SpexGH](https://github.com/SpexGH/TheOtherUs)\
+[JustASysAdmin,ismywb](https://github.com/JustASysAdmin/TheOtherRoles2)\
+[mxyx-club](https://github.com/mxyx-club/TheOtherUs-Dev)\
+[kind_haore](https://github.com/mxyx-club/TheOtherUs-Dev/tree/kind_haore)\
+[dabao40](https://github.com/dabao40/TheOtherRolesGMIA)\
+[miru-y](https://github.com/miru-y/TheOtherRoles-MR)\
+[haoming37](https://github.com/haoming37/GMH)\
+[MaximeGillot](https://github.com/MaximeGillot/TheOtherRolesForked)\
+[Vitaxses](https://github.com/Vitaxses/TheOtherRoles-E)\
+
+
+
+
+
+
+
+
+
 
 
 This mod is not affiliated with Among Us or Innersloth LLC, and the content contained therein is not endorsed or otherwise sponsored by Innersloth LLC. Portions of the materials contained herein are property of Innersloth LLC. © Innersloth LLC.</p>
