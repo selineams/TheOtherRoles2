@@ -2713,7 +2713,7 @@ namespace TheOtherRoles
             keeps = new List<PlayerControl>();
             currentTarget = null;
             startTime = DateTime.UtcNow;
-            timeLimit = CustomOptionHolder.akujoTimeLimit.getFloat() + 360f;
+            timeLimit = CustomOptionHolder.akujoTimeLimit.getFloat() + 180f;
             knowsRoles = CustomOptionHolder.akujoKnowsRoles.getBool();
             timeLeft = (int)Math.Ceiling(timeLimit - (DateTime.UtcNow - startTime).TotalSeconds);
             numKeeps = Math.Min((int)CustomOptionHolder.akujoNumKeeps.getFloat(), PlayerControl.AllPlayerControls.Count - 2);
@@ -3514,6 +3514,12 @@ namespace TheOtherRoles
             }  else if (Transporter.transporter != null && Transporter.transporter == player2) {
                 if (repeat) shiftRole(player2, player1, false);
                 Transporter.transporter = player1;
+            }  else if (Teleporter.teleporter != null && Teleporter.teleporter == player2) {
+                if (repeat) shiftRole(player2, player1, false);
+                Teleporter.teleporter = player1;
+            }  else if (Arbiter.arbiter != null && Arbiter.arbiter == player2) {
+                if (repeat) shiftRole(player2, player1, false);
+                Arbiter.arbiter = player1;
             } else if (Swapper.swapper != null && Swapper.swapper == player2) {
                 if (repeat) shiftRole(player2, player1, false);
                 Swapper.swapper = player1;

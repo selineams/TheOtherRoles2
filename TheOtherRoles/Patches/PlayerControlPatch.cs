@@ -826,11 +826,11 @@ namespace TheOtherRoles.Patches {
 
                 p.cosmetics.nameText.transform.parent.SetLocalZ(-0.0001f);  // This moves both the name AND the colorblindtext behind objects (if the player is behind the object), like the rock on polus
                bool snitchFlag = false;
-				if (Snitch.snitch != null) {
+				if (Snitch.snitch != null && Snitch.seeInMeeting && !Snitch.snitch.Data.IsDead) {
 					var (playerCompleted, playerTotal) = TasksHandler.taskInfo(Snitch.snitch.Data);
 					int numberOfTasks = playerTotal - playerCompleted;
 					bool completedSnitch = (Snitch.seeInMeeting && CachedPlayer.LocalPlayer.PlayerControl == Snitch.snitch && numberOfTasks == 0);
-					snitchFlag = (completedSnitch && (Helpers.isNeutral(p) || p.Data.Role.IsImpostor));
+					snitchFlag = (completedSnitch && (p == Helpers.isNeutral(p) || p.Data.Role.IsImpostor));
 				}
                 bool isKataomoi = PlayerControl.LocalPlayer == Kataomoi.kataomoi;
                 bool isKataomoiTarget = (Kataomoi.kataomoi != null && p == Kataomoi.target && (p.isDead() || p != PlayerControl.LocalPlayer));

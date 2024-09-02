@@ -836,9 +836,13 @@ namespace TheOtherRoles.Patches {
                 // Save the meeting target
                 target = meetingTarget;
 
-                if (Pitfaller.pitfaller != null && Pitfaller.pitfallbody != null && Pitfaller.pitfallbody.PlayerId == meetingTarget.PlayerId)
+                if (Pitfaller.pitfaller != null && Pitfaller.pitfallbody != null && Pitfaller.pitfallbody.PlayerId == meetingTarget.PlayerId){
                     Pitfaller.pitfaller.MurderPlayer(__instance);
-
+                    if (Pitfaller.pitfallbody != null)
+                        Pitfaller.pitfallbody = null;
+                    if (meetingTarget != null)
+                        meetingTarget = null;
+                    }
 
                 // Add Portal info into Portalmaker Chat:
                 if (Portalmaker.portalmaker != null && (CachedPlayer.LocalPlayer.PlayerControl == Portalmaker.portalmaker || Helpers.shouldShowGhostInfo()) && !Portalmaker.portalmaker.Data.IsDead) {
