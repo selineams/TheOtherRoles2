@@ -396,6 +396,8 @@ namespace TheOtherRoles
                         roleName = Helpers.cs(Color.gray, "(备胎)") + roleName;
                     if (p == Akujo.honmei)
                         roleName = Helpers.cs(Akujo.color, "(真爱)") + roleName;
+                    if (p == BodyGuard.guarded)
+                        roleName = Helpers.cs(BodyGuard.color, "(被护驾) ") + roleName;
 
                     // Death Reason on Ghosts
                     if (p.Data.IsDead) {
@@ -443,7 +445,7 @@ namespace TheOtherRoles
                                     deathReasonString = $" - 被 {Helpers.cs(killerColor, deadPlayer.killerIfExisting.Data.PlayerName)} 炸了";
                                     break;
                                 case DeadPlayer.CustomDeathReason.Arson:
-                                    deathReasonString = $" - 被 by {Helpers.cs(killerColor, deadPlayer.killerIfExisting.Data.PlayerName)} 烧了";
+                                    deathReasonString = $" - 被 {Helpers.cs(killerColor, deadPlayer.killerIfExisting.Data.PlayerName)} 烧了";
                                     break;
                                 case DeadPlayer.CustomDeathReason.LoveStolen:
                                     deathReasonString = $" - {Helpers.cs(Akujo.color, "爱人被夺")}";

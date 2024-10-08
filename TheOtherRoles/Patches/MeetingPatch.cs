@@ -877,39 +877,36 @@ namespace TheOtherRoles.Patches {
                     }
                 }
 
-                //doomsayer reveal
+                // doomsayer reveal
                 if (
-                    Doomsayer.doomsayer != null 
-                    &&
-                    (CachedPlayer.LocalPlayer.PlayerControl == Doomsayer.doomsayer || Helpers.shouldShowGhostInfo()) 
-                    &&
-                    !Doomsayer.doomsayer.Data.IsDead
-                    &&
-                    Doomsayer.playerTargetinformation != null)
+                    Doomsayer.doomsayer != null
+                    && (CachedPlayer.LocalPlayer.PlayerControl == Doomsayer.doomsayer || Helpers.shouldShowGhostInfo())
+                    && !Doomsayer.doomsayer.Data.IsDead
+                    && Doomsayer.playerTargetinformation != null
+                /*&& Doomsayer.playerTargetinformation.All(p => p != null)*/ // 确保列表中的所有对象都不是 null
+                )
                 {
                     int i = 1;
-                    List<RoleInfo> allRoleInfo = new List<RoleInfo>(10);
-                    if (Doomsayer.onlineTarger)
-                    {
-                        allRoleInfo = Helpers.onlineRoleInfos();
-                    }
-                    else
-                    {
-                        allRoleInfo = Helpers.allRoleInfos();
-                    }
+                    List<RoleInfo> allRoleInfo = Doomsayer.onlineTarger
+                        ? Helpers.onlineRoleInfos()
+                        : Helpers.allRoleInfos();
+
+                    // 使用 System.Random，避免与 UnityEngine.Random 冲突
+                    System.Random random = new System.Random();
+
                     foreach (PlayerControl predictionTarget in Doomsayer.playerTargetinformation)
                     {
-                        System.Random random = new System.Random();
-                        int x = random.Next(0, (int)Doomsayer.formationNum);
-                        RoleInfo roleInfoTarget = RoleInfo.getRoleInfoForPlayer(predictionTarget, false).FirstOrDefault();
-                        string message = $"预言 " + i + ": " + predictionTarget.name + "\n";
-                        List<int> temp = Enumerable.Range(0, allRoleInfo.Count).OrderBy(q => Guid.NewGuid()).Take((int)Doomsayer.formationNum).ToList();
-                        List<string> allProperty = new List<string>();
+                        if (predictionTarget == null) continue; // 跳过无效的目标
 
+                        RoleInfo roleInfoTarget = RoleInfo.getRoleInfoForPlayer(predictionTarget, false).FirstOrDefault();
+                        if (roleInfoTarget == null) continue; // 跳过找不到角色信息的目标
+
+                        int x = random.Next(0, (int)Doomsayer.formationNum);
+                        string message = $"预言 {i}: {predictionTarget.name}\n";
+                        List<int> temp = Enumerable.Range(0, allRoleInfo.Count).OrderBy(q => Guid.NewGuid()).Take((int)Doomsayer.formationNum).ToList();
 
                         for (int num = 0, tempNum = 0; num < Doomsayer.formationNum && tempNum < Doomsayer.formationNum; num++)
                         {
-
                             if (allRoleInfo[temp[tempNum]].name.Equals(roleInfoTarget.name))
                             {
                                 tempNum++;
@@ -927,18 +924,21 @@ namespace TheOtherRoles.Patches {
                                 tempNum++;
                             }
                         }
+
                         if (x == Doomsayer.formationNum - 1 && Doomsayer.onlineTarger)
                         {
                             message += roleInfoTarget.name + ",";
                         }
 
-
                         i++;
                         FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(Doomsayer.doomsayer, $"{message}");
                     }
+
+                    // 清理
                     allRoleInfo.Clear();
                     Doomsayer.playerTargetinformation.Clear();
                 }
+
 
 
                 // Add Snitch info

@@ -662,11 +662,11 @@ namespace TheOtherRoles {
 
             bomberSpawnRate = CustomOption.Create(460, Types.Impostor, cs(Bomber.color, "爆破手"), rates, null, true);
             bomberBombDestructionTime = CustomOption.Create(461, Types.Impostor, "炸弹爆炸倒计时", 15f, 0f, 120f, 2.5f, bomberSpawnRate);
-            bomberBombDestructionRange = CustomOption.Create(462, Types.Impostor, "爆炸破坏范围", 70f, 5f, 150f, 5f, bomberSpawnRate);
-            bomberBombHearRange = CustomOption.Create(463, Types.Impostor, "爆炸破坏预警范围", 80f, 5f, 150f, 5f, bomberSpawnRate);
+            bomberBombDestructionRange = CustomOption.Create(462, Types.Impostor, "爆炸破坏范围", 100f, 5f, 150f, 5f, bomberSpawnRate);
+            bomberBombHearRange = CustomOption.Create(463, Types.Impostor, "爆炸破坏预警范围", 100f, 5f, 150f, 5f, bomberSpawnRate);
             bomberDefuseDuration = CustomOption.Create(464, Types.Impostor, "拆除炸弹所需时间", 3f, 0.5f, 30f, 0.5f, bomberSpawnRate);
             bomberBombCooldown = CustomOption.Create(465, Types.Impostor, "安放炸弹冷却时间", 20f, 2.5f, 30f, 2.5f, bomberSpawnRate);
-            bomberBombActiveAfter = CustomOption.Create(466, Types.Impostor, "炸弹安放后激活所需时间", 3f, 0.5f, 15f, 0.5f, bomberSpawnRate);
+            bomberBombActiveAfter = CustomOption.Create(466, Types.Impostor, "炸弹安放后激活所需时间", 5f, 0.5f, 15f, 0.5f, bomberSpawnRate);
 
             yoyoSpawnRate = CustomOption.Create(470, Types.Impostor, cs(Yoyo.color, "悠悠球"), rates, null, true);
             yoyoBlinkDuration = CustomOption.Create(471, Types.Impostor, "传送持续时长", 20f, 2.5f, 120f, 2.5f, yoyoSpawnRate);
@@ -808,8 +808,8 @@ namespace TheOtherRoles {
             deputyKeepsHandcuffs = CustomOption.Create(109, Types.Crewmate, "辅警升职为警长后保留辅警技能", true, deputyGetsPromoted);
 
             lighterSpawnRate = CustomOption.Create(110, Types.Crewmate, cs(Lighter.color, "执灯人"), rates, null, true);
-            lighterModeLightsOnVision = CustomOption.Create(111, Types.Crewmate, "非熄灯状态下的执灯人视野", 1.5f, 0.25f, 5f, 0.25f, lighterSpawnRate);
-            lighterModeLightsOffVision = CustomOption.Create(112, Types.Crewmate, "熄灯状态状态下的执灯人视野", 5f, 0.25f, 5f, 0.25f, lighterSpawnRate);
+            lighterModeLightsOnVision = CustomOption.Create(111, Types.Crewmate, "非熄灯状态下的执灯人视野", 3.5f, 0.25f, 5f, 0.25f, lighterSpawnRate);
+            lighterModeLightsOffVision = CustomOption.Create(112, Types.Crewmate, "熄灯状态状态下的执灯人视野", 3.5f, 0.25f, 5f, 0.25f, lighterSpawnRate);
             lighterFlashlightWidth = CustomOption.Create(113, Types.Crewmate, "手电筒范围", 1f, 0.1f, 1f, 0.1f, lighterSpawnRate);
 
             detectiveSpawnRate = CustomOption.Create(120, Types.Crewmate, cs(Detective.color, "侦探"), rates, null, true);
@@ -937,7 +937,7 @@ namespace TheOtherRoles {
 
             trapperSpawnRate = CustomOption.Create(410, Types.Crewmate, cs(Trapper.color, "诱捕者"), rates, null, true);
             trapperCooldown = CustomOption.Create(420, Types.Crewmate, "设置陷阱冷却", 25f, 5f, 120f, 5f, trapperSpawnRate);
-            trapperMaxCharges = CustomOption.Create(440, Types.Crewmate, "陷阱最大使用次数", 5f, 1f, 15f, 1f, trapperSpawnRate);
+            trapperMaxCharges = CustomOption.Create(440, Types.Crewmate, "陷阱最大使用次数", 15f, 1f, 15f, 1f, trapperSpawnRate);
             trapperRechargeTasksNumber = CustomOption.Create(450, Types.Crewmate, "诱捕者进行一次充能需要完成的任务数", 1f, 1f, 15f, 1f, trapperSpawnRate);
             trapperTrapNeededTriggerToReveal = CustomOption.Create(451, Types.Crewmate, "陷阱触发提示所需人数", 3f, 2f, 10f, 1f, trapperSpawnRate);
             trapperAnonymousMap = CustomOption.Create(452, Types.Crewmate, "显示匿名地图", true, trapperSpawnRate);
@@ -969,7 +969,7 @@ namespace TheOtherRoles {
             teleporterTeleportNumber = CustomOption.Create(949, Types.Crewmate, "交换次数", 10f, 1f, 10f, 1f, teleporterSpawnRate);
 
             // Modifier (1000 - 1999)
-            modifiersAreHidden = CustomOption.Create(1009, Types.Modifier, cs(Color.yellow, "开局不显示诱饵网红溅血者"), true, null, true);
+            modifiersAreHidden = CustomOption.Create(1009, Types.Modifier, cs(Color.yellow, "开局不显示诱饵网红溅血者"), false, null, true);
 
             modifierDisperser = CustomOption.Create(1900, Types.Modifier, cs(Color.red, "分散者"), rates, null, true);
             modifierDisperserDispersesToVent = CustomOption.Create(1941, Types.Modifier, "分散者分散至洞口", true, modifierDisperser);
@@ -1041,8 +1041,8 @@ namespace TheOtherRoles {
 
             modifierGiant = CustomOption.Create(1934, Types.Modifier, cs(Color.yellow, "巨人"), rates, null, true);
             modifierGiantQuantity = CustomOption.Create(1935, Types.Modifier, "巨人数量", ratesModifier, modifierGiant);
-            modifierGiantSpeed = CustomOption.Create(1936, Types.Modifier, "巨人速度", 0.2f, 0.1f, 3f, 0.1f, modifierGiant);
-            modifierGiantSize = CustomOption.Create(1937, Types.Modifier, "巨人尺寸", 1.0f, 0.8f, 2, 0.1f, modifierGiant);
+            modifierGiantSpeed = CustomOption.Create(1936, Types.Modifier, "巨人速度", 0.6f, 0.1f, 3f, 0.1f, modifierGiant);
+            modifierGiantSize = CustomOption.Create(1937, Types.Modifier, "巨人尺寸", 1.2f, 0.8f, 2, 0.1f, modifierGiant);
 
             modifierOneTimeKiller = CustomOption.Create(1940, Types.Modifier, cs(Sheriff.color, "正义使者"), rates, null, true);
             
@@ -1161,7 +1161,10 @@ namespace TheOtherRoles {
             blockedRolePairings.Add((byte)RoleId.Mini, new [] { (byte)RoleId.Spy});
           //  blockedRolePairings.Add((byte)RoleId.Vulture, new [] { (byte)RoleId.Cleaner});
          //   blockedRolePairings.Add((byte)RoleId.Cleaner, new [] { (byte)RoleId.Vulture});
-            
+            blockedRolePairings.Add((byte)RoleId.Mayor, new [] { (byte)RoleId.AntiReport});
+            blockedRolePairings.Add((byte)RoleId.AntiReport, new [] { (byte)RoleId.Mayor});
+         //   blockedRolePairings.Add((byte)RoleId.AntiReport, new [] { (byte)RoleId.Detective});
+         //   blockedRolePairings.Add((byte)RoleId.Detective, new [] { (byte)RoleId.AntiReport});
         }
     }
 }

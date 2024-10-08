@@ -694,25 +694,38 @@ namespace TheOtherRoles
             }
         }
 
-        public static void cleanBody(byte playerId, byte cleaningPlayerId) {
-            if (Medium.futureDeadBodies != null) {
-                var deadBody = Medium.futureDeadBodies.Find(x => x.Item1.player.PlayerId == playerId).Item1;
-                if (deadBody != null) deadBody.wasCleaned = true;
+        public static void cleanBody(byte playerId, byte cleaningPlayerId)
+        {
+            if (Medium.futureDeadBodies != null)
+            {
+                var body = Medium.futureDeadBodies.Find(x => x.Item1.player.PlayerId == playerId);
+                if (body != null && body.Item1 != null)
+                {
+                    var deadBody = body.Item1;
+                    deadBody.wasCleaned = true;
+                }
             }
 
             DeadBody[] array = UnityEngine.Object.FindObjectsOfType<DeadBody>();
-            for (int i = 0; i < array.Length; i++) {
-                if (GameData.Instance.GetPlayerById(array[i].ParentId).PlayerId == playerId) {
+            for (int i = 0; i < array.Length; i++)
+            {
+                var playerData = GameData.Instance.GetPlayerById(array[i].ParentId);
+                if (playerData != null && playerData.PlayerId == playerId)
+                {
                     UnityEngine.Object.Destroy(array[i].gameObject);
-                }     
+                }
             }
-            if (Vulture.vulture != null && cleaningPlayerId == Vulture.vulture.PlayerId) {
+
+            if (Vulture.vulture != null && cleaningPlayerId == Vulture.vulture.PlayerId)
+            {
                 Vulture.eatenBodies++;
-                if (Vulture.eatenBodies == Vulture.vultureNumberToWin) {
+                if (Vulture.eatenBodies == Vulture.vultureNumberToWin)
+                {
                     Vulture.triggerVultureWin = true;
                 }
             }
         }
+
 
         public static void timeMasterRewindTime() {
             TimeMaster.shieldActive = false; // Shield is no longer active when rewinding

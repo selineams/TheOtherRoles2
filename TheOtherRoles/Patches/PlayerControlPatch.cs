@@ -830,7 +830,7 @@ namespace TheOtherRoles.Patches {
 					var (playerCompleted, playerTotal) = TasksHandler.taskInfo(Snitch.snitch.Data);
 					int numberOfTasks = playerTotal - playerCompleted;
 					bool completedSnitch = (Snitch.seeInMeeting && CachedPlayer.LocalPlayer.PlayerControl == Snitch.snitch && numberOfTasks == 0);
-					snitchFlag = (completedSnitch && (p == Helpers.isNeutral(p) || p.Data.Role.IsImpostor));
+                    snitchFlag = (completedSnitch && (Snitch.isRevealed && ((Snitch.targets == Snitch.Targets.EvilPlayers && Helpers.isEvil(p)) || (Snitch.targets == Snitch.Targets.Killers && Helpers.isKiller(p)))));
 				}
                 bool isKataomoi = PlayerControl.LocalPlayer == Kataomoi.kataomoi;
                 bool isKataomoiTarget = (Kataomoi.kataomoi != null && p == Kataomoi.target && (p.isDead() || p != PlayerControl.LocalPlayer));
@@ -870,6 +870,7 @@ namespace TheOtherRoles.Patches {
 
                     var (tasksCompleted, tasksTotal) = TasksHandler.taskInfo(p.Data);
                     string roleNames = RoleInfo.GetRolesString(p, true, false);
+                    //string roleNamesimp = RoleInfo.GetRolesString(p, true,false, false);
                     string roleText = RoleInfo.GetRolesString(p, true, TORMapOptions.ghostsSeeModifier);
                     string taskInfo = tasksTotal > 0 ? $"<color=#FAD934FF>({tasksCompleted}/{tasksTotal})</color>" : "";
 
@@ -880,6 +881,12 @@ namespace TheOtherRoles.Patches {
                         extraInfoText = Helpers.cs(Kataomoi.color, " ");                   
                     if (p == CachedPlayer.LocalPlayer.PlayerControl) {
                         if (p.Data.IsDead) roleNames = roleText;
+                        //if((TORMapOptions.impostorSeeRoles && Spy.spy == null && CachedPlayer.LocalPlayer.Data.Role.IsImpostor && !CachedPlayer.LocalPlayer.Data.IsDead && p == p.Data.Role.IsImpostor))
+                        //{
+                        //    roleNames = roleNamesimp;
+                         //   playerInfoText = roleNames;
+                        //    meetingInfoText = playerInfoText;
+                        //}
                         playerInfoText = $"{roleNames}";
                         if (p == Swapper.swapper) playerInfoText = $"{roleNames}" + Helpers.cs(Swapper.color, $" ({Swapper.charges})");
                         if (HudManager.Instance.TaskPanel != null) {

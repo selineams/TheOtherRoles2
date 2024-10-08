@@ -169,6 +169,7 @@ namespace TheOtherRoles
             killedToWin = 0;
             canGuess = true;
             triggerDoomsayerrWin = false;
+            playerTargetinformation.Clear();
             cooldown = CustomOptionHolder.doomsayerCooldown.getFloat();
             hasMultipleShotsPerMeeting = CustomOptionHolder.doomsayerHasMultipleShotsPerMeeting.getBool();
             showInfoInGhostChat = CustomOptionHolder.doomsayerShowInfoInGhostChat.getBool();
