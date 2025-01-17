@@ -19,11 +19,12 @@ namespace TheOtherRoles{
         public static bool enableHorseMode = false;
         public static bool shieldFirstKill = false;
         public static bool ShowVentsOnMap = true;
+        public static bool ShowChatNotifications = true;
         public static bool impostorSeeRoles = false;
         public static bool camoComms = false;
 
 
-        public static CustomGamemodes gameMode = CustomGamemodes.Guesser;
+        public static CustomGamemodes gameMode = CustomGamemodes.Classic;
 
         // Updating values
         public static int meetingsCount = 0;
@@ -60,7 +61,8 @@ namespace TheOtherRoles{
             enableSoundEffects = TheOtherRolesPlugin.EnableSoundEffects.Value;
             enableHorseMode = TheOtherRolesPlugin.EnableHorseMode.Value;
             ShowVentsOnMap = TheOtherRolesPlugin.ShowVentsOnMap.Value;
-            
+            ShowChatNotifications = TheOtherRolesPlugin.ShowChatNotifications.Value;
+
             //Patches.ShouldAlwaysHorseAround.isHorseMode = TheOtherRolesPlugin.EnableHorseMode.Value;
         }
     }
