@@ -4,9 +4,9 @@
     "net6.0": {
       "AmongUs.GameLibs.Steam": {
         "type": "Direct",
-        "requested": "[2024.3.5, )",
-        "resolved": "2024.3.5",
-        "contentHash": "5KOcBSFnql0DmrL82GikWb5I+KLvD8h8RsS28BKTCws2fPKwWauUm/L9Zh73pIHcnOMCpvnAxWeZh/AqxAEI0Q=="
+        "requested": "[2024.10.29, )",
+        "resolved": "2024.10.29",
+        "contentHash": "znuLMD9DRMTp7RMfIz3hts5KUljioPZ1TiuodgyFrH3mDEcOLZtn1sA08AU9pUzsgQA9hzikrrzP+sJIsPqZ9g=="
       },
       "BepInEx.IL2CPP.MSBuild": {
         "type": "Direct",
@@ -70,15 +70,10 @@
           "AsmResolver": "5.1.0"
         }
       },
-      "AssetRipper.Primitives": {
-        "type": "Transitive",
-        "resolved": "2.1.0",
-        "contentHash": "nrgwUMa69ztOfMKbmytNI3mU/fuN3eWptq2Mu8aLg2ly394w51KJbUx5z477HbRvabD8TD8rM4wRe6EBqB2xdA=="
-      },
       "AssetRipper.VersionUtilities": {
         "type": "Transitive",
-        "resolved": "1.2.1",
-        "contentHash": "knQ/W1YwTZS2AbdaZh+nhyyBEZQPQDcahhSOnh88i+cdg4/FEoFJiCwaavgFvCMNuUeHTbcZc4qttF8WQ8xLIA=="
+        "resolved": "1.3.1",
+        "contentHash": "/1D18NOpqm7rS7+qVUbAReVMNWwgDuYpsnf0RkX1Aah/I0a0irqldoFJ+Kku7YdbSm0zqD+Z6iYUGKoP3GwTNQ=="
       },
       "BepInEx.Core": {
         "type": "Transitive",
@@ -322,17 +317,17 @@
       },
       "Samboy063.LibCpp2IL": {
         "type": "Transitive",
-        "resolved": "2022.1.0-pre-release.13",
-        "contentHash": "fwkVLAXqD+7XfIXJEDh2OkJqe6YMkNmOP05oudEnuq3ITEuVUSb0K8ffa22vx+n/NDIyNP+s1lLRFcmHVP57oQ==",
+        "resolved": "2022.1.0-development.866",
+        "contentHash": "EcJSWTfQko8SQozozoUT+aQJVWC8wj8C0YUiPBF4rNRId19yTKp2IXcXnI747v+8/aal222QR6WHfoBK2WlVLg==",
         "dependencies": {
-          "AssetRipper.Primitives": "2.1.0",
-          "Samboy063.WasmDisassembler": "2022.1.0-pre-release.13"
+          "AssetRipper.VersionUtilities": "1.3.1",
+          "Samboy063.WasmDisassembler": "2022.1.0-development.866"
         }
       },
       "Samboy063.WasmDisassembler": {
         "type": "Transitive",
-        "resolved": "2022.1.0-pre-release.13",
-        "contentHash": "dI4PDG+AFctYzaD0pqojK7SGiiPi6xgIRXp07hHnXumW+DYbS2nVQ8nTFSHiP6xE7UhW6I+PpbC5jh/2nksW+Q=="
+        "resolved": "2022.1.0-development.866",
+        "contentHash": "2QK8F3eISkLcoW/Nt7wtxyQh31EXAqEMBVXXjEnuxyvXpBXxOIGpjmE3pWhGwxQwDCbe4zBsLF1zUiqq3/pXRA=="
       },
       "SemanticVersioning": {
         "type": "Transitive",
@@ -341,8 +336,8 @@
       },
       "StableNameDotNet": {
         "type": "Transitive",
-        "resolved": "0.1.0-pre-release.13",
-        "contentHash": "8ovX1WcVUO6R1pHzaW1v1SC9coSWSYh5JjjZ/vvr7jsb7+hWzMVpsV+uyWLMie9olE2FW1k4RLaXf5GmvlVwMg=="
+        "resolved": "0.1.0-development.866",
+        "contentHash": "DJb8x4dV3ucDgM12sU28HxCdeqY/JudJbeJG6mgXWDJzpFZw2Jd7JF1pKFRNLzh/0gpo8bCGLQS9gOWZmBjdtg=="
       },
       "System.Collections": {
         "type": "Transitive",

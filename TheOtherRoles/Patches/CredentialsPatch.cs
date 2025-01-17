@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using AmongUs.GameOptions;
+using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -35,10 +36,10 @@ $@"<size=40%> <color=#FCCE03FF>Special thanks to Smeggy</color></size>
         [HarmonyPatch(typeof(PingTracker), nameof(PingTracker.Update))]
         internal static class PingTrackerPatch
         {
-
             static void Postfix(PingTracker __instance){
-                __instance.text.alignment = TextAlignmentOptions.TopRight;
+                __instance.text.alignment = AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started ? TextAlignmentOptions.Top : TextAlignmentOptions.TopLeft;
                 var position = __instance.GetComponent<AspectPosition>();
+                position.Alignment = AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started ? AspectPosition.EdgeAlignments.Top : AspectPosition.EdgeAlignments.LeftTop;
                 if (AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started) {
                     string gameModeText = $"";
                     if (HideNSeek.isHideNSeekGM) gameModeText = $"捉迷藏";
@@ -46,7 +47,7 @@ $@"<size=40%> <color=#FCCE03FF>Special thanks to Smeggy</color></size>
                     else if (PropHunt.isPropHuntGM) gameModeText = "躲猫猫";
                     if (gameModeText != "") gameModeText = Helpers.cs(Color.yellow, gameModeText) + "\n";
                     __instance.text.text = $"<size=100%><color=#ff351f>超多职业PLUS</color></size> v{TheOtherRolesPlugin.Version.ToString() + (TheOtherRolesPlugin.betaDays > 0 ? "-BETA" : "")}\n{gameModeText}<size=50%> 整合:<color=#8B008B>匿名者</color>\n"/*<color=#ff351f>四个憨批汉化组-amonguscn.club</color> \n 追加参考：<color=#FFB793>ismywb,spex,dabao40,miru-y,沫夏悠轩,善良的好人,Vitaxses</color> \n </size>"*/ + __instance.text.text;
-                    position.DistanceFromEdge = new Vector3(2.25f, 0.11f, 0);
+                    position.DistanceFromEdge = new Vector3(1.5f, 0.11f, 0);
                 } else {
                     string gameModeText = $"";
                     if (TORMapOptions.gameMode == CustomGamemodes.HideNSeek) gameModeText = $"捉迷藏";
@@ -54,9 +55,17 @@ $@"<size=40%> <color=#FCCE03FF>Special thanks to Smeggy</color></size>
                     else if (TORMapOptions.gameMode == CustomGamemodes.PropHunt) gameModeText = $"躲猫猫";
                     if (gameModeText != "") gameModeText = Helpers.cs(Color.yellow, gameModeText) + "\n";
 
-                    var host = $"房主: {GameData.Instance?.GetHost()?.PlayerName}";
-                    __instance.text.text = $"{fullCredentialsVersion}\n  {gameModeText + fullCredentials}\n {host}\n {__instance.text.text}";
-                    position.DistanceFromEdge = new Vector3(3.5f, 0.1f, 0);
+                    if (gameModeText != "") gameModeText = Helpers.cs(Color.yellow, gameModeText);
+                    __instance.text.text = $"{fullCredentialsVersion}\n{fullCredentials}\n {__instance.text.text}";
+                    position.DistanceFromEdge = new Vector3(0.5f, 0.11f);
+                    try
+                    {
+                        var GameModeText = GameObject.Find("GameModeText")?.GetComponent<TextMeshPro>();
+                        GameModeText.text = gameModeText == "" ? (GameOptionsManager.Instance.currentGameOptions.GameMode == GameModes.HideNSeek ? "原版捉迷藏" : "经典") : gameModeText;
+                        var ModeLabel = GameObject.Find("ModeLabel")?.GetComponentInChildren<TextMeshPro>();
+                        ModeLabel.text = "游戏模式";
+                    }
+                    catch { }
                 }
                 position.AdjustPosition();
             }

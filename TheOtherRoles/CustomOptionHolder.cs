@@ -587,21 +587,19 @@ namespace TheOtherRoles {
 
             // Role Options
             presetSelection = CustomOption.Create(0, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "设置"), presets, null, true);
-            activateRoles = CustomOption.Create(1, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "开启MOD职业并关闭原版职业"), true, null, true);
-            anyPlayerCanStopStart = CustomOption.Create(2, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "任一玩家可终止游戏开始"), false, null, false);
 
             if (Utilities.EventUtility.canBeEnabled) enableEventMode = CustomOption.Create(10423, Types.General, cs(Color.green, "开启特殊模式"), true, null, true);
 
             // Using new id's for the options to not break compatibilty with older versions
-            crewmateRolesCountMin = CustomOption.Create(300, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "最小船员职业数"), 15f, 0f, 15f, 1f, null, true);
+            crewmateRolesCountMin = CustomOption.Create(300, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "最小船员职业数"), 15f, 0f, 15f, 1f, null, true, heading: "最大/小职业数");
             crewmateRolesCountMax = CustomOption.Create(301, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "最大船员职业数"), 15f, 0f, 15f, 1f);
-            crewmateRolesFill = CustomOption.Create(308, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "所有船员必定拥有职业\n(无视最大/最小职业数)"), true);
             neutralRolesCountMin = CustomOption.Create(302, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "最小独立阵营职业数"), 15f, 0f, 15f, 1f);
             neutralRolesCountMax = CustomOption.Create(303, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "最大独立阵营职业数"), 15f, 0f, 15f, 1f);
             impostorRolesCountMin = CustomOption.Create(304, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "最小内鬼职业数"), 15f, 0f, 15f, 1f);
             impostorRolesCountMax = CustomOption.Create(305, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "最大内鬼职业数"), 15f, 0f, 15f, 1f);
             modifiersCountMin = CustomOption.Create(306, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "最小附加职业数"), 15f, 0f, 15f, 1f);
             modifiersCountMax = CustomOption.Create(307, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "最大附加职业数"), 15f, 0f, 15f, 1f);
+            crewmateRolesFill = CustomOption.Create(308, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "所有船员必定拥有职业\n(无视最大/最小职业数)"), true);
 
             mafiaSpawnRate = CustomOption.Create(18, Types.Impostor, cs(Janitor.color, "黑手党"), rates, null, true);
             janitorCooldown = CustomOption.Create(19, Types.Impostor, "清洁工清理冷却", 30f, 10f, 60f, 2.5f, mafiaSpawnRate);
@@ -969,7 +967,7 @@ namespace TheOtherRoles {
             teleporterTeleportNumber = CustomOption.Create(949, Types.Crewmate, "交换次数", 10f, 1f, 10f, 1f, teleporterSpawnRate);
 
             // Modifier (1000 - 1999)
-            modifiersAreHidden = CustomOption.Create(1009, Types.Modifier, cs(Color.yellow, "开局不显示诱饵网红溅血者"), false, null, true);
+            modifiersAreHidden = CustomOption.Create(1009, Types.Modifier, cs(Color.yellow, "隐藏VIP, 诱饵 & 溅血者效果"), true, null, true, heading: cs(Color.yellow, "死亡后隐藏附加效果"));
 
             modifierDisperser = CustomOption.Create(1900, Types.Modifier, cs(Color.red, "分散者"), rates, null, true);
             modifierDisperserDispersesToVent = CustomOption.Create(1941, Types.Modifier, "分散者分散至洞口", true, modifierDisperser);
@@ -1048,14 +1046,14 @@ namespace TheOtherRoles {
             
 
             // Guesser Gamemode (2000 - 2999)
-            guesserGamemodeCrewNumber = CustomOption.Create(2001, Types.Guesser, cs(Guesser.color, "船员阵营赌怪数量"), 15f, 1f, 15f, 1f, null, true);
-            guesserGamemodeNeutralNumber = CustomOption.Create(2002, Types.Guesser, cs(Guesser.color, "独立阵营赌怪数量"), 15f, 1f, 15f, 1f, null, true);
-            guesserGamemodeImpNumber = CustomOption.Create(2003, Types.Guesser, cs(Guesser.color, "内鬼阵营赌怪数量"), 15f, 1f, 15f, 1f, null, true);
-            guesserForceJackalGuesser = CustomOption.Create(2007, Types.Guesser, "强制爪牙作为赌怪", false, null, true);
+            guesserGamemodeCrewNumber = CustomOption.Create(2001, Types.Guesser, cs(Guesser.color, "船员阵营赌怪数量"), 15f, 1f, 15f, 1f, null, true, heading: "赌怪数量");
+            guesserGamemodeNeutralNumber = CustomOption.Create(2002, Types.Guesser, cs(Guesser.color, "独立阵营赌怪数量"), 15f, 1f, 15f, 1f, null);
+            guesserGamemodeImpNumber = CustomOption.Create(2003, Types.Guesser, cs(Guesser.color, "内鬼阵营赌怪数量"), 15f, 1f, 15f, 1f, null);
+            guesserForceJackalGuesser = CustomOption.Create(2007, Types.Guesser, "强制爪牙作为赌怪", false, null, true, heading: "强制赌怪");
             guesserGamemodeSidekickIsAlwaysGuesser = CustomOption.Create(2012, Types.Guesser, "随从始终作为赌怪", false, null);
             guesserForceDoomsayerGuesser = CustomOption.Create(2019, Types.Guesser, "强制末日使徒作为赌怪（不开启该职业无技能）", true, null, true);
-            guesserForceThiefGuesser = CustomOption.Create(2011, Types.Guesser, "强制身份窃贼作为赌怪", true, null, true);
-            guesserGamemodeHaveModifier = CustomOption.Create(2004, Types.Guesser, "赌怪可以拥有附加职业", true, null);
+            guesserForceThiefGuesser = CustomOption.Create(2011, Types.Guesser, "强制身份窃贼作为赌怪", true, null);
+            guesserGamemodeHaveModifier = CustomOption.Create(2004, Types.Guesser, "赌怪可以拥有附加职业", true, null, true, heading: "赌怪常规设置");
             guesserGamemodeNumberOfShots = CustomOption.Create(2005, Types.Guesser, "赌怪最大猜测次数", 3f, 1f, 15f, 1f, null);
             guesserGamemodeHasMultipleShotsPerMeeting = CustomOption.Create(2006, Types.Guesser, "一轮会议可多次猜测", true, null);
             guesserGamemodeKillsThroughShield = CustomOption.Create(2008, Types.Guesser, "赌怪猜测无视医生护盾", true, null);
@@ -1078,7 +1076,7 @@ namespace TheOtherRoles {
             hideNSeekHunterWaiting = CustomOption.Create(3022, Types.HideNSeekMain, cs(Color.yellow, "游戏开始时猎人等待时间"), 15f, 2.5f, 60f, 2.5f);
 
 
-            hunterLightCooldown = CustomOption.Create(3005, Types.HideNSeekRoles, cs(Color.red, "猎人开灯冷却"), 30f, 5f, 60f, 1f, null, true);
+            hunterLightCooldown = CustomOption.Create(3005, Types.HideNSeekRoles, cs(Color.red, "猎人开灯冷却"), 30f, 5f, 60f, 1f, null, true, heading: "猎人手电筒设置");
             hunterLightDuration = CustomOption.Create(3006, Types.HideNSeekRoles, cs(Color.red, "猎人开灯持续时间"), 5f, 1f, 60f, 1f);
             hunterLightVision = CustomOption.Create(3007, Types.HideNSeekRoles, cs(Color.red, "猎人开灯视野"), 3f, 1f, 5f, 0.25f);
             hunterLightPunish = CustomOption.Create(3008, Types.HideNSeekRoles, cs(Color.red, "猎人开灯惩罚时间"), 5f, 0f, 30f, 1f);
@@ -1089,21 +1087,21 @@ namespace TheOtherRoles {
             hunterArrowDuration = CustomOption.Create(3013, Types.HideNSeekRoles, cs(Color.red, "猎人开启箭头持续时间"), 5f, 0f, 60f, 1f);
             hunterArrowPunish = CustomOption.Create(3014, Types.HideNSeekRoles, cs(Color.red, "猎人开启箭头惩罚时间"), 5f, 0f, 30f, 1f);
 
-            huntedShieldCooldown = CustomOption.Create(3015, Types.HideNSeekRoles, cs(Color.gray, "猎物开启护盾冷却"), 30f, 5f, 60f, 1f, null, true);
+            huntedShieldCooldown = CustomOption.Create(3015, Types.HideNSeekRoles, cs(Color.gray, "猎物开启护盾冷却"), 30f, 5f, 60f, 1f, null, true, heading: "猎物护盾设置");
             huntedShieldDuration = CustomOption.Create(3016, Types.HideNSeekRoles, cs(Color.gray, "猎物护盾持续时间"), 5f, 1f, 60f, 1f);
             huntedShieldRewindTime = CustomOption.Create(3018, Types.HideNSeekRoles, cs(Color.gray, "猎物护盾回溯时间"), 3f, 1f, 10f, 1f);
             huntedShieldNumber = CustomOption.Create(3026, Types.HideNSeekRoles, cs(Color.gray, "猎物护盾使用次数"), 3f, 1f, 15f, 1f);
 
             // Prop Hunt General Options
             propHuntMap = CustomOption.Create(4020, Types.PropHunt, cs(Color.yellow, "地图"), new string[] { "The Skeld", "Mira", "Polus", "Airship", "Fungle", "Submerged", "LI Map"}, null, true, onChange: ()=> { int map = propHuntMap.selection; if (map >= 3) map++; GameOptionsManager.Instance.currentNormalGameOptions.MapId = (byte)map;});
-            propHuntTimer = CustomOption.Create(4021, Types.PropHunt, cs(Color.yellow, "游戏时长"), 5f, 1f, 30f, 0.5f);
+            propHuntTimer = CustomOption.Create(4021, Types.PropHunt, cs(Color.yellow, "游戏时长"), 5f, 1f, 30f, 0.5f, null, true, heading: "变形狩猎常规设置");
             propHuntUnstuckCooldown = CustomOption.Create(4011, Types.PropHunt, cs(Color.yellow, "穿墙冷却"), 30f, 2.5f, 60f, 2.5f);
             propHuntUnstuckDuration = CustomOption.Create(4012, Types.PropHunt, cs(Color.yellow, "穿墙持续时间"), 2f, 1f, 60f, 1f);
             propHunterVision = CustomOption.Create(4006, Types.PropHunt, cs(Color.yellow, "鬼视野"), 0.5f, 0.25f, 2f, 0.25f);
             propVision = CustomOption.Create(4007, Types.PropHunt, cs(Color.yellow, "匿藏者视野"), 2f, 0.25f, 5f, 0.25f);
 
             // Hunter Options
-            propHuntNumberOfHunters = CustomOption.Create(4000, Types.PropHunt, cs(Color.red, "鬼数量"), 1f, 1f, 5f, 1f, null, true);
+            propHuntNumberOfHunters = CustomOption.Create(4000, Types.PropHunt, cs(Color.red, "鬼数量"), 1f, 1f, 5f, 1f, null, true, heading: "鬼设置");
             hunterInitialBlackoutTime = CustomOption.Create(4001, Types.PropHunt, cs(Color.red, "鬼闭眼倒数时长"), 10f, 5f, 20f, 1f);
             hunterMissCooldown = CustomOption.Create(4004, Types.PropHunt, cs(Color.red, "未命中目标后击杀冷却"), 10f, 2.5f, 60f, 2.5f);
             hunterHitCooldown = CustomOption.Create(4005, Types.PropHunt, cs(Color.red, "命中目标后击杀冷却"), 10f, 2.5f, 60f, 2.5f);
@@ -1114,7 +1112,7 @@ namespace TheOtherRoles {
             propHuntFindCooldown = CustomOption.Create(4023, Types.PropHunt, cs(Color.red, "搜索技能冷却"), 60f, 2.5f, 1800f, 2.5f);
             propHuntFindDuration = CustomOption.Create(4024, Types.PropHunt, cs(Color.red, "搜索技能时长"), 5f, 1f, 15f, 1f);
             // Prop Options
-            propBecomesHunterWhenFound = CustomOption.Create(4003, Types.PropHunt, cs(Palette.CrewmateBlue, "匿藏者被抓后变成鬼"), true, null, true);
+            propBecomesHunterWhenFound = CustomOption.Create(4003, Types.PropHunt, cs(Palette.CrewmateBlue, "匿藏者被抓后变成鬼"), true, null, true, heading: "匿藏者设置");
             propHuntInvisEnabled = CustomOption.Create(4013, Types.PropHunt, cs(Palette.CrewmateBlue, "启用隐身能力"), true, null, true);
             propHuntInvisCooldown = CustomOption.Create(4014, Types.PropHunt, cs(Palette.CrewmateBlue, "隐身能力冷却"), 120f, 10f, 1800f, 2.5f, propHuntInvisEnabled);
             propHuntInvisDuration = CustomOption.Create(4015, Types.PropHunt, cs(Palette.CrewmateBlue, "隐身能力时长"), 5f, 1f, 30f, 1f, propHuntInvisEnabled);
@@ -1126,19 +1124,20 @@ namespace TheOtherRoles {
 
 
             // Other options
-            maxNumberOfMeetings = CustomOption.Create(3, Types.General, "紧急会议总次数（市长会议除外）", 2, 0, 4, 1, null, true);
+            maxNumberOfMeetings = CustomOption.Create(3, Types.General, "紧急会议总次数（市长会议除外）", 2, 0, 4, 1, null, true, heading: "游戏设定");
+            anyPlayerCanStopStart = CustomOption.Create(2, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "任一玩家可终止游戏开始"), false, null, false);
             blockSkippingInEmergencyMeetings = CustomOption.Create(4, Types.General, "紧急会议禁止弃票", false);
             noVoteIsSelfVote = CustomOption.Create(5, Types.General, "不投票等于投自己", false, blockSkippingInEmergencyMeetings);
             hidePlayerNames = CustomOption.Create(6, Types.General, "隐藏玩家昵称", false);
             allowParallelMedBayScans = CustomOption.Create(7, Types.General, "允许同时进行扫描任务", false);
             shieldFirstKill = CustomOption.Create(8, Types.General, "首位死亡玩家可在下局游戏获得一个护盾", true);
             finishTasksBeforeHauntingOrZoomingOut = CustomOption.Create(9, Types.General, "全地图视角与幽幽鬼影仅可在完成任务后使用", false);
-            camsNightVision = CustomOption.Create(11, Types.General, "如果灯光被破坏, 监控会切换到夜视模式", false, null, true);
-            camsNoNightVisionIfImpVision = CustomOption.Create(12, Types.General, "内鬼不受到监控的夜视效果影响", false, camsNightVision, false);
             deadImpsBlockSabotage = CustomOption.Create(13, Types.General, cs(Palette.ImpostorRed, "死亡内鬼无法开启破坏"), false, null, false);
+            camsNightVision = CustomOption.Create(11, Types.General, "如果灯光被破坏, 监控会切换到夜视模式", false, null, true, heading: "夜视摄像头");
+            camsNoNightVisionIfImpVision = CustomOption.Create(12, Types.General, "内鬼不受到监控的夜视效果影响", false, camsNightVision, false);
 
 
-            dynamicMap = CustomOption.Create(500, Types.General, "在随机地图上游玩", false, null, true);
+            dynamicMap = CustomOption.Create(500, Types.General, "在随机地图上游玩", false, null, true, heading: "随机地图");
             dynamicMapEnableSkeld = CustomOption.Create(501, Types.General, "Skeld", rates, dynamicMap, false);
             dynamicMapEnableMira = CustomOption.Create(502, Types.General, "Mira", rates, dynamicMap, false);
             dynamicMapEnablePolus = CustomOption.Create(503, Types.General, "Polus", rates, dynamicMap, false);
